@@ -1,0 +1,6 @@
+{
+  "name": "Preplexa",
+  "description": "NEET UG & JEE Mains exam preparation app with topic-wise 10+ mock test series, interactive quizzes, syllabus tracking, and detailed solutions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

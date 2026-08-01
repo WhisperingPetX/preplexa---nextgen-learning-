@@ -1,0 +1,136 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Top Vertical Ray -->
+    <path
+        android:pathData="M 54,12 C 55,17 55,20 54,22 C 53,20 53,17 54,12 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="54" android:startY="12"
+                android:endX="54" android:endY="22"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#AB47BC" />
+                <item android:offset="1.0" android:color="#7E57C2" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Top-Left Ray -->
+    <path
+        android:pathData="M 34,22 Q 40,28 41,31 Q 38,27 34,22 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="34" android:startY="22"
+                android:endX="41" android:endY="31"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#00E5FF" />
+                <item android:offset="1.0" android:color="#2979FF" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Left Horizontal Ray -->
+    <path
+        android:pathData="M 25,45 C 30,44 35,44 37,45 C 35,46 30,46 25,45 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="25" android:startY="45"
+                android:endX="37" android:endY="45"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#00B0FF" />
+                <item android:offset="1.0" android:color="#00E5FF" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Top-Right Ray -->
+    <path
+        android:pathData="M 74,22 Q 68,28 67,31 Q 70,27 74,22 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="74" android:startY="22"
+                android:endX="67" android:endY="31"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#FF4081" />
+                <item android:offset="1.0" android:color="#F50057" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Right Horizontal Ray -->
+    <path
+        android:pathData="M 83,45 C 78,44 73,44 71,45 C 73,46 78,46 83,45 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="71" android:startY="45"
+                android:endX="83" android:endY="45"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#FF6E40" />
+                <item android:offset="1.0" android:color="#FFAB40" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Main Central Radiant 4-Point Star -->
+    <path
+        android:pathData="M 54,26 Q 54,45 71,45 Q 54,45 54,64 Q 54,45 37,45 Q 54,45 54,26 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="37" android:startY="26"
+                android:endX="71" android:endY="64"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#00B0FF" />
+                <item android:offset="0.3" android:color="#651FFF" />
+                <item android:offset="0.7" android:color="#D500F9" />
+                <item android:offset="1.0" android:color="#FF4081" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Open Book V-Shape (Left Wing) -->
+    <path
+        android:pathData="M 54,64 L 37,48 L 37,65 L 54,79 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="37" android:startY="48"
+                android:endX="54" android:endY="79"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#00B0FF" />
+                <item android:offset="1.0" android:color="#651FFF" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Open Book V-Shape (Right Wing) -->
+    <path
+        android:pathData="M 54,64 L 71,48 L 71,65 L 54,79 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="54" android:startY="48"
+                android:endX="71" android:endY="79"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#D500F9" />
+                <item android:offset="0.5" android:color="#FF4081" />
+                <item android:offset="1.0" android:color="#FF6E40" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Bottom Crossed Tail V Accent -->
+    <path
+        android:pathData="M 54,79 L 45,88 L 54,83 L 63,88 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="45" android:startY="79"
+                android:endX="63" android:endY="88"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#7C4DFF" />
+                <item android:offset="1.0" android:color="#E040FB" />
+            </gradient>
+        </aapt:attr>
+    </path>
+</vector>

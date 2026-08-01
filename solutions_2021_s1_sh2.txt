@@ -1,0 +1,663 @@
+PHYSICS
+1.[2] For a particle executing SHM,
+x = Asin(wt + p)
+v = wAcos(wt+ p)
+=> v^2 / (w^2 A^2) + x^2 / A^2 = 1 => equation of ellipse
+between v and x
+Hence option (2)
+
+2.[3] From the given condition, we have
+Fnetq = - [2Fq/q cos0]
+Fnetq = - 2 . 1/(4 pi e0) q^2 / (sqrt(d^2 + x^2))^2 . x / sqrt(d^2 + x^2)
+= - q^2 / (2 pi e0 (d^2 + x^2)^3/2) x
+For x << d,
+Fnet q = - q^2 / (2 pi e0 d^3) x
+:. a = - q^2 / (2 pi e0 m d^3) x
+Comparing with equation of SHM (a = -w^2 x)
+:. w = sqrt(q^2 / (2 pi e0 m d^3))
+Hence option (3) is correct
+
+3.[4] From the assumption of KTG, the molecules of
+gas collide with the walls and suffers
+momentum change which results in force on
+the wall and hence pressure.
+Hence option (4) is correct
+
+4.[4] Soft ferromagnetic materials are materials
+which can be easily magnetised and
+demagnetised by external magnetic field. When
+external field is applied, the domains experiences a net torque hence change its
+orientation.
+Hence option (4) is correct
+
+5.[4] Truth table of the given gate :
+A B C
+0 0 0
+0 1 1
+1 0 0
+1 1 0
+Truth table of option (1)
+A B C
+0 0 1
+0 1 1
+1 0 0
+1 1 1
+Truth table of option (2)
+A B C
+0 0 1
+0 1 0
+1 0 1
+1 1 1
+Truth table of option (3)
+A B C
+0 0 1
+0 1 0
+1 0 0
+1 1 0
+Truth table of option (4)
+A B C
+0 0 0
+0 1 1
+1 0 0
+1 1 0
+Since option (1) has same truth table, hence
+answer is option (4) is correct.
+
+6.[1] T = 2pi sqrt(l / g)
+g = 4 pi^2 l / T^2
+dg / g = dl / l + 2 dT / T
+dg / g = (1 * 10^-3) / 1 + 2 * 0.01 / 1.95
+dg / g = 0.0113 or 1.13%
+option (1) is correct
+
+7.[1] Back to back diode will not the make a transistor
+B = ic / ib
+
+8.[3] Keq = K1 + K2 = K + K = 2K
+T = 2pi sqrt(m / Keq) = 2pi sqrt(m / 2K)
+f = 1 / T = 1 / 2pi sqrt(2K / m)
+(Option 3) is correct
+
+9.[1] Just after the switch is closed, inductor will
+behave like infinite resistance (open circuit) so
+the circuit will look like
+i = 9 / (R + R) = 9 / 4 = 2.25
+Option (1) is correct.
+
+10.[2] l = h / mv
+lp = l_alpha
+m_p v_p = m_alpha v_alpha
+m_p v_p = 4m_p v_alpha (m_alpha = 4m_p)
+v_p / v_alpha = 4
+(Option 2) is correct
+
+11.[1] A -> B = isothermal process
+WAB = P1V1 ln(2V1 / V1) = P1V1 ln(2)
+B -> C -> Isochoric process
+WBC = 0
+C -> A -> Adiabatic process
+WCA = (P1/4 * 2V1 - P1V1) / (1 - y) = P1V1 / 2(1 - y) - P1V1 / (1 - y) = - P1V1 / 2(1 - y)
+Wnet = WAB + WBC + WCA {P1V1 = RT}
+= P1V1ln(2) + 0 - P1V1 / 2(y - 1) 
+Option (1) is correct.
+
+12.[1] l_min = 1240 / dV (nm)
+= 1240 / (1.24 * 10^6) = 10^-3 nm
+Option (1) is correct.
+
+13.[1] y = F(x, t)
+For travelling wave y should be linear function
+of x and t and they must exist as (x +/- vt)
+y = Asin(15x - 2t) -> linear function in x and t
+Option (1) is correct.
+
+14.[2] dE = 13.6 [1/n1^2 - 1/n2^2] = hv
+It is maximum if n1 = 1 and n2 = 2
+n = 5 ............................................ -0.544 eV
+n = 4 ............................................ -0.850 eV
+n = 3 ............................................ -1.511 eV
+n = 2 ............................................ -3.4 eV
+n = 1 ............................................ -13.6 eV
+Option (2) is correct.
+
+15.[1] B = lD / d
+lR > lV
+BR = lR D / d and BV = lV D / d
+BR > BV
+Fringe pattern will shrink.
+Option (1) is correct.
+
+16.[3] Let o be the uniform mass density of disc then
+XCOM = (o pi a^2) a - o pi (a/2)^2 (3a/2) / (o pi a^2 - o pi (a/2)^2)
+= (a - 3a/8) / (1 - 1/4) = 5a/6
+Option (2) is correct.
+
+17.[2] Zener diode is heavily doped and have narrow
+depletion layer.
+Option (2) is correct.
+
+18.[4] (a) Source of microwave frequency is magnetron.
+(b) Source of infrared frequency is vibration of atoms and molecules.
+(c) Source of Gamma rays is radioactive decay of nucleus
+(d) Source of X-rays inner shell electron transition.
+Option (4) is correct.
+
+19.[4] F = -ax^2
+ma = -ax^2
+a = -ax^2 / m
+v dv / dx = -ax^2 / m
+integral_v0^0 v dv = integral_0^x -ax^2 / m dx
+[v^2 / 2]_v0^0 = -a/m [x^3 / 3]_0^x
+- v0^2 / 2 = -a x^3 / 3m
+x = (3m v0^2 / 2a)^1/3
+Option(4) is most suitable option as (m) is not given in any option
+
+20.[2] Weight of pole = mg = 49 N
+At equator due to rotation = ge = g - Rw^2
+so W = mge = m(g - Rw^2)
+:. WP > We
+WP = 49 N
+So, We = 48.83 N. 
+We < 49 N
+Option (2) is correct.
+
+21.[2] F = Y.A. dl / l
+dl = F * l / (Y.A.)
+dl = F * l / (Y. pi r^2)
+dl proportional to l / r^2
+dl2 / dl1 = (l2 / l1) * (r1 / r2)^2
+= (2) * (1/2)^2 = 1/2
+dl2 = dl1 / 2 = 0.04 / 2 = 0.02 m
+dl2 = 2cm
+Ans.=2
+
+22.[5] Conductivity s = 5 * 10^7 S/m
+Radius r = 0.5 mm = 5 * 10^-4 m
+E = 10 * 10^-3 V/m
+J = sE = 10 * 10^-3 * 5 * 10^7
+J = 5 * 10^5
+i/A = 5 * 10^5
+i = 5 * 10^5 * pi r^2
+= 5 * 10^5 * pi * (5 * 10^-4)^2
+= 125 pi * 10^-3 Amp
+i = 125 pi mA
+x = 5
+Ans. 5
+
+23.[8] 6l = 2.4, l = 0.4 m
+sin 60 = r/l => r = l sin 60 = l sqrt(3) / 2
+MOI, I = [ m l^2 / 12 + m r^2 ] 6
+= [ m l^2 / 12 + m (l sqrt(3) / 2)^2 ] 6
+= 5 m l^2
+= 5 * 1 * 0.16 = 0.8
+I = 8 * 10^-1 kg m^2 Ans. (2)
+
+24.[2] Kinetic energy K = P^2 / 2m , (PA = PB)
+K proportional to 1/m
+KA / KB = mB / mA = 2 / 1
+Ans. 2
+
+25.[400] vrms = sqrt(3RT / M)
+vrms proportional to sqrt(T)
+(vrms)2 / (vrms)1 = sqrt(T2 / T1) = sqrt(400 / 300) = 2 / sqrt(3)
+(vrms)2 = 2 / sqrt(3) * 200 sqrt(3) = 400 m/s
+
+26.[226] From symmetry p = 1/6 (q / e0)
+= 12 * 10^-6 / (6 * 8.85 * 10^-12)
+= 225.98 * 10^3 Nm^2 / s
+~ 226 * 10^3 Nm^2 / C
+
+27.[8] Sound level decreases by 5dB every km so
+sound level decreased in 20 km = 100 dB
+B2 - B1 = 10 log10 (I2 / I1)
+-100 = 10log10 (I2 / I1) => I1 / I2 = 10^10
+I2 = 10^-10 I1 => P2 = 10^-10 P1 = 10^-8 W
+x = 8 Ans. 8
+
+28.[900] At resonance
+P = V^2 / R
+R = V^2 / P = (120)^2 / 16 = 900 ohms
+
+29.[8] Frequency of sound heard by car-1, which comes by reflection from car-2
+f1 = f0 ((340 + 2)/(340 - 2)) * ((340 + 2)/(340 - 2)) = f0 (342/338)^2
+Frequency of sound coming directly from car-2
+f2 = f0 ((340 + 2)/(340 - 2))
+= f1 - f2 = f0 ( (342/338)(342/338) - 1 ) = 8.09 ~ 8
+
+30.[667] l in vaccum = c / f = 3*10^8 / 3*10^9 = 0.1m
+:. l in medium = 0.1 / u
+Where refractive index u = sqrt(ur er)
+Assuming non-magnetic material ur = 1
+:. u = sqrt(2.25) = 1.5
+lm = 0.1 / 1.5 m = 1/15 m = 6.67 cm
+= 667 * 10^-2 cm
+Ans. 667
+
+CHEMISTRY
+31.[2] Correct sequence of reagents for the following conversion is Br2/Fe, then Sn/HCl, then NaNO2/HCl, then CuBr/HBr.
+
+32.[4] Blood : negatively charged sol According to 
+Hardly-schulz rule, for the negatively charged 
+sol, most (+) ve ion is needed for its efficient 
+coagulation.
+Ans. : FeCl3
+
+33.[4] For nucleophile substitution in aromatic halides
+Correct order is : (i) < (ii) < (iii) < (iv)
+More No. of NO2 substituted aromatic halide,
+increase the rate of nucleophile substitution
+reaction in aromatic halides.
+
+34.[4] Official Answer by NTA (3)
+According to Bohr's theory
+(A) KE = 13.6 Z^2 / n^2 eV/atom => KE proportional to Z^2 / n^2
+(B) speed of e proportional to Z / n => v * n proportional to Z
+(C) Frequency of revolution of e = v / 2 pi r => frequency proportional to Z^2 / n^3
+(D) F = k q1 q2 / r^2 = k Z e^2 / r^2 => F proportional to Z^3 / n^4
+
+35.[3] 
+(a) R-C-Cl -> R-CHO (H2 / Pd-BaSO4, Rosenmund Reduction) -> (a) - (ii)
+(b) R-CH2-COOH -> R-CH(Cl)-COOH (Cl2/P, H2O, HVZ reaction) -> (b) - (iv)
+(c) R-C-NH2 -> R-NH2 (Br2 / NaOH, Hoffmann Bromamide reaction) -> (c) - (i)
+(d) R-C-CH3 -> R-CH2-CH3 (Zn(Hg) / con. HCl, Clemmenson reduction) -> (d) - (iii)
+
+36.[2] (i) [FeCl4]^-2
+Fe^+2 => [Ar] 3d^6
+u = sqrt(n(n+2)) BM = sqrt(4(4+2)) BM = sqrt(24) BM => 4.90 BM
+(ii) [Co(C2O4)3]^-3
+Co^+3 => [Ar] 3d^6 (pairing occurs) => n = 0 => u = 0
+(iii) MnO4^-2
+Mn^+6 => [Ar] 3d^1 => u = sqrt(n(n+2)) BM = sqrt(1(1+2)) BM = sqrt(3) BM => 1.73 BM
+
+37.[4] Colour l/nm
+Li Crimson red 670.8
+Na Yellow 589.2
+Rb Red violet 780.0
+Cs Blue 455.5
+
+38.[3] Reaction of HgSO4/dil.H2SO4 with alkyne
+gives addition of water as per markonikoff's
+rule.
+CH3-C#CH --(HgSO4/H2SO4)--> CH3-C(OH)=CH2 <-> CH3-CO-CH3
+Hence CH3-CH2-CHO cannot be form.
+
+39.[4] BUNA-S, 'S' stand for styrene 
+Buta-1,3-diene + styrene --(Polymerisation)--> Buna-S
+
+40.[2] To reduce the carbonyl groups into alkane wolf
+- kischner reduction is used, without affecting
+the double bond. Reagents: (i) NH2-NH2 (ii) EtO-Na+ / D
+
+41.[2] (a) Valium - Tranquilizer (a)-(iv)
+(b) Morphine - Analgesic (b)-(iii)
+(c) Norethindrone - Antifertility Drug (c)-(i)
+(d) Vitamin B12 - Pernicious anaemia (d)-(ii)
+
+42.[4] Siderite - FeCO3
+Calamine - ZnCO3
+Kaolinite - Al2(OH)4.Si2O5
+Malachite - Cu(OH)2.CuCO3
+
+43.[1] Compound (1) is Non Aromatic
+
+44.[3] Density/g cm^-3: Zn(7.1) < Cr(7.19) < Fe(7.8) < Co(8.7) < Cu(8.9)
+
+45.[3] Clean water would have BOD value of less
+than 5 ppm whereas highly polluted water
+could have a BOD value of 17 ppm or more.
+
+46.[4] (i) In VOSO4, 'V' is in +4 oxidation state.
+So it act as oxidising agent.
+(ii) Cr2O3 is an amphoteric oxide.
+(iii) In RuO4, 'Ru' is in +8 oxidation state.
+So it act as oxidising agent.
+(iv) Red colour of ruby is due to the presence of Cr^+3 ions in Al2O3.
+
+47.[4] I3- Shape : Linear, I-I-I Bond angle => 180 deg
+
+48.[2] Most abundant gas in the troposphere is nitrogen.
+
+49.[3] The diazonium salt of aniline forms an orange-red dye with b-naphthol.
+
+50.[1] L.E. proportional to M.P.
+L.E. : LiF > LiCl, MgO > NaCl
+
+51.[3] Gabriel phthalimide synthesis is used to
+prepare 1 deg aliphatic/alicyclic amine in
+common. Hence amine which can synthesised 
+by Gabriel phthalimide synthesis method is :
+(A) Me2CH-CH2-NH2 (B) CH3CH2NH2
+(C) Ph-CH2-NH2
+
+52.[1] a-sulphur and b-sulphur are diamagnetic. S2-form is paramagnetic.
+
+53.[8] Combustion reaction : 
+CxHy (g) + (x + y/4) O2(g) -> x CO2(g) + y/2 H2O(l)
+V 6V Vx = 4V => x = 4
+Since : (I) Vo2 = 6 * VCxHy
+=> V(x + y/4) = 6V
+=> x + y/4 = 6 => 4 + y/4 = 6 => y = 8
+
+54.[5] Given Mass = 4.75g => C2H2(g)
+=> Moles = 4.75 / 26 mol
+Temp. = 50 + 273 = 323 K
+P = 740 / 760 atm
+R = 0.0826 L atm / mol K
+=> V = nRT / P = (4.75 / 26 * 0.0826 * 323) / (740 / 760)
+=> V = 96314.078 / 19240 = 5.0059 L ~ 5 L
+
+55.[1] Pure Solvent : C6H6 (l)
+Given : Tf = 5.5 deg C
+Kf = 5.12 deg C / m
+Solute is non dissociative
+:. dTf = kf * m
+=> (Tf - T'f) = 5.12 * (10 / 58) / (200 / 1000) mol / kg
+5.5 - T'f = 5.12 * 5 * 10 / 58
+=> T'f = 1.086 deg C ~ 1 deg C
+
+56.[3776] Equation is
+MnO4- + H+ + 5e- -> Mn+2 + 4H2O
+Nernst equation :
+Ecell = E0cell - 0.059 / 5 log ([Mn+2] / ([MnO4-] [H+]^8))
+(I) Given [H+] = 1M
+E1 = E0 - 0.059 / 5 log ([Mn+2] / [MnO4-])
+(II) Now : [H+] = 10^-4 M
+E2 = E0 - 0.059 / 5 log ([Mn+2] / [MnO4-]) * 1 / (10^-4)^8
+= E0 - 0.059 / 5 log ([Mn+2] / [MnO4-]) - 0.059 / 5 log 10^32
+Therefore : |E1 - E2| = 0.059 / 5 * 32
+= 0.3776 V = 3776 * 10^-4
+x = 3776
+
+57.[141] Given : [Ksp]PbI2 = 8 * 10^-9
+To calculate: Solubility of PbI2 in 0.1 M sol of Pb(NO3)2
+(I) Pb(NO3)2 -> Pb+2(aq) + 2NO3-(aq)
+0.1M -> 0.1M + 0.2M
+(II) PbI2(s) <=> Pb+2(aq) + 2I-(aq)
+s -> s + 0.1 and 2s
+~ 0.1
+Now, : Ksp = 8 * 10^-9 = [Pb+2] [I-]^2
+=> 8 * 10^-9 = 0.1 * (2s)^2
+=> 8 * 10^-9 = 4s^2 (s = sqrt(2) * 10^-4)
+=> s = 141 * 10^-6 M
+=> x = 141
+
+58.[81] Given : 
+C12H22O11 + H2O --(I order)--> C6H12O6 + C6H12O6
+t1/2 = 10/3 hr
+t = 0 a = [A]0
+t = 9hr a - x = [A]t
+from I order kinetic : k * t / 2.303 = log ([A]0 / [A]t)
+=> ln 2 / (10/3) * 9 / 2.303 = log (1/f)
+=> 0.693 * 9 * 3 / 23.03 = log(1/f)
+=> log(1/f) = 0.81246 = 81.24 * 10^-2
+=> x = 81
+
+59.[243] C6H5NH2 --(90% efficiency)--> C6H5-NH-CO-CH3
+(Aniline) (Acetanilide)
+Given 1.86 g aniline
+=> 1 mol C6H5NH2 give 1 mole C6H5-NH-CO-CH3
+:. mole of C6H5NH2 = moles of C6H5-NH-CO-CH3
+=> 1.86 / 93 = W_acetanilide / 135
+=> W_acetanilide = 1.86 * 135 / 93 g = 2.70 g
+But efficiency of reaction is 90% only
+:. Mass of acetanilide produced = 2.70 * 90 / 100 g
+= 2.43 g
+= 243 * 10^-2 g
+=> x = 243
+
+60.[855] 3HC = CH(g) -> C6H6(l) : dG0 = -RTlnk
+dG0f = 2.04 * 10^5 J/mol, -1.24 * 10^5 J/mol
+=> dG0 = sum(dG0f)_P - sum(dG0f)_R
+=> -RT ln k = 1 * (-124 * 10^5) - (-3 * 2.04 * 10^5) 
+=> - 2.303 * R * T log k = 4.88 * 10^5
+=> log k = - 4.88 * 10^5 / (2.303 * R * T) = - 488000 / 5705.848 = -85.52
+= -855 * 10^-1
+=> x = 855
+
+MATHEMATICS
+61.[2] 
+Both are tautologies
+
+62.[1] P(9, 6, 9)
+(x - 3)/7 = (y - 2)/5 = (z - 1)/-9 = l
+x = 7l + 3
+y = 5l + 2
+z = -9l + 1
+The mirror image is (20, b, -a -9)
+Midpoint is (29/2, (b+6)/2, (-a)/2)
+(29/2 - 3)/7 = ((b+6)/2 - 2)/5 = (-a/2 - 1)/-9
+(23/2)/7 = (b+2)/10 = (a+2)/18
+Wait, point is (a,6,9). The mirror image is (20,b,-a-9). Midpoint is ((a+20)/2, (b+6)/2, -a/2).
+((a+20)/2 - 3)/7 = ((b+6)/2 - 2)/5 = (-a/2 - 1)/-9 = l
+(a+14)/14 = (b+2)/10 = (a+2)/18
+=> 18(a+14) = 14(a+2) => 18a + 252 = 14a + 28 => 4a = -224 => a = -56
+(b+2)/10 = (-56+2)/18 = -54/18 = -3 => b+2 = -30 => b = -32
+=> |a + b| = |-56 - 32| = 88
+
+63.[3] r.(i + j + k) = 1
+r.(i - 2j) = -2
+point (1, 0, 2)
+Equation of plane
+r.(i + j + k) - 1 + l{r.(i - 2j) + 2} = 0
+r.{(1 + l)i + (1 - 2l)j + k} - 1 + 2l = 0
+point i + 0j + 2k = r
+:. (i + 2k).{(1 + l)i + (1 - 2l)j + k} - 1 + 2l = 0
+1 + l + 2 - 1 + 2l = 0
+3l + 2 = 0 => l = -2/3
+:. r.[(1 - 2/3)i + (1 + 4/3)j + k] = 1 - 2(-2/3)
+r.[1/3 i + 7/3 j + k] = 7/3
+r.[i + 7j + 3k] = 7
+Ans. 3
+
+64.[4] P : y = x^2 + 4 => P(h, h^2+4)
+L : y = 4x - 1 => 4x - y - 1 = 0
+d = |4h - (h^2+4) - 1| / sqrt(16+1) = |h^2 - 4h + 5| / sqrt(17)
+d(d) / dh = (2h - 4) / sqrt(17) = 0 => h = 2
+:. k = 2^2 + 4 = 8
+:. Point (2, 8)
+
+65.[4] tan60 = h/y => h = y sqrt(3)
+tan30 = h/(x+y) => 1/sqrt(3) = h/(x+y) => sqrt(3)h = x + y
+Speed 432 km/h => 432 * (5/18) m/s = 120 m/s => 120 * 20 = 2400 m
+sqrt(3)h = 2400 + h/sqrt(3)
+3h = 2400 sqrt(3) + h
+2h = 2400 sqrt(3)
+h = 1200 sqrt(3) m
+
+66.[2] n+1C2 + 2 (2C2 + 3C2 + 4C2 + ...... + nC2)
+= n+1C2 + 2(n+1C3)
+= n+1C2 + n+1C3 + n+1C3
+= n+2C3 + n+1C3
+= n(n+1)(n+2)/6 + (n-1)n(n+1)/6
+= n(n+1)/6 [n+2 + n-1] = n(n+1)(2n+1)/6
+
+67.[4] f'(x) = 55 , x < -5
+f'(x) = 6x^2 - 6x - 120 = 6(x^2 - x - 20) = 6(x-5)(x+4) , -5 < x < 4
+f'(x) = 6x^2 - 72x - 336 = 6(x^2 - 12x - 56) (Wait, 2x^3 - 3x^2 - 36x - 336 => 6x^2 - 6x - 36 = 6(x-3)(x+2)) , x > 4
+f(x) is increasing in 
+x in (-inf, -4) U (4, inf) 
+
+68.[2] f(x)f''(x) - (f'(x))^2 = 0
+d/dx [f'(x) / f(x)] = 0
+ln (f'(x)) = ln f(x) + lnc
+f'(x) = cf(x)
+ln f(x) = cx + k1
+f(x) = ke^cx
+f(0) = 1 = k
+f'(0) = c = 2
+f(x) = e^2x
+f(1) = e^2 in (6, 9)
+
+69.[4] m = -1/sqrt(3) , c = 2
+(1) c = a sqrt(1+m^2) => 2 = sqrt(7) sqrt(1+1/3) (incorrect)
+(2) c = a/m => 2 = (1/6sqrt(3)) / (-1/sqrt(3)) = -1/6 (incorrect)
+(3) c = sqrt(a^2 m^2 - b^2) => 2 = sqrt(9/2 * 1/3 - 1/2) = 1 (incorrect)
+(4) c = sqrt(a^2 m^2 + b^2) => 2 = sqrt(9 * 1/3 + 1) = 2 (correct)
+
+70.[2] integral_1^3 [x^2 - 2x - 2] dx
+= integral_1^3 [(x-1)^2 - 3] dx
+= integral_1^sqrt(2) 1.dx + integral_sqrt(2)^sqrt(3) 2.dx + integral_sqrt(3)^2 3.dx - 6
+= sqrt(2) - 1 + 2(sqrt(3) - sqrt(2)) + 3(2 - sqrt(3)) - 6
+= -sqrt(2) - sqrt(3) - 1
+
+71.[1] Let 1/4 sin^-1(sqrt(63)/8) = 0
+sin 4(0) = sqrt(63)/8
+cos 4(0) = 1/8
+2cos^2 2(0) - 1 = 1/8
+cos^2 2(0) = 9/16
+cos 2(0) = 3/4
+2cos^2(0) - 1 = 3/4
+cos^2(0) = 7/8
+cos(0) = sqrt(7) / 2sqrt(2)
+tan(0) = 1 / sqrt(7)
+
+72.[2] ~(~P ^ (p v q))
+p v (~ p ^ ~q)
+(p v ~ p) ^ (p v ~ q)
+t ^ (p v ~q)
+p v ~q
+
+73.[3] a + b + c = 2 .....(1)
+and (dy/dx)_(0,0) = 1
+2ax + b |_(0, 0) = 1 => b = 1
+Curve passes through origin 
+So, c = 0
+and a = 1
+
+74.[4] Required area = 2 integral_0^sqrt(3) (2x^2 + 9 - 5x^2)dx
+= 2 [9x - x^3]_0^sqrt(3)
+= 2[9 sqrt(3) - 3 sqrt(3)] = 12 sqrt(3)
+
+75.[2] dy/dx + y/x = bx^3
+I.F. = e^(integral 1/x dx) = x
+So, solution of D.E. is given by 
+y.x = integral b.x^4 dx + c
+y = b.x^4 / 5 + c/x
+Passes through (1, 2)
+2 = b/5 + c ..... (1)
+integral_1^2 f(x)dx = 62/5
+[b.x^5 / 25 + c ln x]_1^2 = 62/5
+c ln 2 + 31b/25 = 62/5 ..... (2)
+By equation (1) & (2)
+c = 0 and b = 10
+
+76.[2] f'(x) = f'(2 -x)
+f(x) = -f(2 - x) + c
+put x = 0
+f'(0) = - f'(2) + c => c = f(0) + f(2) = 1 + e^2
+so, f(x) + f(2 - x) = 1 + e^2
+I = integral_0^2 f(x)dx
+I = integral_0^2 f(2 - x)dx
+2I = integral_0^2 (f(x) + f(2 - x))dx
+2I = integral_0^2 (1 + e^2) dx = (1+e^2) * 2
+I = 1 + e^2
+
+77.[3] Let A^T = A and B^T = -B
+C = A^2 B^2 - B^2 A^2
+C^T = (A^2 B^2)^T - (B^2 A^2)^T
+= (B^2)^T (A^2)^T - (A^2)^T (B^2)^T
+= B^2 A^2 - A^2 B^2
+C^T = -C
+C is skew symmetric
+So det(C) = 0
+so system have infinite solutions
+
+78.[4] (a + 2 + a)/3 = 10/3 => 2a + 2 = 10 => a = 4
+(c + b + b)/3 = 7/3 => c + 2b = 7
+also 2b = a + c => 2b = 4 + c => c = 2b - 4
+2b - 4 + 2b = 7 => 4b = 11 => b = 11/4
+now 4x^2 + 11/4 x + 1 = 0 => 16x^2 + 11x + 4 = 0
+a^2 + b^2 - ab = (a + b)^2 - 3ab
+= (-11/16)^2 - 3(4/16) = 121/256 - 48/256 = 73/256
+Wait, the solution says:
+= (-11/16)^2 - 3(1/4)
+= 121/256 - 3/4 = 121/256 - 192/256 = -71/256
+
+79.[4] D = |1 -2 0; 1 -1 k; 0 k 4| = 1(-4-k^2) + 2(4) = 4 - k^2
+so, A is correct and B,C, E are incorrect 
+If k = 2
+D1 = |1 -2 0; -2 -1 2; 6 2 4| = 1(-4-4) + 2(-8-12) = -8 - 40 = -48 != 0
+So no solution 
+D is correct
+
+80.[3] Total subsets = 2^5 = 32
+Probability = 5C2 * 3^3 / (32 * 32) = 10 * 27 / 1024 = 270 / 1024 = 135 / 512
+
+81.[BONUS] Official Answer by NTA [12]
+
+82.[1] (x - l)/1 = (y - 1/2)/1/2 = (z - 0)/-1/2
+x - 0 = (y + 2l)/1 = (z - l)/1
+Shortest distance = |(a2 - a1).(b1 x b2)| / |b1 x b2|
+b1 x b2 = |i j k; 1 1/2 -1/2; 1 1 1| = i(1) - j(3/2) + k(1/2) = i - 3/2 j + 1/2 k
+|b1 x b2| = sqrt(1 + 9/4 + 1/4) = sqrt(14)/2
+|(a2 - a1).(b1 x b2)| = |(-l i - (2l + 1/2)j + l k) . (i - 3/2 j + 1/2 k)|
+= |-l + 3l + 3/4 + l/2| = |5l/2 + 3/4|
+Wait, the solution says:
+= |-l i + (-2l + 1/2)j + l k| . (2i - 3j + k)/sqrt(14)
+= |-2l + 6l - 3/2 + l| / sqrt(14) = |5l - 3/2| / sqrt(14)
+= sqrt(7) / 2sqrt(2) = sqrt(14) / 4
+|5l - 3/2| / sqrt(14) = sqrt(14)/4 => |5l - 3/2| = 14/4 = 7/2
+5l = 3/2 +/- 7/2 = 5, -2
+l = 1, -2/5
+
+83.[2] a + b + c = 2 (Wait, a+a=1=>a=1/2. b+B=2)
+f(x) + f(1/x) = x(b+B) + (b+B) * 1/x = 2x + 2/x = 2(x + 1/x)
+So f(x) + f(1/x) / (x + 1/x) = 2
+
+84.[56] Let point is (h, k)
+So, sqrt((h - 5)^2 + k^2) = 3 sqrt((h + 5)^2 + k^2)
+8h^2 + 8k^2 + 100h + 200 = 0
+h^2 + k^2 + 25/2 h + 25 = 0
+r^2 = (25/4)^2 - 25
+4r^2 = 25^2 / 4 - 100 = 625/4 - 100 = 225/4 = 56.25
+After round of 4r^2 = 56
+
+85.[BONUS] Official Answer by NTA [1225]
+
+86.[11] var = sum x^2 / n - (sum x / n)^2
+= (9 + k^2)/10 - ((9+k)/10)^2 < 10
+90 + 10k^2 - 81 - k^2 - 18k < 1000
+9k^2 - 18k - 991 < 0
+k^2 - 2k < 991/9 => (k-1)^2 < 1000/9
+-sqrt(1000)/3 < k - 1 < sqrt(1000)/3
+-31.6/3 < k - 1 < 31.6/3
+-10.5 < k - 1 < 10.5
+k < 11.5
+Maximum value of k is 11
+
+87.[3] a(r^4 - 1) / (r - 1) = 65/12
+1/a (1/r^4 - 1) / (1/r - 1) = 65/18 => 1/a * (1 - r^4) / r^3(1 - r) = 65/18 => 1/ar^3 * (r^4-1)/(r-1) = 65/18
+Divide them: a^2 r^3 = 18/12 = 3/2
+and a^3 r^3 = 1 => ar = 1
+So a(1/a^3) = 3/2 => 1/a^2 = 3/2 => a^2 = 2/3?
+No, a^2 r^3 = a^2 r^2 * r = r = 3/2
+=> a = 2/3
+So third term = ar^2 = (2/3) * (9/4) = 3/2
+2a = 3
+
+88.[31650] If group C has one student then number of groups 10C1[2^9 - 2] = 5100
+If group C has two students then number of groups 10C2[2^8 - 2] = 11430
+If group C has three students then number of groups = 10C3 * [2^7 - 2] = 15120
+So total groups = 31650
+
+89.[310] k = (-1 + i sqrt(3))^21 / (1-i)^24 + (1 + i sqrt(3))^21 / (1+i)^24
+= 2^21(w)^21 / (1-i)^24 + 2^21(-w^2)^21 / (1+i)^24
+= 2^21 / (-2i)^12 + 2^21 / (2i)^12
+= 2^21 / 2^12 + 2^21 / 2^12 = 2^9 + 2^9 = 2^10 = 1024 ?
+Wait, solution says: K = 1/512 [e^(i(14pi+6pi)) + e^(i(7pi-6pi))]
+K = 1/512 [1 + (-1)] = 0
+n = [|k|] = 0
+sum_{j=0}^5 (j+5)^2 - sum_{j=0}^5 (j+5)
+= sum (j^2 + 10j + 25 - j - 5) = sum (j^2 + 9j + 20)
+= 55 + 9(15) + 20(6) = 55 + 135 + 120 = 310
+
+90.[2] Case-I x <= 5
+(x + 1)^2 - (x - 5) = 27/4
+x^2 + 2x + 1 - x + 5 = 27/4 => x^2 + x + 6 - 27/4 = 0 => x^2 + x - 3/4 = 0
+=> 4x^2 + 4x - 3 = 0 => (2x + 3)(2x - 1) = 0 => x = 1/2, -3/2
+Case-II x > 5
+(x + 1)^2 + (x - 5) = 27/4
+x^2 + 2x + 1 + x - 5 = 27/4 => x^2 + 3x - 4 - 27/4 = 0 => x^2 + 3x - 43/4 = 0 => 4x^2 + 12x - 43 = 0
+x = (-12 +/- sqrt(144 + 688))/8 = (-12 +/- sqrt(832))/8 = (-3 +/- sqrt(52))/2
+sqrt(52) ~ 7.2 => (-3 + 7.2)/2 = 2.1 < 5 (rejected)
+So, the equation have two real root

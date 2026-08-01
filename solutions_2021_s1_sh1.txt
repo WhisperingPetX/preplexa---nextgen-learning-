@@ -1,0 +1,594 @@
+PHYSICS
+1.[4] WIsothermal = nRTIn(V2/V1)
+WIsobaric = PΔV = nΔT 
+WIsochoric = 0 
+W1= 1nRT In(V/2V) = nRT In2
+W2 = nR (T/2 - T) = -nR T/2
+W3 = 0
+=> Wnet = W1 + W2 + W3 
+=> Wnet = nRT (In2 - 1/2)
+
+2.[1] For convex mirror, focus is behind the mirror.
+f = + r/2
+
+3.[3] Amplitude ∝ Width of slit
+=> A2 = 3A1
+Imax / Imin = (|I1 + I2| / |I1 - I2|)^2
+Intensity I ∝ A^2
+=> Imax / Imin = ((A1 + A2) / |A1 - A2|)^2 = ((A1 + 3A1) / |A1 - 3A1|)^2
+= (4A1 / 2A1)^2 = 4 : 1 
+
+4.[2] F = G(2m)m / d^2 = (2m)ω^2(d/3)
+Gm / d^2 = ω^2 d/3
+=> ω^2 = 3Gm / d^3 => ω = sqrt(3Gm / d^3)
+=> T = 2pi / ω = 2pi sqrt(d^3 / 3Gm)
+
+5.[2] i = 20t + 8t^2
+i = dq / dt => q = integral idt
+=> q = integral_0^15 (20t + 8t^2)dt
+q = [20t^2 / 2 + 8t^3 / 3]_0^15
+q = 10 * (15)^2 + 8(15)^3 / 3
+q = 2250 + 9000
+q = 11250 C
+
+6.[3] Ring I1 = MR^2 / 2 about diameter 
+Disc I2 = MR^2 / 2
+Solid cylinder I3 = MR^2 / 2
+solid sphere I4 = 2/5 MR^2
+I1 = I2 = I3 > I4
+
+7.[4] If linear momentum are equal then wavelength also equal
+P = h / l , E = hc / l
+On decreasing wavelength, momentum and energy of photon increases.
+
+8.[2] Momentum of system remains conserved.
+pi = pf
+MAω = (m + M) A'ω'
+MA sqrt(k / M) = (m + M) A' sqrt(k / (m + M))
+A' = A sqrt(M / (m + M))
+
+9.[4] Y- Younge modulus, K- Bulk modulus, n- modulus of rigidity 
+We know that
+y = 3k (1 - 2o)
+o = 1/2 (1 - y/3k) ......(i)
+y = 2n (1 + o) 
+o = y / 2n - 1 ......(ii)
+From Eq. (i) and Eq. (ii)
+1/2 (1 - y/3k) = y / 2n - 1
+1 - y/3k = y/n - 2
+y/3k = 3 - y/n
+y/3k = (3n - y) / n
+ny/3k = 3n - y
+k = ny / (9n - 3y)
+
+10.[3] A -> Series limit of Lymen series.
+B -> Third member of Balmer series.
+C -> Second member of Paschen series.
+
+11.[4] F1 = Gmm / (2R)^2 = Gm^2 / 4R^2
+F2 = Gmm / (sqrt(2)R)^2 = Gm^2 / 2R^2
+F3 = Gmm / (sqrt(2)R)^2 = Gm^2 / 2R^2
+=> Fnet = F1 + F2 cos 45deg + F3 cos 45deg
+= Gm^2 / 4R^2 + (Gm^2 / 2R^2) * (1/sqrt(2)) + (Gm^2 / 2R^2) * (1/sqrt(2))
+= Gm^2 / R^2 (1/4 + 1/(2sqrt(2)) + 1/(2sqrt(2)))
+= Gm^2 / R^2 (1/4 + 1/sqrt(2)) = Gm^2 / 4R^2 (1 + 2sqrt(2))
+Fnet = Gm^2 / 4R^2 (1 + 2sqrt(2)) = mv^2 / R
+=> v = sqrt(G(1 + 2sqrt(2)) / 2)
+
+12.[2] Slope of v-t graph gives acceleration
+Acceleration will be 
+
+13.[3] For series combination
+1/Ceq1 = 1/C + 1/C => Ceq1 = C/2
+For parallel combination
+Ceq2 = C + C => Ceq2 = 2C
+=> Ceq1 / Ceq2 = (C/2) / 2C = 1/4 = 1 : 4
+
+14.[1] Ie = IC + IB
+=> dIe + dIC + dIB 
+4mA = 3.5 mA + dIB
+=> dIB = 0.5 mA
+b = dIC / dIB = 3.5 / 0.5 = 7
+
+15.[2] (a) Isothermal => Temperature constant -> (ii)
+(b) Isochoric => Volume constant -> (iii)
+(c) Adiabatic => dQ = 0 => Heat content is constant -> (iv)
+(d) Isobaric => Pressure constant -> (i)
+
+16.[1] dV = Vy dT
+dV = 3a^3 a dT
+
+17.[3] I = (6 - 4) / 10 = 1/5 A 
+Vx + 4 + 8 * 1/5 - Vy = 0
+Vx - Vy = -5.6 => |Vx - Vy| = 5.6 V
+
+18.[2] We can replace -Q charge at origin by +Q and -2Q . Now due to +Q charge at every corner of cube. Electric field at center of cube is zero so now net electric field at center is only due to -2Q charge at origin.
+E = kqr / r^3 = (1(-2Q) * a/2 (i + j + k)) / (4pi e0 (a/2 * sqrt(3))^3)
+E = -2Q(i + j + k) / (3sqrt(3)pi a^2 e0)
+
+19.[1] T1 / T2 = 1 / 8
+(2pi / w1) / (2pi / w2) = 1 / 8
+w1 / w2 = 1 / 8
+
+20.[2] x^2 / akT -> dimensionless 
+=> [a] = [x^2] / [kT] = L^2 / ML^2T^-2 = M^-1 T^2
+Now [W] = [a] [b]^2
+[b] = sqrt([W] / [a]) = sqrt(ML^2T^-2 / M^-1T^2) = M^1 L^1 T^-2
+
+21.[25] F.B.D. of the block is shown in the diagram
+Since block is at rest therefore
+fr - mg = 0 ...(1)
+F - N = 0 ....(2)
+fr <= uN
+In limiting case
+fr = uN = uF ....(3)
+Using eq. (1) and (3)
+:. uF = mg
+=> F = mg / u = (0.5 * 10) / 0.2 = 25 N
+Ans 25.00
+
+22.[2000] * Official answer by NTA (200)
+Given : L = 2 x 10^-4 H
+R = 6.28 ohms
+f = 10 MHz = 10^7 HZ
+Since quality factor,
+Q = w0 L / R = 2pi f L / R
+:. Q = 2pi x 10^7 x (2 x 10^-4) / 6.28
+Q = 2 x 10^3 = 2000
+:. Ans. is 2000 
+
+23.[25600] Using Pascals law
+100 x g / A2 = mg / A1 ..... (1)
+Let m mass can lift M0 in second case then
+M0 g / 16A2 = Mg / (A1/16) ....(2)
+{Since A = pi d^2 / 4}
+From equation (1) and (2) we get
+M0 / 16.100 = 16
+=> M0 = 25600 kg
+
+24.[25] At maximum ht. block will experience maximum friction force. Therefore if at this height slope of the tangent is tan 0, then 0 = Angle of repose.
+:. = tan 0 = dy / dx = 2x / 4 = x / 2 = 0.5 
+=> x = 1 and therefore y = x^2 / 4 = 0.25 m = 25 cm
+:. Answer is 25 cm
+
+25.[15] Given : Frequency of wave f = 5 GHz = 5 x 10^9 Hz 
+Relative permittivity, er = 2
+and Relative permeability, ur = 2 
+Since speed of light in a medium is given by,
+V = 1 / sqrt(u e) = 1 / sqrt(ur u0 er e0)
+v = 1 / sqrt(ur er) * 1 / sqrt(u0 e0) = C / sqrt(ur er)
+Where C is speed of light is vacuum.
+:. v = (3 x 10^8) / sqrt(4) = (30 x 10^7) / 2 m/s = 15 x 10^7 m/s
+:. Ans. is 15
+
+26.[25] Current through 2k ohms resistance
+I = 5 / (2 x 10^3) = 2.5 x 10^-3 A = 25 x 10^-4 A
+Ans 25
+
+27.[25] % modulation = Am / Ac x 100
+% modulation = 20 / 80 x 100 = 25%
+Ans 25
+
+28.[1] From conservation of momentum along y-axis.
+Piy = Pfy
+0 + 0 = mv1 sin 30deg j + mv2 sin 30deg(-j)
+mv2 sin 30deg= mv1 sin 30deg
+v2 = v1 or v1 / v2 = 1 
+
+29.[440] NP / NS = VP / VS
+NP / 24 = 220 / 12
+NP = 220 x 24 / 12
+NP = 440
+Ans. 440 turns 
+
+30.[75] Assuming initially axis of Polarizer and Analyzer are parallel
+Now emerging intensity = I0/2 cos^2 30deg
+= 100 (sqrt(3)/2)^2 = 100 x 3/4 = 75 Ans. 75
+
+CHEMISTRY
+31.[4] 
+
+32.[2] In general from left to right in a period, ionistion enthalpy increases due to effective nuclear charge increases.
+but due to extra stability of half filled and full filled electronic configuration, required ionisation enthalpy is more from neighbouring elements.i.e. first ionisation enthalpy order is
+Al < Mg < Si < S < P
+
+33.[3]
+
+34.[1] Sphalerite ore : ZnS
+Calamine ore : ZnCO3
+Siderite ore : FeCO3
+Malachite ore : Cu(OH)2.CuCO3
+It is possible to separate two sulphide ores by adjusting proportion of oil to water or by using' depressants'. In case of an ore containing ZnS and PbS, the depressant used is NaCN.
+
+35.[2] Al2O3(s) + 2NaOH (aq) + 3H2O(l) -> 2Na[Al(OH)4](aq) (X)
+2Na[Al(OH)4](aq) + CO2 (Y) -> Al2O3.xH2O(s) (Z) + 2NaHCO3(aq)
+So 
+X : Na[Al(OH)4]
+Y : CO2
+Z : Al2O3. xH2O
+
+36.[2] Isostructural means same structure
+(A) SO4^2- : Tetrahedral, CrO4^2- : Tetrahedral
+(B) SiCl4 : Tetrahedral, TiCl4 : Tetrahedral
+
+37.[1]
+
+38.[3] Aniline on protonation gives anilinium ion which is meta directing. So considerable amount of meta product is formed.
+
+39.[4] x / m = K(P)^1/n
+log (x / m) = log K + 1/n log P 
+y = c + mx
+m = 1/n so slope will be equal to 1/n.
+
+40.[3] (A) HOCl +H2O2 -> H3O+ + Cl- + O2
+In this equation, H2O2 is reducing chlorine from +1 to -1.
+(B) I2 + H2O2 +2OH- -> 2I- + 2H2O + O2
+In this equation, H2O2 is reducing iodine from 0 to -1. 
+In (A) reduction of HOCl occurs so it will be a oxidising agent hence H2O2 will be a reducing agent.
+In(B) reduction of I2 occurs so it will be a oxidising agent and H2O2 will be a reducing agent. 
+
+41.[3]
+
+42.[3] CH3-CH2-CH3 --(MO2O3)--> CH3-CH2-CH=O
+The reagent used will be MO2O3
+
+43.[2] (i) Blue cupric metaborate is reduced to colourless cuprous metaborate in a luminous flame
+(ii)Cupric metaborate is obtained by heating boric anhydride and copper sulphate in a non luminous flame.
+
+44.[2] Hydrogen bonding is responsible for the stacking of a-helix structure of protein.
+
+45.[3] (b) 2-Chlorobuta-1, 3-diene is the monomeric unit of polymer neoprene.
+(c) 2-Methylbuta-1, 3-diene is the monomeric unit of polymer natural rubber.
+(d) CH2 = CH - CN (Acrylonitrile) is the one of the monomeric unit of polymer Buna-N
+
+46.[4] The gas CH4 evolved due to anaerobic degradation of vegetation which causes global warming and cancer.
+
+47.[2] The major components in "Gun Metal" are
+Cu : 87%
+Zn : 3%
+Sn : 10%
+
+48.[4] Only copper shows positive value for electrode potential of M2+ /M of 3d-series elements.
+
+49.[2]
+
+50.[1]
+
+51.[36] Official Ans by NTA (35)
+ClCH2COOH <=> ClCH2COO- + H+
+i = 1 + (2 - 1) a
+i = 1 + a
+dTf = ikfm 
+0.5 = (1 + a) (1.86) (9.45 / 94.5) / (500 / 1000)
+0.5 = (1 + a) (1.86) * (0.1 / 0.5)
+0.5 / (1.86 * 0.2) = 1 + a
+1.34 = 1 + a => a = 0.34
+Ka = C a^2 / (1 - a)
+C = (9.45 / 94.5) / 0.5 = 0.2 M
+Ka = 0.2 * (0.34)^2 / (1 - 0.34) = 0.035
+Ka = 35 x 10^-3
+
+52.[2] M = (4.5 / 90) / (250 / 1000) = 0.2 = 2 x 10^-1
+
+53.[5] Cl2 <=> 2Cl
+Let mol of both of Cl2 and Cl is x 
+PCl = (x / 2x) * 1 = 1/2
+PCl2 = (x / 2x) * 1 = 1/2
+KP = (1/2)^2 / (1/2) = 1/2 = 0.5 => 5 x 10^-1
+
+54.[2] Both compounds BeO and Be(OH)2 are amphoteric in nature. and both compounds BaO and Sr(OH)2 are basic in nature.
+
+55.[12] 16e- + S8 -> 8S^2-
+12H2O + S8 -> 4S2O3^2- + 24H+ + 16e-
+2S8 + 12H2O -> 8S^2- + 4S2O3^2- + 24H+
+for balancing in basic medium add equal number of OH- that of H+
+2S8 + 12H2O + 24OH- -> 8S^2- + 4S2O3^2- + 24H2O
+2S8 + 24OH- -> 8S^2- + 4S2O3^2- + 12 H2O 
+S8 + 12OH- -> 4S^2- + 2S2O3^2- + 6 H2O
+a = 12
+
+56.[1380] dGo = -RT ln Kp 
+= -R(300) (2) ln(10)
+= -R(300 x 2 x 2.3)
+dGo = -1380 R
+
+57.[2] l = h / sqrt(2mqV)
+lLi / lp = sqrt(mp (e)(v) / (mLi (3e)(V)))
+mLi = 8.3mp
+lLi / lp = sqrt(1 / (8.3 x 3)) = 1 / 5 = 0.2 = 2 x 10^-1
+
+58.[1] Cu2+ + NH3 <=> [Cu(NH3)]2+
+[Cu(NH3)]2+ + NH3 <=> [Cu(NH3)2]2+
+[Cu(NH3)2]2+ + NH3 <=> Cu(NH3)32+
+[Cu(NH3)3]2+ + NH3 <=> [Cu(NH3)4]2+
+So
+K = K1 x K2 x K3 x K4
+= 10^4 x 1.58 x 10^3 x 5 x 10^2 x 10^2
+K = 7.9 x 10^11
+Where K -> Equilibrium constant for formation of [Cu(NH3)4]2+
+So equilibrium constant (K') for dissociation of [Cu(NH3)4]2+ is 1/K
+K' = 1 / K = 1 / (7.9 x 10^11) = 1.26 x 10^-12
+So the value of x = 1.26
+OMR Ans = 1 (After rounded off to the nearest integer)
+
+59.[8]
+
+60.[26] Kt = ln [A]0 / [A]t
+3.3 x 10^-4 x t = ln (100 / 60)
+t = 1547.956 sec
+t = 25.799 min
+~ 26 min 
+
+MATHEMATICS
+61.[4] (A ^ (A -> B)) -> B
+= (A ^ (~A v B)) -> B
+= ((A ^ ~A) v (A ^ B)) -> B
+= (A ^ B) -> B
+= ~(A ^ B) v B
+= (~A v ~B) v B
+= T
+
+62.[4] Let the line be y = mx + c 
+x-intercept : -c/m
+y-intercept : c
+A.M of reciprocals of the intercepts 
+(-m/c + 1/c) / 2 = 1/4
+=> 2 (1 - m) = c 
+line : y = mx + 2(1 - m) = c
+=> (y - 2) - m(x - 2) = 0
+=> line always passes through (2, 2)
+Ans. 4
+
+63.[3] Normal vector :
+i j k
+3 1 -2
+2 -5 -1
+= -11i - j + 17k
+so drs of normal to the required plane is < 11, 1, 17 > 
+plane passes through (1, 2, -3)
+So eqn of plane :
+11 (x - 1) + 1(y - 2) + 17 (z + 3) = 0
+=> 11x + y + 17z + 38 = 0 
+
+64.[4] dP / dt = 0.5P - 450
+=> integral_850^P dp / (P - 900) = integral_0^t dt / 2
+[ln |P(t) - 900|]_850^P = [t/2]_0^t
+=> ln |P(t) - 900| - ln|P(0) - 900| = t / 2
+=> ln |P(t) - 900| - ln |50| = t / 2 for P(t) = 0
+=> ln (900 / 50) = t / 2
+=> t = 2ln18
+
+65.[4] d = 
+3 -2 -k
+2 -4 -2
+1 2 -1
+= 0 => 24 - 2(0) - k(8) = 0 => k = 3 
+dx =
+10 -2 -3
+6 -4 -2
+5m 2 -1
+= 10(8) - 2(-10m + 6) - 3(12 + 20m) = 8(4 - 5m)
+dy =
+3 10 -3
+2 6 -2
+1 5m -1
+= 3(-6 + 10m) + 10(0) - 3(10m - 6) = 0
+dz = 
+3 -2 10
+2 -4 6
+1 2 5m
+= 3(-20m - 12) - 2(6 - 10m) + 10(8) = 40m - 32 = 8(5m - 4)
+for inconsistent k = 3 & m != 4/5
+
+66.[3] For x = n, n in Z
+LHL = lim_{x->n-} f(x) = lim_{x->n-} [x - 1] cos ((2x - 1)/2 pi) = 0
+RHL = lim_{x->n+} f(x) = lim_{x->n+} [x - 1] cos ((2x - 1)/2 pi) = 0
+f(n) = 0
+=> LHL = RHL = f(n)
+=> f(x) is continuous for every real x.
+
+67.[4] Let (x - 3)/1 = (y - 4)/2 = (z - 5)/2 = t
+=> x = 3 + t, y = 2y + 4 , z = 2t + 5
+for point of intersection with x + y + z = 17
+3 + t + 2t + 4 + 2t + 5 = 17
+=> 5t = 5 => t = 1
+=> point of intersection is (4, 6, 7)
+distance between (1, 1, 9) and (4, 6, 7)
+is sqrt(9 + 25 + 4) = sqrt(38)
+
+68.[1] Slope of tangent at P(t, t^3) = [dy/dx]_(t,t^3)
+= (3x^2)_(x=t) = 3t^2
+So equation tangent at P(t, t^3) : 
+y - t^3 = 3t^2(x - t) for point of intersection with y = x^3
+x^3 - t^3 = 3t^2 x - 3t^3
+=> (x - t)(x^2 + xt + t^2) = 3t^2 (x - t) 
+for x != t
+x^2 + xt + t^2 = 3t^2
+=> x^2 + xt - 2t^2 = 0 
+=> (x - t) (x + 2t) = 0 
+So for Q : x = -2t, Q(-2t, -8t^3)
+ordinate of required point : (-8t^3 + 2t^3) / (2 + 1) = -2t^3
+
+69.[3] integral (cos x - sin x) / sqrt(8 - sin 2x) dx
+= integral (cos x - sin x) / sqrt(9 - (sin x + cos x)^2)
+Let sinx + cosx = t
+integral dt / sqrt(9 - t^2) = sin^-1(t/3) + c
+= sin^-1 ((sin x + cos x)/3) + c
+so a = 1, b = 3. 
+
+70.[2] (-15C1 + 2 * 15C2 - 3 * 15C3 + .... - 15 * 15C15) + (14C1 + 14C3 + ... + 14C11)
+= sum_{r=1}^{15} (-1)^r * r * 15Cr + (14C1 + 14C3 + .... + 14C11 + 14C13) - 14C3
+= sum_{r=1}^{15} (-1)^r * 15 * 14C_{r-1} + 2^13 - 14
+= 15 (-14C0 + 14C1 ...... -14C14) + 2^13 - 14
+= 2^13 - 14 
+
+71.[1] f(x) = (4x^3 - 3x^2) / 6 - 2 sinx + (2x-1) cosx 
+f'(x) = (2x^2 - x) - 2cos x + 2cos x - sin x(2x - 1)
+= (2x - 1)(x - sinx)
+for x > 0, x - sinx > 0
+x < 0, x - sinx < 0
+for x in (-inf, 0] U [1/2, inf), f'(x) >= 0
+for x in [0, 1/2], f'(x) <= 0
+=> f(x) increases in [1/2, inf).
+
+72.[3] f(g(x)) = 2g(x) - 1 = 2 (1 / (x - 1)) - 1
+= (2 - (x - 1)) / (x - 1) = (3 - x) / (x - 1)
+Wait, the solution says:
+f(g(x)) = 2g(x) - 1 = 2((x-1/2)/(x-1)) - 1 = (2x - 1)/(x-1) - 1 = x/(x-1)
+Range of f(g(x) = R - {1}
+Range of f(g(x)) is not onto & f(g(x)) is one-one
+So f(g(x)) is one-one but not onto.
+
+73.[4] nC2 (1/2)^n = nC3 (1/2)^n => nC2 = nC3
+=> n = 5
+Probability of getting an odd number for odd number of times is 
+5C1 (1/2)^5 + 5C3 (1/2)^5 + 5C5 (1/2)^5
+= 1/2^5 (5 + 10 + 1) 
+= 16/32 = 1/2
+
+74.[1]
+Indians Foreigners Number of ways
+2 4 -> 6C2 x 8C4 = 1050
+3 6 -> 6C3 x 8C6 = 560
+4 8 -> 6C4 x 8C8 = 15
+Total number of ways = 1625
+
+75.[3] Required area
+= pi (6)^2 - 2 integral_0^3 sqrt(9x) dx - integral_3^6 sqrt(36 - x^2) dx
+= 36pi - 12 sqrt(3) - 2 [x/2 sqrt(36 - x^2) + 18 sin^-1(x/6)]_3^6
+= 36pi - 12 sqrt(3) - 2 (9pi - 3pi - 9sqrt(3)/2)
+= 24pi - 3 sqrt(3)
+
+76.[4] Consider (p^2 + q^2)^2 - 2p^2 q^2 = 272
+((p + q)^2 - 2pq)^2 - 2p^2 q^2 = 272
+(4 - 2pq)^2 - 2p^2 q^2 = 272
+16 - 16pq + 4p^2q^2 - 2p^2q^2 = 272
+2(pq)^2 - 16pq - 256 = 0 
+(pq)^2 - 8pq - 128 = 0
+pq = (8 +/- 24) / 2 = 16, -8
+:. pq = 16
+:. Required equation : x^2 - (2)x + 16 = 0
+
+77.[2] tan 0 = h / 75 = 75 / 3h
+=> h^2 = (75)^2 / 3
+h = 25 sqrt(3) m
+
+78.[1] lim_{x->0+} (integral_0^x^3 sin sqrt(t) dt) / x^6 
+Wait, the formula was different:
+lim_{x->0+} integral_0^x^3 (sin t dt) / x^3
+= lim_{x->0+} (sin x) 2x / 3x^2 = 2/3 
+
+79.[4] e^(cos^2 0 + cos^4 0 + ...) ln 2 = 2^(cos^2 0 + cos^4 0 + ...)
+= 2^(cot^2 0)
+Now - t^2 - 9t + 9 = 0 => t = 1, 8
+=> 2^(cot^2 0) = 1, 8 => cot^2 0 = 0, 3
+0 < 0 < pi/2 => cot 0 = sqrt(3)
+=> (2 sin 0) / (sin 0 + sqrt(3) sin 0) = sqrt(2) / (1 + sqrt(3) cot 0)
+= sqrt(2) / 4 = 1/2
+Wait, solution says 1/2.
+
+80.[3] h = (at^2 + a)/2 , k = (2at + 0)/2
+=> t^2 = (2h - a)/a and t = k/a
+=> k^2/a^2 = (2h - a)/a
+=> Locus of (h, k) is y^2 = a(2x - a)
+=> y^2 = 2a (x - a/2)
+Its directix is x - a/2 = -a/2
+=> x = 0 
+
+81.[10] Put z = x + iy
+x + iy + a|x + iy - 1| + 2i = 0
+=> x + a sqrt((x - 1)^2 + y^2) + i (y + 2) = 0 + 0i
+=> y + 2 = 0 and x + a sqrt((x - 1)^2 + y^2) = 0 
+=> y = -2 and a^2 = x^2 / (x^2 - 2x + 5)
+Now x^2 / (x^2 - 2x + 5) in [0, 5/4]
+:. a^2 in [0, 5/4] => a in [-sqrt(5)/2, sqrt(5)/2]
+:. p = -sqrt(5)/2 ; q = sqrt(5)/2
+=> 4(p^2 + q^2) = 4 (5/4 + 5/4) = 10 
+
+82.[3] integral_{-a}^0 (-2x + 2)dx + integral_0^2 (x + 2 - x)dx + integral_2^a (2x - 2)dx = 22
+[-x^2 - 2x]_0^a + [2x]_0^2 + [x^2 - 2x]_2^a = 22
+a^2 + 2a + 4 + a^2 - 2a - (4 - 4) = 22
+2a^2 = 8 => a = 3 
+integral_{-3}^3 (x + [x])dx = -(-3 - 2 - 1 + 1 + 2) = 3
+
+83.[5] B and C will contain three digit numbers of the form 9k + 2 and 9k + l respectively. We need to find sum of all elements in the set B U C effectively.
+Now, S(B U C) = S(B) + S(C) - S(B I C) 
+where S(k) denotes sum of elements of set k. 
+Also, B = {101, 109, ......, 992}
+:. S(B) = 100/2 (101 + 992) = 54650
+Case-I : If l = 2
+then B I C = B
+:. S(B U C) = S(B)
+which is not possible as given sum is 274 x 400 = 109600.
+Case-II : If l != 2
+then B I C = empty
+:. S(B U C) = S(B) + S(C) = 400 x 274
+=> 54650 + sum_{k=11}^110 (9k + l) = 109600
+=> sum_{k=11}^110 9k + sum_{k=11}^110 l = 54950
+=> 9 (100/2 (11 + 110)) + l (100) = 54950
+=> 54450 + 100l = 54950
+=> l = 5
+
+84.[540] a^2 + b^2 + c^2 + d^2 + e^2 + f^2 + g^2 + h^2 + i^2 = 7 
+Case-I : Seven (1's) and two (0's)
+9C2 = 36
+Case-II : One (2) and three (1's) and five (0's)
+9! / (5!3!) = 504
+:. total = 540 
+
+85.[3] x^2 + y^2 + 2x - 6y + 6 = 0
+center (-1, 3)
+Wait, equation is x^2+y^2-2x-6y+6=0?
+center (1, 3), radius = 2
+distance between (1, 3) and (2, 1) is sqrt(5)
+:. (sqrt(5))^2 + (2)^2 = r^2
+=> r = 3 
+
+86.[9] Let f(x) = 4/sin x + 1/(1 - sin x)
+=> f '(x) = 0 => sin x = 2/3
+:. f(x)min = 4/(2/3) + 1/(1 - 2/3) = 9
+f(x)max -> inf
+f(x) is continuous function
+:. a_min = 9
+
+87.[1] lim_{n->inf} tan {sum_{r=1}^n tan^-1(1/(1 + r + r^2))}
+= lim_{n->inf} tan {sum_{r=1}^n tan^-1((r+1 - r)/(1 + r(r+1)))}
+= tan (lim_{n->inf} sum_{r=1}^n [tan^-1(r+1) - tan^-1(r)])
+= tan (lim_{n->inf} (tan^-1(n+1) - pi/4))
+= tan (pi/2 - pi/4) = 1 
+
+88.[75] Let c = l(b x (a x b))
+= l ((b.b)a - (b.a)b)
+= l (5(-i - j + k) - (-3)(2i + k))
+Wait, actual calculation:
+a = -i + j + k, b = 2i + 0j + k
+b.b = 5, b.a = -2+1 = -1
+c = l (5(-i+j+k) - (-1)(2i+k))
+c.a = 7 => l = 1/2
+=> c = (-3/2 i + 5/2 j + 3 k)
+2 |a + b + c|^2 = 2 |(-1+2-3/2)i + (1+0+5/2)j + (1+1+3)k|^2 = 75
+
+89.[6] Let P(B1) = p1, P(B2) = p2, P(B3) = p3
+p1 (1 - p2) (1 - p3) = a 
+p2 (1 - p1) (1 - p3) = b 
+p3 (1 - p1) (1 - p2) = y 
+(1 - p1) (1 - p2) (1 - p3) = p
+=> p1 / (1 - p1) = a/p , p2 / (1 - p2) = b/p & p3 / (1 - p3) = y/p
+Also b = ap / (a + 2p) = 3yp / (p - 2y)
+=> ap - 2ay = 3ay + 6py
+=> ap - 6py = 5ay
+=> p1/(1-p1) - 6p3/(1-p3) = 5p1p3 / ((1-p1)(1-p3))
+=> p1 - 6p3 = 0 
+=> p1 / p3 = 6 
+
+90.[17] PQ = kI 
+|P|.|Q| = k^3
+=> |P| = 2k != 0 => P is an invertible matrix 
+:. PQ = kI 
+:. Q = kP^-1I 
+:. Q = adj.P / 2
+:. q23 = -k/8
+:. -(3a + 4) / 2 = -k/8 => k = 4 
+:. |P| = 2k => k = 10 + 6a .....(i)
+Put value of k in (i) .... we get a = -1 
+a^2 + k^2 = 17
