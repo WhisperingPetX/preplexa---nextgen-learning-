@@ -49,6 +49,7 @@ fun ProfileScreen(viewModel: MainViewModel) {
     val trialDaysLeft by viewModel.trialDaysRemaining.collectAsState()
     val isServiceLocked by viewModel.isServiceLocked.collectAsState()
     val isDarkMode by viewModel.isDarkMode.collectAsState()
+    val isAutoRotate by viewModel.isAvatarAutoRotating.collectAsState()
 
     var showEditProfileDialog by remember { mutableStateOf(false) }
     var showSubscriptionModal by remember { mutableStateOf(false) }
@@ -62,9 +63,6 @@ fun ProfileScreen(viewModel: MainViewModel) {
     val totalQuestions = attempts.sumOf { it.totalQuestions }
     val avgScore = if (totalAttempts > 0) attempts.map { it.scorePercent }.average().toInt() else 0
     val streakCount by viewModel.currentStreak.collectAsState()
-
-    // Available Avatar Emojis
-    val avatarList = listOf("🎓", "🚀", "🩺", "🦁", "⚡", "👑", "🦉", "🌟", "🎯", "🧬", "🏆", "💥")
 
     // Dynamic Badges based on student accomplishments
     val earnedBadges = remember(totalAttempts, avgScore, streakCount) {
@@ -82,10 +80,10 @@ fun ProfileScreen(viewModel: MainViewModel) {
         EditProfileDialog(
             currentName = studentName,
             currentAvatar = studentAvatar,
-            avatarList = avatarList,
+            isAutoRotateCurrent = isAutoRotate,
             onDismiss = { showEditProfileDialog = false },
-            onSave = { newName, newAvatar ->
-                viewModel.updateStudentProfile(newName, newAvatar)
+            onSave = { newName, newAvatar, autoRotate ->
+                viewModel.updateStudentProfile(newName, newAvatar, autoRotate)
                 showEditProfileDialog = false
             }
         )
@@ -264,6 +262,22 @@ fun ProfileScreen(viewModel: MainViewModel) {
                                             fontSize = 11.sp,
                                             fontWeight = FontWeight.ExtraBold,
                                             color = Color(0xFFD97706),
+                                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                                        )
+                                    }
+
+                                    // Daily Avatar Persona Pill
+                                    val todayInfo = remember { com.example.model.DailyAvatarManager.getTodayAvatarInfo() }
+                                    Surface(
+                                        color = Color(0xFFE0F2FE),
+                                        border = BorderStroke(1.dp, Color(0xFFBAE6FD)),
+                                        shape = RoundedCornerShape(12.dp)
+                                    ) {
+                                        Text(
+                                            text = if (isAutoRotate) "📅 ${todayInfo.dayName}: ${todayInfo.personaTitle}" else "📅 ${todayInfo.dayName} Avatar",
+                                            fontSize = 11.sp,
+                                            fontWeight = FontWeight.ExtraBold,
+                                            color = Color(0xFF0284C7),
                                             modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
                                         )
                                     }
@@ -549,7 +563,7 @@ fun ProfileScreen(viewModel: MainViewModel) {
                 }
             }
 
-            // --- 5.5 SUPABASE CLOUD ACCOUNT & LOGIN CARD ---
+            // --- 5.5 ACCOUNT CARD ---
             item {
                 Surface(
                     shape = RoundedCornerShape(20.dp),
@@ -568,47 +582,92 @@ fun ProfileScreen(viewModel: MainViewModel) {
                         ) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                horizontalArrangement = Arrangement.spacedBy(10.dp)
                             ) {
-                                Text("☁️", fontSize = 20.sp)
+                                Surface(
+                                    shape = CircleShape,
+                                    color = if (supabaseStatus.isLoggedIn) Color(0xFFEF4444).copy(alpha = 0.1f) else BentoPrimaryContainer,
+                                    modifier = Modifier.size(36.dp)
+                                ) {
+                                    Box(contentAlignment = Alignment.Center) {
+                                        Icon(
+                                            imageVector = if (supabaseStatus.isLoggedIn) Icons.Default.Person else Icons.Default.AccountCircle,
+                                            contentDescription = null,
+                                            tint = if (supabaseStatus.isLoggedIn) Color(0xFFEF4444) else BentoPrimary,
+                                            modifier = Modifier.size(20.dp)
+                                        )
+                                    }
+                                }
                                 Column {
                                     Text(
-                                        text = "Supabase Cloud Sync",
+                                        text = "Account",
                                         fontWeight = FontWeight.ExtraBold,
                                         fontSize = 15.sp,
                                         color = BentoOnSurface
                                     )
                                     Text(
-                                        text = if (supabaseStatus.isLoggedIn) "Logged in as ${supabaseStatus.userEmail}" else "Not signed in • Data saved locally only",
-                                        fontSize = 11.5.sp,
+                                        text = if (supabaseStatus.isLoggedIn) "${supabaseStatus.userEmail}" else "Not signed in",
+                                        fontSize = 12.sp,
                                         color = BentoOnSurfaceVariant
                                     )
                                 }
                             }
                         }
 
-                        Button(
-                            onClick = { viewModel.navigateToScreen(Screen.AUTH) },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = if (supabaseStatus.isLoggedIn) BentoSurfaceVariant else BentoPrimary
-                            ),
-                            shape = RoundedCornerShape(12.dp),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .testTag("profile_manage_account_button")
-                        ) {
-                            Icon(
-                                imageVector = if (supabaseStatus.isLoggedIn) Icons.Default.ManageAccounts else Icons.Default.Login,
-                                contentDescription = null,
-                                tint = if (supabaseStatus.isLoggedIn) BentoOnSurface else Color.White
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = if (supabaseStatus.isLoggedIn) "Manage Account / Sign Out" else "Sign In / Register Account",
-                                fontSize = 13.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = if (supabaseStatus.isLoggedIn) BentoOnSurface else Color.White
-                            )
+                        if (supabaseStatus.isLoggedIn) {
+                            Button(
+                                onClick = {
+                                    viewModel.signOutSupabase()
+                                },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color(0xFFEF4444),
+                                    contentColor = Color.White
+                                ),
+                                shape = RoundedCornerShape(12.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(44.dp)
+                                    .testTag("profile_logout_button")
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Logout,
+                                    contentDescription = "Log Out",
+                                    tint = Color.White,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(
+                                    text = "Log Out",
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White
+                                )
+                            }
+                        } else {
+                            Button(
+                                onClick = { viewModel.navigateToScreen(Screen.AUTH) },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = BentoPrimary
+                                ),
+                                shape = RoundedCornerShape(12.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(44.dp)
+                                    .testTag("profile_manage_account_button")
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Login,
+                                    contentDescription = null,
+                                    tint = Color.White
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(
+                                    text = "Sign In / Register",
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White
+                                )
+                            }
                         }
                     }
                 }
@@ -798,24 +857,28 @@ fun ProfileStatCard(
     }
 }
 
-// --- EDIT NAME & AVATAR DIALOG ---
+// --- EDIT NAME & 7 DAILY AVATARS DIALOG ---
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileDialog(
     currentName: String,
     currentAvatar: String,
-    avatarList: List<String>,
+    isAutoRotateCurrent: Boolean,
     onDismiss: () -> Unit,
-    onSave: (newName: String, newAvatar: String) -> Unit
+    onSave: (newName: String, newAvatar: String, autoRotate: Boolean) -> Unit
 ) {
     var nameText by remember { mutableStateOf(currentName) }
+    var autoRotate by remember { mutableStateOf(isAutoRotateCurrent) }
     var selectedAvatar by remember { mutableStateOf(currentAvatar) }
+
+    val weeklyAvatars = com.example.model.DailyAvatarManager.WEEKLY_AVATARS
+    val todayInfo = com.example.model.DailyAvatarManager.getTodayAvatarInfo()
 
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
             Text(
-                text = "✏️ Customize Student Profile",
+                text = "✏️ Customize Profile & Daily Avatars",
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 17.sp,
                 color = BentoOnSurface
@@ -826,34 +889,7 @@ fun EditProfileDialog(
                 verticalArrangement = Arrangement.spacedBy(14.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(
-                    text = "Select Avatar Icon:",
-                    fontSize = 12.5.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = BentoOnSurface
-                )
-
-                LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    items(avatarList) { avatar ->
-                        val isSelected = avatar == selectedAvatar
-                        Surface(
-                            shape = CircleShape,
-                            color = if (isSelected) BentoPrimaryContainer else BentoSurfaceVariant,
-                            border = BorderStroke(1.5.dp, if (isSelected) BentoPrimary else Color.Transparent),
-                            modifier = Modifier
-                                .size(44.dp)
-                                .clickable { selectedAvatar = avatar }
-                        ) {
-                            Box(contentAlignment = Alignment.Center) {
-                                Text(avatar, fontSize = 22.sp)
-                            }
-                        }
-                    }
-                }
-
+                // Name Field
                 OutlinedTextField(
                     value = nameText,
                     onValueChange = { nameText = it },
@@ -864,16 +900,135 @@ fun EditProfileDialog(
                         .fillMaxWidth()
                         .testTag("profile_name_input_field")
                 )
+
+                Text(
+                    text = "7 Daily Rotating Avatars (Sun ➔ Sat):",
+                    fontSize = 12.5.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = BentoOnSurface
+                )
+
+                // 1. Auto-Rotate Toggle Card
+                Surface(
+                    onClick = {
+                        autoRotate = true
+                        selectedAvatar = todayInfo.avatarEmoji
+                    },
+                    shape = RoundedCornerShape(12.dp),
+                    color = if (autoRotate) BentoPrimaryContainer else BentoSurfaceVariant,
+                    border = BorderStroke(1.5.dp, if (autoRotate) BentoPrimary else Color.Transparent),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        modifier = Modifier.padding(12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        Surface(
+                            shape = CircleShape,
+                            color = BentoPrimary,
+                            modifier = Modifier.size(36.dp)
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Text("🔄", fontSize = 18.sp)
+                            }
+                        }
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = "Auto Daily Rotation (Recommended)",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 13.sp,
+                                color = BentoOnSurface
+                            )
+                            Text(
+                                text = "Changes daily: Sun(🫏), Mon(🚀), Tue(🐼), Wed(🩺), Thu(🐒), Fri(🦉), Sat(🏆)",
+                                fontSize = 10.5.sp,
+                                color = BentoOnSurfaceVariant
+                            )
+                        }
+                    }
+                }
+
+                Text(
+                    text = "Or Pick a Specific Day Avatar:",
+                    fontSize = 11.5.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = BentoOnSurfaceVariant
+                )
+
+                // 2. 7 Day Avatars Row
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    items(weeklyAvatars) { dayInfo ->
+                        val isToday = dayInfo.dayOfWeek == todayInfo.dayOfWeek
+                        val isSelected = !autoRotate && selectedAvatar == dayInfo.avatarEmoji
+
+                        Surface(
+                            onClick = {
+                                autoRotate = false
+                                selectedAvatar = dayInfo.avatarEmoji
+                            },
+                            shape = RoundedCornerShape(14.dp),
+                            color = if (isSelected) BentoPrimaryContainer else BentoSurfaceVariant,
+                            border = BorderStroke(
+                                1.5.dp,
+                                if (isSelected) BentoPrimary else if (isToday) Color(0xFFFF9100) else Color.Transparent
+                            ),
+                            modifier = Modifier.width(82.dp)
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(vertical = 8.dp, horizontal = 4.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(4.dp)
+                            ) {
+                                Text(
+                                    text = dayInfo.avatarEmoji,
+                                    fontSize = 24.sp
+                                )
+                                Text(
+                                    text = dayInfo.dayName.take(3),
+                                    fontSize = 11.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = BentoOnSurface
+                                )
+                                Text(
+                                    text = dayInfo.personaTitle.substringAfter(" "),
+                                    fontSize = 8.5.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    color = BentoOnSurfaceVariant,
+                                    maxLines = 1,
+                                    textAlign = TextAlign.Center
+                                )
+                                if (isToday) {
+                                    Surface(
+                                        color = Color(0xFFFF6D00),
+                                        shape = RoundedCornerShape(4.dp)
+                                    ) {
+                                        Text(
+                                            text = "TODAY",
+                                            fontSize = 7.5.sp,
+                                            fontWeight = FontWeight.ExtraBold,
+                                            color = Color.White,
+                                            modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp)
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         confirmButton = {
             Button(
-                onClick = { onSave(nameText, selectedAvatar) },
+                onClick = { onSave(nameText, selectedAvatar, autoRotate) },
                 colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary),
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier.testTag("save_profile_button")
             ) {
-                Text("Save Changes", fontWeight = FontWeight.Bold)
+                Text("Save Profile", fontWeight = FontWeight.Bold)
             }
         },
         dismissButton = {

@@ -72,3 +72,33 @@ data class QuestionResultDetail(
     val selectedOptionIndex: Int?,
     val isCorrect: Boolean
 )
+
+data class DayAvatarInfo(
+    val dayOfWeek: Int, // Calendar.SUNDAY (1) .. Calendar.SATURDAY (7)
+    val dayName: String,
+    val avatarEmoji: String,
+    val personaTitle: String,
+    val themeColorHex: String
+)
+
+object DailyAvatarManager {
+    val WEEKLY_AVATARS = listOf(
+        DayAvatarInfo(java.util.Calendar.SUNDAY, "Sunday", "🫏", "Sunday Steadfast Donkey", "#FFB300"),
+        DayAvatarInfo(java.util.Calendar.MONDAY, "Monday", "🚀", "Monday Rocket Pioneer", "#3D5AFE"),
+        DayAvatarInfo(java.util.Calendar.TUESDAY, "Tuesday", "🐼", "Tuesday Power Panda", "#FF6D00"),
+        DayAvatarInfo(java.util.Calendar.WEDNESDAY, "Wednesday", "🩺", "Wednesday Med Wizard", "#00E676"),
+        DayAvatarInfo(java.util.Calendar.THURSDAY, "Thursday", "🐒", "Thursday Clever Monkey", "#AA00FF"),
+        DayAvatarInfo(java.util.Calendar.FRIDAY, "Friday", "🦉", "Friday Night Owl", "#00B0FF"),
+        DayAvatarInfo(java.util.Calendar.SATURDAY, "Saturday", "🏆", "Saturday Grand Legend", "#FFD600")
+    )
+
+    fun getTodayAvatarInfo(): DayAvatarInfo {
+        val cal = java.util.Calendar.getInstance()
+        val dayOfWeek = cal.get(java.util.Calendar.DAY_OF_WEEK)
+        return WEEKLY_AVATARS.find { it.dayOfWeek == dayOfWeek } ?: WEEKLY_AVATARS[0]
+    }
+
+    fun getAvatarForDay(dayOfWeek: Int): DayAvatarInfo {
+        return WEEKLY_AVATARS.find { it.dayOfWeek == dayOfWeek } ?: WEEKLY_AVATARS[0]
+    }
+}

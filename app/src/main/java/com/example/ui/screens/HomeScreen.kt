@@ -1,7 +1,7 @@
 package com.example.ui.screens
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.example.ui.components.ExamEnvironmentBackground
 import com.example.R
 import com.example.model.BadgeItem
 import com.example.model.BadgeRepository
@@ -69,6 +70,16 @@ fun HomeScreen(viewModel: MainViewModel) {
 
     val currentStreakDays by viewModel.currentStreak.collectAsState()
     val streakDays by viewModel.streakHistory.collectAsState()
+
+    // Flash/Blink effect animation on exam selection
+    val flashAlpha = remember { Animatable(0f) }
+    LaunchedEffect(selectedExam) {
+        flashAlpha.snapTo(0.6f)
+        flashAlpha.animateTo(
+            targetValue = 0f,
+            animationSpec = tween(durationMillis = 350, easing = FastOutSlowInEasing)
+        )
+    }
     
     if (showStreakCalendarModal) {
         StreakCalendarDialog(
@@ -248,29 +259,6 @@ fun HomeScreen(viewModel: MainViewModel) {
                         }
                     }
 
-                    // Cloud Auth / Account Action Button
-                    IconButton(
-                        onClick = { viewModel.navigateToScreen(Screen.AUTH) },
-                        modifier = Modifier.testTag("top_bar_auth_button")
-                    ) {
-                        Surface(
-                            shape = CircleShape,
-                            color = if (supabaseStatus.isLoggedIn) Color(0xFF10B981).copy(alpha = 0.2f) else BentoPrimaryContainer,
-                            border = BorderStroke(1.5.dp, if (supabaseStatus.isLoggedIn) Color(0xFF10B981) else BentoPrimary),
-                            shadowElevation = 2.dp,
-                            modifier = Modifier.size(36.dp)
-                        ) {
-                            Box(contentAlignment = Alignment.Center) {
-                                Icon(
-                                    imageVector = if (supabaseStatus.isLoggedIn) Icons.Filled.CheckCircle else Icons.Filled.Login,
-                                    contentDescription = "Account Sync",
-                                    tint = if (supabaseStatus.isLoggedIn) Color(0xFF10B981) else BentoPrimary,
-                                    modifier = Modifier.size(20.dp)
-                                )
-                            }
-                        }
-                    }
-
                     // Profile Avatar Icon Button
                     IconButton(
                         onClick = { viewModel.navigateToScreen(Screen.PROFILE) },
@@ -295,14 +283,20 @@ fun HomeScreen(viewModel: MainViewModel) {
             )
         }
     ) { innerPadding ->
-        LazyColumn(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = 18.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp),
-            contentPadding = PaddingValues(bottom = 32.dp)
         ) {
+            ExamEnvironmentBackground(selectedExam = selectedExam)
+
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 18.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                contentPadding = PaddingValues(bottom = 32.dp)
+            ) {
             // 0. BROADCAST APP UPDATE BANNER
             if (appUpdateNotice.isNotBlank()) {
                 item {
@@ -435,7 +429,6 @@ fun HomeScreen(viewModel: MainViewModel) {
                             accentColor = Color(0xFF00C853),
                             onClick = {
                                 viewModel.selectExam(ExamType.NEET_UG)
-                                viewModel.navigateToScreen(com.example.ui.viewmodel.Screen.TOPIC_LIST)
                             }
                         )
 
@@ -448,7 +441,6 @@ fun HomeScreen(viewModel: MainViewModel) {
                             accentColor = Color(0xFF651FFF),
                             onClick = {
                                 viewModel.selectExam(ExamType.JEE_MAINS)
-                                viewModel.navigateToScreen(com.example.ui.viewmodel.Screen.TOPIC_LIST)
                             }
                         )
                     }
@@ -460,19 +452,19 @@ fun HomeScreen(viewModel: MainViewModel) {
                 LiveCompetitionCard(viewModel = viewModel, studentName = studentName)
             }
 
-            // 3. SNAPCHAT-STYLE STREAK CARD
+            // 3. SNAPCHAT-STYLE STREAK CARD (CLEAN & COMPACT)
             item {
                 Surface(
                     modifier = Modifier.fillMaxWidth().clickable { showStreakCalendarModal = true },
-                    shape = RoundedCornerShape(24.dp),
+                    shape = RoundedCornerShape(18.dp),
                     color = Color(0xFF121829), // Rich Dark Canvas
                     border = BorderStroke(1.dp, Color(0xFF2E3856))
                 ) {
                     Column(
-                        modifier = Modifier.padding(20.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                        modifier = Modifier.padding(12.dp),
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        // Streak Header Row
+                        // Compact Streak Header Row
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
@@ -480,58 +472,50 @@ fun HomeScreen(viewModel: MainViewModel) {
                         ) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
                                 Surface(
                                     shape = CircleShape,
                                     color = Color(0xFF331600),
                                     border = BorderStroke(1.dp, Color(0xFFFF6D00)),
-                                    modifier = Modifier.size(46.dp)
+                                    modifier = Modifier.size(34.dp)
                                 ) {
                                     Box(contentAlignment = Alignment.Center) {
-                                        Text("🔥", fontSize = 24.sp)
+                                        Text("🔥", fontSize = 18.sp)
                                     }
                                 }
 
-                                Column {
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.spacedBy(6.dp)
-                                    ) {
-                                        Text(
-                                            text = "$currentStreakDays Days Streak!",
-                                            fontWeight = FontWeight.Black,
-                                            fontSize = 18.sp,
-                                            color = Color(0xFFFF9100),
-                                            maxLines = 1
-                                        )
-                                        Surface(
-                                            color = Color(0xFF003B00),
-                                            shape = RoundedCornerShape(8.dp),
-                                            border = BorderStroke(1.dp, Color(0xFF00E676))
-                                        ) {
-                                            Text(
-                                                text = "ACTIVE",
-                                                fontSize = 9.sp,
-                                                fontWeight = FontWeight.ExtraBold,
-                                                color = Color(0xFF00E676),
-                                                maxLines = 1,
-                                                softWrap = false,
-                                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
-                                            )
-                                        }
-                                    }
+                                Text(
+                                    text = "$currentStreakDays Days Streak",
+                                    fontWeight = FontWeight.ExtraBold,
+                                    fontSize = 14.sp,
+                                    color = Color(0xFFFF9100),
+                                    maxLines = 1
+                                )
+                                Surface(
+                                    color = Color(0xFF003B00),
+                                    shape = RoundedCornerShape(6.dp),
+                                    border = BorderStroke(1.dp, Color(0xFF00E676))
+                                ) {
                                     Text(
-                                        text = "Next Badge Unlocks at Day 30! (Monthly Titan 📅)",
-                                        fontSize = 11.sp,
-                                        color = Color(0xFF94A3B8),
-                                        fontWeight = FontWeight.Medium
+                                        text = "ACTIVE",
+                                        fontSize = 8.5.sp,
+                                        fontWeight = FontWeight.ExtraBold,
+                                        color = Color(0xFF00E676),
+                                        modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
                                     )
                                 }
                             }
+
+                            Text(
+                                text = "Calendar 📅",
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFFFFB74D)
+                            )
                         }
 
-                        // Days Tracker Row
+                        // Compact Days Tracker Row
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
@@ -541,7 +525,7 @@ fun HomeScreen(viewModel: MainViewModel) {
                                 Column(
                                     modifier = Modifier.weight(1f),
                                     horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                                    verticalArrangement = Arrangement.spacedBy(3.dp)
                                 ) {
                                     Surface(
                                         shape = CircleShape,
@@ -550,20 +534,20 @@ fun HomeScreen(viewModel: MainViewModel) {
                                             1.dp,
                                             if (isActive) Color(0xFFFF9100) else Color(0xFF334155)
                                         ),
-                                        modifier = Modifier.size(34.dp)
+                                        modifier = Modifier.size(28.dp)
                                     ) {
                                         Box(contentAlignment = Alignment.Center) {
                                             if (isActive) {
-                                                Text("🔥", fontSize = 14.sp)
+                                                Text("🔥", fontSize = 12.sp)
                                             } else {
-                                                Text(dayLetter, fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color(0xFF64748B))
+                                                Text(dayLetter, fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color(0xFF64748B))
                                             }
                                         }
                                     }
 
                                     Text(
                                         text = dayName,
-                                        fontSize = 9.sp,
+                                        fontSize = 8.5.sp,
                                         fontWeight = FontWeight.Bold,
                                         color = if (isActive) Color(0xFFFFB74D) else Color(0xFF64748B),
                                         maxLines = 1,
@@ -733,8 +717,23 @@ fun HomeScreen(viewModel: MainViewModel) {
                     }
                 }
             }
+        } // Closes LazyColumn
+
+        // Exam Switch Flash/Blink Overlay
+        if (flashAlpha.value > 0.001f) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        if (selectedExam == ExamType.NEET_UG)
+                            Color(0xFF00E676).copy(alpha = flashAlpha.value * 0.35f)
+                        else
+                            Color(0xFF7C4DFF).copy(alpha = flashAlpha.value * 0.35f)
+                    )
+            )
         }
     }
+}
 }
 
 @Composable
@@ -1226,15 +1225,15 @@ fun LiveCompetitionCard(
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(20.dp))
+            .clip(RoundedCornerShape(16.dp))
             .clickable { isExpanded = !isExpanded },
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(16.dp),
         color = Color(0xFF0F172A), // Dark Midnight Competition Canvas
         border = BorderStroke(1.dp, Color(0xFF334155))
     ) {
         Column(
-            modifier = Modifier.padding(14.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             // Header Row with Live Pulse Indicator & Toggle Button
             Row(
@@ -1244,76 +1243,41 @@ fun LiveCompetitionCard(
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.weight(1f)
                 ) {
-                    // Pulsing Red Live Badge
+                    Text("⚡", fontSize = 18.sp)
+                    Text(
+                        text = "NTA Live Arena",
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 13.5.sp,
+                        color = Color.White
+                    )
                     Surface(
-                        color = Color(0xFF7F1D1D),
-                        shape = CircleShape,
-                        border = BorderStroke(1.dp, Color(0xFFEF4444)),
-                        modifier = Modifier.size(36.dp)
+                        color = Color(0xFF991B1B),
+                        shape = RoundedCornerShape(6.dp)
                     ) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Text("⚡", fontSize = 18.sp)
-                        }
-                    }
-
-                    Column {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(6.dp)
-                        ) {
-                            Text(
-                                text = "NTA Live Competition Arena",
-                                fontWeight = FontWeight.Black,
-                                fontSize = 14.sp,
-                                color = Color.White
-                            )
-                            Surface(
-                                color = Color(0xFF991B1B),
-                                shape = RoundedCornerShape(6.dp)
-                            ) {
-                                Row(
-                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                                ) {
-                                    Surface(
-                                        color = Color(0xFFEF4444),
-                                        shape = CircleShape,
-                                        modifier = Modifier.size(6.dp)
-                                    ) {}
-                                    Text(
-                                        text = "LIVE",
-                                        fontSize = 9.sp,
-                                        fontWeight = FontWeight.ExtraBold,
-                                        color = Color.White
-                                    )
-                                }
-                            }
-                        }
                         Text(
-                            text = if (isExpanded) "🔴 $formattedTotal Aspirants Active • Tap to Hide" else "🔴 $formattedTotal Aspirants Active • Tap to Join ⚔️",
-                            fontSize = 11.sp,
-                            color = Color(0xFF38BDF8),
-                            fontWeight = FontWeight.Bold
+                            text = "LIVE",
+                            fontSize = 8.5.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = Color.White,
+                            modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
                         )
                     }
                 }
 
-                // Expand / Hide Action Badge
                 Surface(
                     color = Color(0xFF1E293B),
-                    shape = RoundedCornerShape(10.dp),
+                    shape = RoundedCornerShape(8.dp),
                     border = BorderStroke(1.dp, Color(0xFF38BDF8))
                 ) {
                     Text(
-                        text = if (isExpanded) "Hide 🔼" else "Join ⚔️",
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.ExtraBold,
+                        text = if (isExpanded) "Hide 🔼" else "🔴 $formattedTotal Active ⚔️",
+                        fontSize = 10.5.sp,
+                        fontWeight = FontWeight.Bold,
                         color = Color(0xFF38BDF8),
-                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                     )
                 }
             }

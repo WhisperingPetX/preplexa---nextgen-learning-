@@ -119,7 +119,7 @@ fun AuthScreen(viewModel: MainViewModel) {
                     )
 
                     Text(
-                        text = "NEET & JEE Rank Accelerator • Cloud Account Sync",
+                        text = "NEET & JEE Rank Accelerator",
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Medium,
                         color = BentoOnSurfaceVariant,
@@ -155,7 +155,7 @@ fun AuthScreen(viewModel: MainViewModel) {
 
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                 Text(
-                                    text = "Account Connected",
+                                    text = "Signed In",
                                     fontWeight = FontWeight.ExtraBold,
                                     fontSize = 16.sp,
                                     color = BentoPrimary
@@ -166,41 +166,9 @@ fun AuthScreen(viewModel: MainViewModel) {
                                     fontWeight = FontWeight.Bold,
                                     color = BentoOnSurface
                                 )
-                                Text(
-                                    text = "User ID: ${supabaseStatus.userId?.take(12) ?: "Supabase User"}...",
-                                    fontSize = 11.sp,
-                                    color = BentoOnSurfaceVariant
-                                )
                             }
 
                             Divider(color = BentoSurfaceVariant)
-
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                                ) {
-                                    Text("☁️", fontSize = 18.sp)
-                                    Text("Cloud Sync Status", fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = BentoOnSurface)
-                                }
-                                Surface(
-                                    color = Color(0xFF10B981).copy(alpha = 0.15f),
-                                    shape = RoundedCornerShape(12.dp),
-                                    border = BorderStroke(1.dp, Color(0xFF10B981))
-                                ) {
-                                    Text(
-                                        text = "Active & Synced",
-                                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
-                                        fontSize = 11.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = Color(0xFF10B981)
-                                    )
-                                }
-                            }
 
                             Button(
                                 onClick = {
@@ -213,9 +181,9 @@ fun AuthScreen(viewModel: MainViewModel) {
                                     .fillMaxWidth()
                                     .testTag("sign_out_button")
                             ) {
-                                Icon(Icons.Default.ExitToApp, contentDescription = null)
+                                Icon(Icons.Default.ExitToApp, contentDescription = null, tint = Color.White)
                                 Spacer(modifier = Modifier.width(8.dp))
-                                Text("Sign Out of Account", fontWeight = FontWeight.Bold)
+                                Text("Log Out", fontWeight = FontWeight.Bold, color = Color.White)
                             }
                         }
                     }

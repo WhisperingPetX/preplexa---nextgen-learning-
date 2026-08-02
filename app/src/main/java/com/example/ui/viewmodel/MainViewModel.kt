@@ -67,10 +67,31 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     )
     val studentName: StateFlow<String> = _studentName.asStateFlow()
 
+    private val _isAvatarAutoRotating = MutableStateFlow(
+        userPrefs.getBoolean("avatar_auto_rotate", true)
+    )
+    val isAvatarAutoRotating: StateFlow<Boolean> = _isAvatarAutoRotating.asStateFlow()
+
     private val _studentAvatar = MutableStateFlow(
-        userPrefs.getString("student_avatar", "🎓") ?: "🎓"
+        if (userPrefs.getBoolean("avatar_auto_rotate", true) || userPrefs.getString("student_avatar", "AUTO") == "AUTO") {
+            com.example.model.DailyAvatarManager.getTodayAvatarInfo().avatarEmoji
+        } else {
+            userPrefs.getString("student_avatar", com.example.model.DailyAvatarManager.getTodayAvatarInfo().avatarEmoji) ?: com.example.model.DailyAvatarManager.getTodayAvatarInfo().avatarEmoji
+        }
     )
     val studentAvatar: StateFlow<String> = _studentAvatar.asStateFlow()
+
+    private fun refreshDailyAvatar() {
+        val isAuto = userPrefs.getBoolean("avatar_auto_rotate", true) || userPrefs.getString("student_avatar", "AUTO") == "AUTO"
+        if (isAuto) {
+            val todayInfo = com.example.model.DailyAvatarManager.getTodayAvatarInfo()
+            _studentAvatar.value = todayInfo.avatarEmoji
+            _isAvatarAutoRotating.value = true
+        } else {
+            _isAvatarAutoRotating.value = false
+            _studentAvatar.value = userPrefs.getString("student_avatar", com.example.model.DailyAvatarManager.getTodayAvatarInfo().avatarEmoji) ?: com.example.model.DailyAvatarManager.getTodayAvatarInfo().avatarEmoji
+        }
+    }
 
     // --- Streak State ---
     private val _currentStreak = MutableStateFlow(userPrefs.getInt("current_streak", 1))
@@ -84,6 +105,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val liveArenaStats: StateFlow<com.example.data.supabase.SupabaseLiveArenaDto> = _liveArenaStats.asStateFlow()
 
     init {
+        refreshDailyAvatar()
         updateStreak()
         viewModelScope.launch {
             val arenaRes = supabaseService.fetchLiveArenaStats()
@@ -101,6 +123,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun updateStreak() {
+        refreshDailyAvatar()
         val lastActiveDate = userPrefs.getString("last_active_date", "")
         val dateFormat = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault())
         val currentDate = dateFormat.format(java.util.Date())
@@ -150,18 +173,29 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _streakHistory.value = historyList
     }
 
-    fun updateStudentProfile(name: String, avatar: String) {
+    fun updateStudentProfile(name: String, avatar: String, autoRotate: Boolean = false) {
         val trimmedName = name.trim().ifEmpty { "Aspirant" }
         _studentName.value = trimmedName
-        _studentAvatar.value = avatar
+        _isAvatarAutoRotating.value = autoRotate
+        
+        val newAvatar = if (autoRotate) {
+            com.example.model.DailyAvatarManager.getTodayAvatarInfo().avatarEmoji
+        } else {
+            avatar
+        }
+        _studentAvatar.value = newAvatar
+
         userPrefs.edit()
             .putString("student_name", trimmedName)
-            .putString("student_avatar", avatar)
+            .putString("student_avatar", if (autoRotate) "AUTO" else avatar)
+            .putBoolean("avatar_auto_rotate", autoRotate)
             .apply()
     }
 
     // --- State Navigation ---
-    private val _currentScreen = MutableStateFlow(Screen.HOME)
+    private val _currentScreen = MutableStateFlow(
+        if (!SupabaseConfig.getUserEmail(application).isNullOrBlank() || !SupabaseConfig.getUserId(application).isNullOrBlank()) Screen.HOME else Screen.AUTH
+    )
     val currentScreen: StateFlow<Screen> = _currentScreen.asStateFlow()
 
     // --- Exam & Subject Filters ---
@@ -826,6 +860,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 syncState = SupabaseSyncState.IDLE
             )
         }
+        _currentScreen.value = Screen.AUTH
     }
 
     fun updateSupabaseCredentials(url: String, anonKey: String) {
