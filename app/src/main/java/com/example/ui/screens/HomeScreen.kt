@@ -248,6 +248,29 @@ fun HomeScreen(viewModel: MainViewModel) {
                         }
                     }
 
+                    // Cloud Auth / Account Action Button
+                    IconButton(
+                        onClick = { viewModel.navigateToScreen(Screen.AUTH) },
+                        modifier = Modifier.testTag("top_bar_auth_button")
+                    ) {
+                        Surface(
+                            shape = CircleShape,
+                            color = if (supabaseStatus.isLoggedIn) Color(0xFF10B981).copy(alpha = 0.2f) else BentoPrimaryContainer,
+                            border = BorderStroke(1.5.dp, if (supabaseStatus.isLoggedIn) Color(0xFF10B981) else BentoPrimary),
+                            shadowElevation = 2.dp,
+                            modifier = Modifier.size(36.dp)
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(
+                                    imageVector = if (supabaseStatus.isLoggedIn) Icons.Filled.CheckCircle else Icons.Filled.Login,
+                                    contentDescription = "Account Sync",
+                                    tint = if (supabaseStatus.isLoggedIn) Color(0xFF10B981) else BentoPrimary,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                            }
+                        }
+                    }
+
                     // Profile Avatar Icon Button
                     IconButton(
                         onClick = { viewModel.navigateToScreen(Screen.PROFILE) },
@@ -1189,6 +1212,17 @@ fun LiveCompetitionCard(
     var isExpanded by remember { mutableStateOf(false) }
     var activeTab by remember { mutableStateOf("battle") } // "battle" or "leaderboard"
 
+    val liveArenaStats by viewModel.liveArenaStats.collectAsState()
+    val formattedTotal = remember(liveArenaStats.totalActiveAspirants) {
+        java.text.NumberFormat.getInstance().format(liveArenaStats.totalActiveAspirants)
+    }
+    val formattedNeet = remember(liveArenaStats.neetLiveAspirants) {
+        java.text.NumberFormat.getInstance().format(liveArenaStats.neetLiveAspirants)
+    }
+    val formattedJee = remember(liveArenaStats.jeeLiveAspirants) {
+        java.text.NumberFormat.getInstance().format(liveArenaStats.jeeLiveAspirants)
+    }
+
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -1260,7 +1294,7 @@ fun LiveCompetitionCard(
                             }
                         }
                         Text(
-                            text = if (isExpanded) "🔴 1,842 Aspirants Active • Tap to Hide" else "🔴 1,842 Aspirants Active • Tap to Join ⚔️",
+                            text = if (isExpanded) "🔴 $formattedTotal Aspirants Active • Tap to Hide" else "🔴 $formattedTotal Aspirants Active • Tap to Join ⚔️",
                             fontSize = 11.sp,
                             color = Color(0xFF38BDF8),
                             fontWeight = FontWeight.Bold
@@ -1367,7 +1401,7 @@ fun LiveCompetitionCard(
                                         shape = RoundedCornerShape(8.dp)
                                     ) {
                                         Text(
-                                            text = "642 Live Aspirants",
+                                            text = "$formattedNeet Live Aspirants",
                                             fontSize = 10.sp,
                                             fontWeight = FontWeight.Bold,
                                             color = Color(0xFF60A5FA),
@@ -1433,7 +1467,7 @@ fun LiveCompetitionCard(
                                         shape = RoundedCornerShape(8.dp)
                                     ) {
                                         Text(
-                                            text = "418 Live Aspirants",
+                                            text = "$formattedJee Live Aspirants",
                                             fontSize = 10.sp,
                                             fontWeight = FontWeight.Bold,
                                             color = Color(0xFFC084FC),

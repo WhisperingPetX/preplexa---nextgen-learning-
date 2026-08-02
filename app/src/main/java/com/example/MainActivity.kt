@@ -55,6 +55,7 @@ fun PreplexaApp(viewModel: MainViewModel = viewModel()) {
                     Screen.ANALYTICS -> viewModel.navigateToScreen(Screen.HOME)
                     Screen.PYQ_PAPERS -> viewModel.navigateToScreen(Screen.HOME)
                     Screen.PROFILE -> viewModel.navigateToScreen(Screen.HOME)
+                    Screen.AUTH -> viewModel.navigateToScreen(Screen.HOME)
                     Screen.HOME -> { /* Exit */ }
                 }
             }
@@ -73,6 +74,7 @@ fun PreplexaApp(viewModel: MainViewModel = viewModel()) {
                     Screen.ANALYTICS -> AnalyticsScreen(viewModel = viewModel)
                     Screen.PYQ_PAPERS -> PyqPapersScreen(viewModel = viewModel)
                     Screen.PROFILE -> ProfileScreen(viewModel = viewModel)
+                    Screen.AUTH -> AuthScreen(viewModel = viewModel)
                 }
             }
         }

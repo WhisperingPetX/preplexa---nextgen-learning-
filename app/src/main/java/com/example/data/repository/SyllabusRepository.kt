@@ -985,10 +985,10 @@ object SyllabusRepository {
                     return JeeMain2023Session2Shift2QuestionsRepository.getQuestions(testId)
                 }
                 if (testId.contains("2024_s1_sh2")) {
-                    return JeeMain2024Jan27Shift2QuestionsRepository.getQuestions(testId)
+                    return JeeMain2024QuestionsRepository.getJeeMain2024Jan27Shift1Questions(testId)
                 }
                 if (testId.contains("2024_s2_sh1")) {
-                    return JeeMain2024Session2Shift1QuestionsRepository.getQuestions(testId)
+                    return JeeMain2024QuestionsRepository.getJeeMain2024Jan27Shift1Questions(testId)
                 }
                 if (testId.contains("2024_s2_sh2")) {
                     return JeeMain2024Session2Shift2QuestionsRepository.getQuestions(testId)

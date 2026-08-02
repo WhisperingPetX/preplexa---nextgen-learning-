@@ -431,69 +431,66 @@ fun JeeMainPyqYearCard(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // Header Row: Year Badge & Highlight Tag & Expand Toggle
-            Row(
+            // Top Clickable Header Area (Tap to expand / collapse)
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable { isExpanded = !isExpanded },
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                // Header Row: Year Badge & Highlight Tag
                 Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Surface(
-                        color = BentoPrimaryContainer,
-                        shape = RoundedCornerShape(10.dp)
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Text(
-                            text = "JEE MAIN ${pyq.year}",
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.ExtraBold,
-                            color = BentoPrimary,
-                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-                        )
-                    }
+                        Surface(
+                            color = BentoPrimaryContainer,
+                            shape = RoundedCornerShape(10.dp)
+                        ) {
+                            Text(
+                                text = "JEE MAIN ${pyq.year}",
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.ExtraBold,
+                                color = BentoPrimary,
+                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                            )
+                        }
 
-                    Surface(
-                        color = BentoSurfaceVariant.copy(alpha = 0.6f),
-                        border = BorderStroke(1.dp, BentoSurfaceVariant),
-                        shape = RoundedCornerShape(10.dp)
-                    ) {
-                        Text(
-                            text = pyq.highlightTag,
-                            fontSize = 10.5.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = BentoOnSurfaceVariant,
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
-                        )
+                        Surface(
+                            color = BentoSurfaceVariant.copy(alpha = 0.6f),
+                            border = BorderStroke(1.dp, BentoSurfaceVariant),
+                            shape = RoundedCornerShape(10.dp)
+                        ) {
+                            Text(
+                                text = pyq.highlightTag,
+                                fontSize = 10.5.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = BentoOnSurfaceVariant,
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+                            )
+                        }
                     }
                 }
 
-                Text(
-                    text = if (isExpanded) "Hide 🔼" else "Expand 🔽",
-                    fontSize = 11.5.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = BentoPrimary,
-                    maxLines = 1,
-                    softWrap = false
-                )
-            }
-
-            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                Text(
-                    text = "JEE Main ${pyq.year} Official Papers",
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 15.5.sp,
-                    color = BentoOnSurface
-                )
-                Text(
-                    text = "Sessions 1 & 2 • Shift 1 (Morning) & Shift 2 (Evening) • NTA Pattern (75 Qs / 300 Marks)",
-                    fontSize = 11.5.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = BentoOnSurfaceVariant
-                )
+                Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                    Text(
+                        text = "JEE Main ${pyq.year} Official Papers",
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 15.5.sp,
+                        color = BentoOnSurface
+                    )
+                    Text(
+                        text = "Sessions 1 & 2 • Shift 1 (Morning) & Shift 2 (Evening) • NTA Pattern (75 Qs / 300 Marks)",
+                        fontSize = 11.5.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = BentoOnSurfaceVariant
+                    )
+                }
             }
 
             if (isExpanded) {

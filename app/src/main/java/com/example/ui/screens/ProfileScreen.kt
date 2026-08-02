@@ -267,22 +267,6 @@ fun ProfileScreen(viewModel: MainViewModel) {
                                             modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
                                         )
                                     }
-
-                                    // Be Confident Badge
-                                    Surface(
-                                        color = Color(0xFFF3E8FF),
-                                        border = BorderStroke(1.dp, Color(0xFFD8B4FE)),
-                                        shape = RoundedCornerShape(12.dp)
-                                    ) {
-                                        Text(
-                                            text = "✨ Be confident",
-                                            fontSize = 11.sp,
-                                            fontWeight = FontWeight.Bold,
-                                            fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
-                                            color = Color(0xFF9333EA),
-                                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-                                        )
-                                    }
                                 }
                             }
                         }
@@ -560,6 +544,71 @@ fun ProfileScreen(viewModel: MainViewModel) {
                                     }
                                 }
                             }
+                        }
+                    }
+                }
+            }
+
+            // --- 5.5 SUPABASE CLOUD ACCOUNT & LOGIN CARD ---
+            item {
+                Surface(
+                    shape = RoundedCornerShape(20.dp),
+                    color = BentoSurface,
+                    border = BorderStroke(1.dp, BentoSurfaceVariant),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Text("☁️", fontSize = 20.sp)
+                                Column {
+                                    Text(
+                                        text = "Supabase Cloud Sync",
+                                        fontWeight = FontWeight.ExtraBold,
+                                        fontSize = 15.sp,
+                                        color = BentoOnSurface
+                                    )
+                                    Text(
+                                        text = if (supabaseStatus.isLoggedIn) "Logged in as ${supabaseStatus.userEmail}" else "Not signed in • Data saved locally only",
+                                        fontSize = 11.5.sp,
+                                        color = BentoOnSurfaceVariant
+                                    )
+                                }
+                            }
+                        }
+
+                        Button(
+                            onClick = { viewModel.navigateToScreen(Screen.AUTH) },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = if (supabaseStatus.isLoggedIn) BentoSurfaceVariant else BentoPrimary
+                            ),
+                            shape = RoundedCornerShape(12.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .testTag("profile_manage_account_button")
+                        ) {
+                            Icon(
+                                imageVector = if (supabaseStatus.isLoggedIn) Icons.Default.ManageAccounts else Icons.Default.Login,
+                                contentDescription = null,
+                                tint = if (supabaseStatus.isLoggedIn) BentoOnSurface else Color.White
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = if (supabaseStatus.isLoggedIn) "Manage Account / Sign Out" else "Sign In / Register Account",
+                                fontSize = 13.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = if (supabaseStatus.isLoggedIn) BentoOnSurface else Color.White
+                            )
                         }
                     }
                 }

@@ -23,7 +23,8 @@ enum class Screen {
     BOOKMARKS,
     ANALYTICS,
     PYQ_PAPERS,
-    PROFILE
+    PROFILE,
+    AUTH
 }
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -78,8 +79,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _streakHistory = MutableStateFlow<List<Triple<String, Boolean, String>>>(emptyList())
     val streakHistory: StateFlow<List<Triple<String, Boolean, String>>> = _streakHistory.asStateFlow()
 
+    // --- Live Arena Real-Time Stats ---
+    private val _liveArenaStats = MutableStateFlow(com.example.data.supabase.SupabaseLiveArenaDto())
+    val liveArenaStats: StateFlow<com.example.data.supabase.SupabaseLiveArenaDto> = _liveArenaStats.asStateFlow()
+
     init {
         updateStreak()
+        viewModelScope.launch {
+            val arenaRes = supabaseService.fetchLiveArenaStats()
+            if (arenaRes.isSuccess) {
+                arenaRes.getOrNull()?.let { _liveArenaStats.value = it }
+            }
+        }
         // Pre-populate PYQ Questions
         viewModelScope.launch {
             if (!userPrefs.getBoolean("pyq_2024_loaded", false)) {
@@ -692,7 +703,22 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 val syncAttemptsResult = supabaseService.syncTestAttempts(attemptDtos)
                 val syncBookmarksResult = supabaseService.syncBookmarks(bookmarkDtos)
 
-                if (syncAttemptsResult.isSuccess || syncBookmarksResult.isSuccess) {
+                val newsResult = supabaseService.fetchAdminNews()
+                if (newsResult.isSuccess) {
+                    val remoteNews = newsResult.getOrNull()?.map { "${it.title}: ${it.content}" }
+                    if (!remoteNews.isNullOrEmpty()) {
+                        _adminNewsList.value = remoteNews
+                    }
+                }
+
+                val arenaResult = supabaseService.fetchLiveArenaStats()
+                if (arenaResult.isSuccess) {
+                    arenaResult.getOrNull()?.let { stats ->
+                        _liveArenaStats.value = stats
+                    }
+                }
+
+                if (syncAttemptsResult.isSuccess || syncBookmarksResult.isSuccess || newsResult.isSuccess) {
                     _supabaseStatus.update { 
                         it.copy(
                             isConnected = true,

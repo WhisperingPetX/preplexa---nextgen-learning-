@@ -199,6 +199,122 @@ class SupabaseService(private val context: Context) {
         }
     }
 
+    suspend fun pushPapers(papers: List<SupabasePaperDto>): Result<List<SupabasePaperDto>> = withContext(Dispatchers.IO) {
+        if (papers.isEmpty()) return@withContext Result.success(emptyList())
+
+        val url = "${SupabaseConfig.getUrl(context)}/rest/v1/papers"
+        val type = Types.newParameterizedType(List::class.java, SupabasePaperDto::class.java)
+        val jsonStr = moshi.adapter<List<SupabasePaperDto>>(type).toJson(papers)
+
+        val headers = buildHeaders().newBuilder()
+            .set("Prefer", "resolution=merge-duplicates,return=representation")
+            .build()
+
+        val request = Request.Builder()
+            .url(url)
+            .headers(headers)
+            .post(jsonStr.toRequestBody(JSON_MEDIA_TYPE))
+            .build()
+
+        try {
+            client.newCall(request).execute().use { response ->
+                val bodyStr = response.body?.string().orEmpty()
+                if (response.isSuccessful) {
+                    val synced = moshi.adapter<List<SupabasePaperDto>>(type).fromJson(bodyStr) ?: emptyList()
+                    Result.success(synced)
+                } else {
+                    Result.failure(Exception("Push papers failed: ${response.code} $bodyStr"))
+                }
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun pushQuestions(questions: List<SupabaseQuestionDto>): Result<List<SupabaseQuestionDto>> = withContext(Dispatchers.IO) {
+        if (questions.isEmpty()) return@withContext Result.success(emptyList())
+
+        val url = "${SupabaseConfig.getUrl(context)}/rest/v1/questions"
+        val type = Types.newParameterizedType(List::class.java, SupabaseQuestionDto::class.java)
+        val jsonStr = moshi.adapter<List<SupabaseQuestionDto>>(type).toJson(questions)
+
+        val headers = buildHeaders().newBuilder()
+            .set("Prefer", "resolution=merge-duplicates,return=representation")
+            .build()
+
+        val request = Request.Builder()
+            .url(url)
+            .headers(headers)
+            .post(jsonStr.toRequestBody(JSON_MEDIA_TYPE))
+            .build()
+
+        try {
+            client.newCall(request).execute().use { response ->
+                val bodyStr = response.body?.string().orEmpty()
+                if (response.isSuccessful) {
+                    val synced = moshi.adapter<List<SupabaseQuestionDto>>(type).fromJson(bodyStr) ?: emptyList()
+                    Result.success(synced)
+                } else {
+                    Result.failure(Exception("Push questions failed: ${response.code} $bodyStr"))
+                }
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun fetchAdminNews(): Result<List<SupabaseNewsDto>> = withContext(Dispatchers.IO) {
+        val url = "${SupabaseConfig.getUrl(context)}/rest/v1/admin_news?select=*&order=created_at.desc"
+        val request = Request.Builder()
+            .url(url)
+            .headers(buildHeaders())
+            .get()
+            .build()
+
+        try {
+            client.newCall(request).execute().use { response ->
+                val bodyStr = response.body?.string().orEmpty()
+                if (response.isSuccessful) {
+                    val type = Types.newParameterizedType(List::class.java, SupabaseNewsDto::class.java)
+                    val newsList = moshi.adapter<List<SupabaseNewsDto>>(type).fromJson(bodyStr) ?: emptyList()
+                    Result.success(newsList)
+                } else {
+                    Result.failure(Exception("Fetch news failed: ${response.code}"))
+                }
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun fetchLiveArenaStats(): Result<SupabaseLiveArenaDto> = withContext(Dispatchers.IO) {
+        val url = "${SupabaseConfig.getUrl(context)}/rest/v1/live_arena_stats?select=*&order=updated_at.desc&limit=1"
+        val request = Request.Builder()
+            .url(url)
+            .headers(buildHeaders())
+            .get()
+            .build()
+
+        try {
+            client.newCall(request).execute().use { response ->
+                val bodyStr = response.body?.string().orEmpty()
+                if (response.isSuccessful) {
+                    val type = Types.newParameterizedType(List::class.java, SupabaseLiveArenaDto::class.java)
+                    val list = moshi.adapter<List<SupabaseLiveArenaDto>>(type).fromJson(bodyStr) ?: emptyList()
+                    if (list.isNotEmpty()) {
+                        Result.success(list.first())
+                    } else {
+                        Result.success(SupabaseLiveArenaDto())
+                    }
+                } else {
+                    Result.failure(Exception("Fetch arena stats failed: ${response.code}"))
+                }
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     suspend fun pingHealth(): Boolean = withContext(Dispatchers.IO) {
         val url = "${SupabaseConfig.getUrl(context)}/rest/v1/"
         val request = Request.Builder()

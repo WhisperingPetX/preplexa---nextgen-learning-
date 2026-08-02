@@ -65,6 +65,51 @@ data class SupabaseUserProfileDto(
     @Json(name = "last_synced_at") val lastSyncedAt: Long
 )
 
+@JsonClass(generateAdapter = true)
+data class SupabaseLiveArenaDto(
+    @Json(name = "id") val id: String? = null,
+    @Json(name = "total_active_aspirants") val totalActiveAspirants: Int = 1842,
+    @Json(name = "neet_live_aspirants") val neetLiveAspirants: Int = 1124,
+    @Json(name = "jee_live_aspirants") val jeeLiveAspirants: Int = 718,
+    @Json(name = "updated_at") val updatedAt: String? = null
+)
+
+@JsonClass(generateAdapter = true)
+data class SupabaseNewsDto(
+    @Json(name = "id") val id: String? = null,
+    @Json(name = "title") val title: String,
+    @Json(name = "content") val content: String,
+    @Json(name = "is_urgent") val isUrgent: Boolean = false,
+    @Json(name = "created_at") val createdAt: String? = null
+)
+
+@JsonClass(generateAdapter = true)
+data class SupabasePaperDto(
+    @Json(name = "id") val id: String,
+    @Json(name = "title") val title: String,
+    @Json(name = "exam_type") val examType: String,
+    @Json(name = "year") val year: Int,
+    @Json(name = "total_questions") val totalQuestions: Int,
+    @Json(name = "duration_minutes") val durationMinutes: Int,
+    @Json(name = "is_chapterwise") val isChapterwise: Boolean = false,
+    @Json(name = "chapter_name") val chapterName: String? = null
+)
+
+@JsonClass(generateAdapter = true)
+data class SupabaseQuestionDto(
+    @Json(name = "id") val id: String,
+    @Json(name = "paper_id") val paperId: String,
+    @Json(name = "question_text") val questionText: String,
+    @Json(name = "option_a") val optionA: String,
+    @Json(name = "option_b") val optionB: String,
+    @Json(name = "option_c") val optionC: String,
+    @Json(name = "option_d") val optionD: String,
+    @Json(name = "correct_option_index") val correctOptionIndex: Int,
+    @Json(name = "explanation") val explanation: String,
+    @Json(name = "subject") val subject: String? = null,
+    @Json(name = "chapter") val chapter: String? = null
+)
+
 enum class SupabaseSyncState {
     IDLE,
     SYNCING,
@@ -79,4 +124,6 @@ data class SupabaseStatus(
     val syncState: SupabaseSyncState = SupabaseSyncState.IDLE,
     val lastSyncedTime: Long? = null,
     val errorMessage: String? = null
-)
+) {
+    val isLoggedIn: Boolean get() = !userEmail.isNullOrBlank() || !userId.isNullOrBlank()
+}
