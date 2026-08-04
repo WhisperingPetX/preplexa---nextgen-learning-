@@ -113,15 +113,27 @@ fun AnalyticsScreen(viewModel: MainViewModel) {
                     containerColor = BentoBackground
                 )
             )
+        },
+        bottomBar = {
+            ModernBottomNavigationBar(
+                currentScreen = Screen.ANALYTICS,
+                onNavigate = { viewModel.navigateToScreen(it) }
+            )
         }
     ) { paddingValues ->
-        LazyColumn(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .padding(paddingValues),
+            contentAlignment = Alignment.TopCenter
         ) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .widthIn(max = 680.dp)
+                    .padding(horizontal = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
             // --- 1. FUTURISTIC AI PROBABILITY OF SELECTION CARD ---
             item {
                 Surface(
@@ -398,6 +410,7 @@ fun AnalyticsScreen(viewModel: MainViewModel) {
             item { Spacer(modifier = Modifier.height(24.dp)) }
         }
     }
+}
 }
 
 @Composable

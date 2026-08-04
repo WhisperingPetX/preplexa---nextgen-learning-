@@ -26,6 +26,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import kotlinx.coroutines.launch
 import com.example.model.ExamType
 import com.example.ui.theme.*
 import com.example.ui.viewmodel.MainViewModel
@@ -48,6 +51,25 @@ data class PyqPaperItem(
 fun PyqPapersScreen(viewModel: MainViewModel) {
     var selectedTab by remember { mutableStateOf(ExamType.NEET_UG) }
     val context = LocalContext.current
+
+    val exams = remember { listOf(ExamType.NEET_UG, ExamType.JEE_MAINS) }
+    val coroutineScope = rememberCoroutineScope()
+    val initialPage = remember { if (selectedTab == ExamType.NEET_UG) 0 else 1 }
+    val pagerState = rememberPagerState(initialPage = initialPage, pageCount = { 2 })
+
+    LaunchedEffect(selectedTab) {
+        val targetPage = if (selectedTab == ExamType.NEET_UG) 0 else 1
+        if (pagerState.currentPage != targetPage && !pagerState.isScrollInProgress) {
+            pagerState.animateScrollToPage(targetPage)
+        }
+    }
+
+    LaunchedEffect(pagerState.currentPage) {
+        val targetExam = exams[pagerState.currentPage]
+        if (selectedTab != targetExam) {
+            selectedTab = targetExam
+        }
+    }
 
     // Dynamically fetch current year and compute 10-year range (currentYear down to currentYear - 9)
     val currentYear = remember { java.util.Calendar.getInstance().get(java.util.Calendar.YEAR) }
@@ -83,16 +105,14 @@ fun PyqPapersScreen(viewModel: MainViewModel) {
         }
     }
 
-    val currentList = if (selectedTab == ExamType.NEET_UG) neetPyqList else jeePyqList
-
     Scaffold(
-        containerColor = BentoBackground,
+        containerColor = BentoPurpleBg,
         topBar = {
             TopAppBar(
                 title = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
-                            text = "📜 10 Years PYQ Papers",
+                            text = "10 Years PYQ Papers",
                             fontWeight = FontWeight.ExtraBold,
                             fontSize = 18.sp,
                             color = BentoOnSurface
@@ -114,176 +134,197 @@ fun PyqPapersScreen(viewModel: MainViewModel) {
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = BentoBackground
+                    containerColor = BentoPurpleBg
                 )
+            )
+        },
+        bottomBar = {
+            ModernBottomNavigationBar(
+                currentScreen = Screen.PYQ_PAPERS,
+                onNavigate = { viewModel.navigateToScreen(it) }
             )
         }
     ) { paddingValues ->
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp)
+                .padding(paddingValues),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // --- 1. EXAM FILTER TABS (NEET UG vs JEE MAIN) ---
-            item {
-                Surface(
-                    color = BentoSurface,
-                    shape = RoundedCornerShape(20.dp),
-                    border = BorderStroke(1.dp, BentoSurfaceVariant),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 4.dp)
-                ) {
-                    Row(
-                        modifier = Modifier.padding(6.dp),
-                        horizontalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
-                        // NEET UG TAB
-                        val isNeet = selectedTab == ExamType.NEET_UG
-                        Surface(
-                            modifier = Modifier
-                                .weight(1f)
-                                .clip(RoundedCornerShape(16.dp))
-                                .clickable { selectedTab = ExamType.NEET_UG }
-                                .testTag("pyq_tab_neet"),
-                            color = if (isNeet) BentoPrimaryContainer else Color.Transparent,
-                            border = BorderStroke(1.dp, if (isNeet) BentoPrimary else Color.Transparent),
-                            shape = RoundedCornerShape(16.dp)
-                        ) {
-                            Row(
-                                modifier = Modifier.padding(vertical = 12.dp, horizontal = 8.dp),
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text("🩺", fontSize = 16.sp)
-                                Spacer(modifier = Modifier.width(6.dp))
-                                Text(
-                                    text = "NEET UG PYQ",
-                                    fontWeight = if (isNeet) FontWeight.ExtraBold else FontWeight.Bold,
-                                    fontSize = 13.5.sp,
-                                    color = if (isNeet) BentoPrimary else BentoOnSurfaceVariant
-                                )
-                            }
-                        }
-
-                        // JEE MAIN TAB
-                        val isJee = selectedTab == ExamType.JEE_MAINS
-                        Surface(
-                            modifier = Modifier
-                                .weight(1f)
-                                .clip(RoundedCornerShape(16.dp))
-                                .clickable { selectedTab = ExamType.JEE_MAINS }
-                                .testTag("pyq_tab_jee"),
-                            color = if (isJee) BentoPrimaryContainer else Color.Transparent,
-                            border = BorderStroke(1.dp, if (isJee) BentoPrimary else Color.Transparent),
-                            shape = RoundedCornerShape(16.dp)
-                        ) {
-                            Row(
-                                modifier = Modifier.padding(vertical = 12.dp, horizontal = 8.dp),
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text("🚀", fontSize = 16.sp)
-                                Spacer(modifier = Modifier.width(6.dp))
-                                Text(
-                                    text = "JEE Main PYQ",
-                                    fontWeight = if (isJee) FontWeight.ExtraBold else FontWeight.Bold,
-                                    fontSize = 13.5.sp,
-                                    color = if (isJee) BentoPrimary else BentoOnSurfaceVariant
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-
-            // --- 2. INFORMATIONAL BANNER CARD ---
-            item {
-                Surface(
-                    color = BentoPrimaryContainer.copy(alpha = 0.6f),
-                    border = BorderStroke(1.dp, BentoPrimary.copy(alpha = 0.3f)),
-                    shape = RoundedCornerShape(20.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Row(
-                        modifier = Modifier.padding(14.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        Text("🎯", fontSize = 28.sp)
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(
-                                text = if (selectedTab == ExamType.NEET_UG) "10 Years NEET UG Question Bank" else "10 Years JEE Main Question Bank",
-                                fontWeight = FontWeight.ExtraBold,
-                                fontSize = 14.sp,
-                                color = BentoPrimary
-                            )
-                            Text(
-                                text = "Attempt real 10-year past papers under timed conditions to accurately train your speed and boost AI Selection Probability!",
-                                fontSize = 11.5.sp,
-                                color = BentoOnSurfaceVariant,
-                                fontWeight = FontWeight.Medium,
-                                lineHeight = 16.sp
-                            )
-                        }
-                    }
-                }
-            }
-
-            // --- 3. SECTION TITLE ---
-            item {
+            Surface(
+                color = BentoSurface,
+                shape = RoundedCornerShape(20.dp),
+                border = BorderStroke(1.dp, BentoSurfaceVariant),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .widthIn(max = 680.dp)
+                    .padding(horizontal = 16.dp, vertical = 6.dp)
+            ) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 4.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier = Modifier.padding(6.dp),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
-                    Text(
-                        text = if (selectedTab == ExamType.NEET_UG) "🩺 Available NEET Papers ($startYear - $currentYear)" else "🚀 Available JEE Papers ($startYear - $currentYear)",
-                        fontWeight = FontWeight.ExtraBold,
-                        fontSize = 15.sp,
-                        color = BentoOnSurface,
-                        modifier = Modifier.weight(1f)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = "10 Years Total",
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = BentoOnSurfaceVariant
-                    )
-                }
-            }
-
-            // --- 4. LIST OF 10 YEARS OF PYQ PAPERS ---
-            items(currentList) { pyq ->
-                if (selectedTab == ExamType.NEET_UG) {
-                    PyqPaperCardItem(
-                        pyq = pyq,
-                        onAttemptClick = {
-                            viewModel.startPyqTest(pyq.year, pyq.examType, pyq.title)
-                        }
-                    )
-                } else {
-                    JeeMainPyqYearCard(
-                        pyq = pyq,
-                        onStartTest = { session, shift ->
-                            viewModel.startPyqTest(
-                                year = pyq.year,
-                                examType = ExamType.JEE_MAINS,
-                                title = "JEE Main ${pyq.year}",
-                                session = session,
-                                shift = shift
+                    // NEET UG TAB
+                    val isNeet = selectedTab == ExamType.NEET_UG
+                    Surface(
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(RoundedCornerShape(16.dp))
+                            .clickable {
+                                coroutineScope.launch { pagerState.animateScrollToPage(0) }
+                            }
+                            .testTag("pyq_tab_neet"),
+                        color = if (isNeet) BentoPrimaryContainer else Color.Transparent,
+                        border = BorderStroke(1.dp, if (isNeet) BentoPrimary else Color.Transparent),
+                        shape = RoundedCornerShape(16.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(vertical = 12.dp, horizontal = 8.dp),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "NEET UG PYQ",
+                                fontWeight = if (isNeet) FontWeight.ExtraBold else FontWeight.Bold,
+                                fontSize = 13.5.sp,
+                                color = if (isNeet) BentoPrimary else BentoOnSurfaceVariant
                             )
                         }
-                    )
+                    }
+
+                    // JEE MAIN TAB
+                    val isJee = selectedTab == ExamType.JEE_MAINS
+                    Surface(
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(RoundedCornerShape(16.dp))
+                            .clickable {
+                                coroutineScope.launch { pagerState.animateScrollToPage(1) }
+                            }
+                            .testTag("pyq_tab_jee"),
+                        color = if (isJee) BentoPrimaryContainer else Color.Transparent,
+                        border = BorderStroke(1.dp, if (isJee) BentoPrimary else Color.Transparent),
+                        shape = RoundedCornerShape(16.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(vertical = 12.dp, horizontal = 8.dp),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "JEE Main PYQ",
+                                fontWeight = if (isJee) FontWeight.ExtraBold else FontWeight.Bold,
+                                fontSize = 13.5.sp,
+                                color = if (isJee) BentoPrimary else BentoOnSurfaceVariant
+                            )
+                        }
+                    }
                 }
             }
 
-            item { Spacer(modifier = Modifier.height(24.dp)) }
+            // --- 2. SLIDING HORIZONTAL PAGER FOR EXAMS ---
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.fillMaxSize()
+            ) { page ->
+                val activeExam = exams[page]
+                val activeList = if (activeExam == ExamType.NEET_UG) neetPyqList else jeePyqList
+
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .widthIn(max = 680.dp)
+                        .padding(horizontal = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(14.dp)
+                ) {
+                    // --- 2. INFORMATIONAL BANNER CARD ---
+                    item {
+                        Surface(
+                            color = BentoPrimaryContainer.copy(alpha = 0.6f),
+                            border = BorderStroke(1.dp, BentoPrimary.copy(alpha = 0.3f)),
+                            shape = RoundedCornerShape(20.dp),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(14.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                Text("🎯", fontSize = 28.sp)
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(
+                                        text = if (activeExam == ExamType.NEET_UG) "10 Years NEET UG Question Bank" else "10 Years JEE Main Question Bank",
+                                        fontWeight = FontWeight.ExtraBold,
+                                        fontSize = 14.sp,
+                                        color = BentoPrimary
+                                    )
+                                    Text(
+                                        text = "Attempt real 10-year past papers under timed conditions to accurately train your speed and boost AI Selection Probability!",
+                                        fontSize = 11.5.sp,
+                                        color = BentoOnSurfaceVariant,
+                                        fontWeight = FontWeight.Medium,
+                                        lineHeight = 16.sp
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    // --- 3. SECTION TITLE ---
+                    item {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 4.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = if (activeExam == ExamType.NEET_UG) "Available NEET Papers ($startYear - $currentYear)" else "Available JEE Papers ($startYear - $currentYear)",
+                                fontWeight = FontWeight.ExtraBold,
+                                fontSize = 15.sp,
+                                color = BentoOnSurface,
+                                modifier = Modifier.weight(1f)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = "10 Years Total",
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = BentoOnSurfaceVariant
+                            )
+                        }
+                    }
+
+                    // --- 4. LIST OF 10 YEARS OF PYQ PAPERS ---
+                    items(activeList) { pyq ->
+                        if (activeExam == ExamType.NEET_UG) {
+                            PyqPaperCardItem(
+                                pyq = pyq,
+                                onAttemptClick = {
+                                    viewModel.startPyqTest(pyq.year, pyq.examType, pyq.title)
+                                }
+                            )
+                        } else {
+                            JeeMainPyqYearCard(
+                                pyq = pyq,
+                                onStartTest = { session, shift ->
+                                    viewModel.startPyqTest(
+                                        year = pyq.year,
+                                        examType = ExamType.JEE_MAINS,
+                                        title = "JEE Main ${pyq.year}",
+                                        session = session,
+                                        shift = shift
+                                    )
+                                }
+                            )
+                        }
+                    }
+
+                    item { Spacer(modifier = Modifier.height(24.dp)) }
+                }
+            }
         }
     }
 }
@@ -367,14 +408,14 @@ fun PyqPaperCardItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Surface(
-                    color = BentoBlueBadge.copy(alpha = 0.15f),
+                    color = BentoPrimaryContainer,
                     shape = RoundedCornerShape(8.dp)
                 ) {
                     Text(
-                        text = "✅ Answer Key",
+                        text = "Answer Key",
                         fontSize = 10.5.sp,
                         fontWeight = FontWeight.Bold,
-                        color = BentoBlueBadge,
+                        color = BentoPrimary,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
                     )
                 }
@@ -398,10 +439,8 @@ fun PyqPaperCardItem(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(Icons.Default.PlayArrow, contentDescription = "Start Test", modifier = Modifier.size(18.dp))
-                    Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = "📝 Start ${pyq.year} Official Mock Test",
+                        text = "Start ${pyq.year} Official Mock Test",
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 13.sp
                     )

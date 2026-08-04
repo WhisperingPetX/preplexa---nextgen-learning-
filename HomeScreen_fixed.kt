@@ -18,14 +18,18 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.automirrored.filled.*
+import androidx.compose.material.icons.filled.NotificationsActive
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Login
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.outlined.*
 import kotlinx.coroutines.launch
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import coil.compose.AsyncImage
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -76,6 +80,7 @@ fun HomeScreen(viewModel: MainViewModel) {
     var showAllBadgesModal by remember { mutableStateOf(false) }
     var showStreakCalendarModal by remember { mutableStateOf(false) }
     var showBubbleEffect by remember { mutableStateOf(false) }
+
 
     val context = LocalContext.current
     val todayDateKey = remember {
@@ -171,12 +176,18 @@ fun HomeScreen(viewModel: MainViewModel) {
         Dialog(onDismissRequest = { showNewsDialog = false }) {
             Surface(
                 shape = RoundedCornerShape(20.dp),
+                Text(
+                    text = "Examination News",
                 color = BentoBackground,
                 border = BorderStroke(1.dp, BentoPrimary.copy(alpha = 0.5f)),
                 shadowElevation = 8.dp,
+                Text(
+                    text = "No new notifications yet.",
                 modifier = Modifier.fillMaxWidth().padding(16.dp)
             ) {
                 Column(
+                    Text(
+                        text = news,
                     modifier = Modifier.padding(20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -187,7 +198,11 @@ fun HomeScreen(viewModel: MainViewModel) {
                     ) {
                         Surface(
                             shape = CircleShape,
+                            Text(
+                                text = "Preplexa",
                             color = BentoPrimaryContainer,
+                            Text(
+                                text = "NTA Exam Prep",
                             modifier = Modifier.size(48.dp)
                         ) {
                             Box(contentAlignment = Alignment.Center) {
@@ -195,41 +210,61 @@ fun HomeScreen(viewModel: MainViewModel) {
                                     imageVector = Icons.Filled.NotificationsActive,
                                     contentDescription = "News",
                                     tint = BentoPrimary,
+                                    Text(
+                                        text = appUpdateNotice,
                                     modifier = Modifier.size(24.dp)
                                 )
                             }
                         }
-                        Text(
-                            text = "Examination News",
+                            Text(
+                                text = greetingText,
                             fontWeight = FontWeight.ExtraBold,
+                            Text(
+                                text = "${selectedExam.displayName}",
                             fontSize = 18.sp,
+                            Text(
+                                text = "${currentStreakDays}d Streak",
                             color = BentoOnSurface
                         )
                     }
 
                     if (adminNewsList.isEmpty()) {
-                        Text(
-                            text = "No new notifications yet.",
+                            Text(
+                                text = "Select Your Target Exam",
                             fontSize = 14.sp,
+                            Text(
+                                text = "$currentStreakDays Days Streak",
                             color = BentoOnSurfaceVariant,
+                            Text(
+                                text = "ACTIVE",
                             modifier = Modifier.padding(16.dp)
                         )
                     } else {
                         LazyColumn(
                             verticalArrangement = Arrangement.spacedBy(12.dp),
+                            Text(
+                                text = "Calendar",
                             modifier = Modifier.fillMaxWidth().heightIn(max = 300.dp)
                         ) {
                             items(adminNewsList) { news ->
                                 Surface(
                                     shape = RoundedCornerShape(12.dp),
+                                    Text(
+                                        text = dayName,
                                     color = BentoSurface,
                                     border = BorderStroke(1.dp, BentoSurfaceVariant),
+                                    Text(
+                                        text = title,
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
-                                    Text(
-                                        text = news,
+                                        Text(
+                                            text = subtitle,
                                         fontSize = 13.5.sp,
+                                        Text(
+                                            text = exam.displayName,
                                         color = BentoOnSurface,
+                                        Text(
+                                            text = exam.description,
                                         modifier = Modifier.padding(16.dp)
                                     )
                                 }
@@ -240,10 +275,10 @@ fun HomeScreen(viewModel: MainViewModel) {
                     Button(
                         onClick = { showNewsDialog = false },
                         colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary),
+                        Text(
+                            text = "DAY ${badge.dayMilestone}",
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Close", fontWeight = FontWeight.Bold, color = Color.White)
-                    }
                 }
             }
         }
@@ -269,9 +304,13 @@ fun HomeScreen(viewModel: MainViewModel) {
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         Surface(
+                            Text(
+                                text = badge.title,
                             modifier = Modifier
                                 .size(42.dp)
                                 .clip(RoundedCornerShape(14.dp)),
+                            Text(
+                                text = badge.description,
                             color = Color(0xFF0B0F19),
                             border = BorderStroke(1.dp, BentoPrimaryContainer)
                         ) {
@@ -280,68 +319,102 @@ fun HomeScreen(viewModel: MainViewModel) {
                                     painter = painterResource(id = R.drawable.ic_preplexa_logo),
                                     contentDescription = "Preplexa Logo",
                                     tint = Color.Unspecified,
+                                    Text(
+                                        text = if (badge.isUnlocked) "UNLOCKED" else "PROGRESS",
                                     modifier = Modifier.fillMaxSize()
                                 )
                             }
                         }
                         Column {
-                            Text(
-                                text = "Preplexa",
+                                Text(
+                                    text = badge.progressText,
                                 fontWeight = FontWeight.ExtraBold,
+                                Text(
+                                    text = "365-Day Badges Roadmap",
                                 fontSize = 20.sp,
+                                Text(
+                                    text = "36 Milestones • $unlockedCount/36 Unlocked",
                                 color = BentoOnSurface
                             )
-                            Text(
-                                text = "NTA Exam Prep",
+                                Text(
+                                    text = label,
                                 fontSize = 11.sp,
+                                Text(
+                                    text = "30-Day Streak Journey",
                                 color = BentoOnSurfaceVariant,
+                                Text(
+                                    text = "Keep going! You have $currentStreak days active.",
                                 fontWeight = FontWeight.Medium
                             )
                         }
                     }
                 },
                 actions = {
-                    // Small Streak Badge
-                    Surface(
-                        modifier = Modifier
-                            .padding(end = 8.dp)
-                            .clickable { showStreakCalendarModal = true },
-                        shape = RoundedCornerShape(12.dp),
-                        color = Color(0xFF331600),
-                        border = BorderStroke(1.dp, Color(0xFFFF6D00))
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp),
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp)
-                        ) {
-                            Text("🔥", fontSize = 14.sp)
-                            Text(
-                                text = "$currentStreakDays",
-                                color = Color(0xFFFF9100),
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 12.sp
-                            )
-                        }
-                    }
-
-                    // Global Dark/Light Theme Toggle Button Only
+                    // Global Dark/Light Theme Toggle Button
                     IconButton(
                         onClick = { viewModel.toggleDarkMode() },
-                        modifier = Modifier
-                            .padding(end = 6.dp)
-                            .testTag("top_bar_theme_toggle_button")
+                        Text(
+                            text = "Day $dayNumber",
+                        modifier = Modifier.testTag("top_bar_theme_toggle_button")
                     ) {
                         Surface(
                             shape = CircleShape,
+                            Text(
+                                text = "Day $dayNumber",
                             color = if (isDarkMode) Color(0xFF1E293B) else BentoPrimaryContainer,
                             border = BorderStroke(1.5.dp, if (isDarkMode) Color(0xFF334155) else BentoSurfaceVariant),
                             shadowElevation = 2.dp,
+                            Text(
+                                text = "NTA Live Arena",
                             modifier = Modifier.size(36.dp)
                         ) {
                             Box(contentAlignment = Alignment.Center) {
-                                Text(if (isDarkMode) "🌙" else "☀️", fontSize = 18.sp)
-                            }
+                        }
+                    }
+
+                    // Small App Guide / Tutorial Icon Button (Between theme & profile, icon only)
+                    IconButton(
+                        onClick = { viewModel.openTutorial() },
+                        Text(
+                            text = "LIVE",
+                        modifier = Modifier.testTag("top_bar_guide_icon_button")
+                    ) {
+                        Surface(
+                            shape = CircleShape,
+                            Text(
+                                text = "$formattedTotal Active",
+                            color = BentoPrimaryContainer,
+                            border = BorderStroke(1.5.dp, BentoPrimary.copy(alpha = 0.5f)),
+                            shadowElevation = 2.dp,
+                            Text(
+                                text = "$currentMonthName Badges",
+                            modifier = Modifier.size(36.dp)
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                        }
+                    }
+
+                    // Profile Avatar Icon Button (Shows Previous Day Badge Icon)
+                    IconButton(
+                        onClick = { viewModel.navigateToScreen(Screen.PROFILE) },
+                        Text(
+                            text = "$unlockedCount / 30 Days Unlocked • Tap badge to set avatar",
+                        modifier = Modifier
+                            .padding(end = 4.dp)
+                            .testTag("top_bar_profile_button")
+                    ) {
+                        Surface(
+                            shape = CircleShape,
+                            Text(
+                                text = "Claim Day ${todayBadge.dayOfMonth}",
+                            color = BentoPrimaryContainer,
+                            border = BorderStroke(1.5.dp, BentoPrimary),
+                            shadowElevation = 2.dp,
+                            Text(
+                                text = "$unlockedCount Earned",
+                            modifier = Modifier.size(36.dp)
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
                         }
                     }
                 },
@@ -356,6 +429,8 @@ fun HomeScreen(viewModel: MainViewModel) {
         }
     ) { innerPadding ->
         Box(
+            Text(
+                text = badge.emojiIcon,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding),
@@ -364,6 +439,8 @@ fun HomeScreen(viewModel: MainViewModel) {
             ExamEnvironmentBackground(selectedExam = selectedExam)
 
             LazyColumn(
+                Text(
+                    text = "Day ${badge.dayOfMonth}",
                 modifier = Modifier
                     .fillMaxWidth()
                     .widthIn(max = 680.dp)
@@ -376,23 +453,33 @@ fun HomeScreen(viewModel: MainViewModel) {
                 item {
                     Surface(
                         shape = RoundedCornerShape(16.dp),
+                        Text(
+                            text = if (badge.isToday) "TODAY" else if (badge.isUnlocked) "UNLOCKED" else "LOCKED",
                         color = Color(0xFFFEF3C7),
                         border = BorderStroke(1.dp, Color(0xFFF59E0B)),
+                        Text(
+                            text = "Student Study Analytics",
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 4.dp)
                     ) {
                         Row(
+                            Text(
+                                text = "Real-time activity & time tracking",
                             modifier = Modifier.padding(14.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            Text("📢", fontSize = 20.sp)
-                            Text(
                                 text = appUpdateNotice,
                                 fontSize = 12.sp,
+                                Text(
+                                    text = "42.5 hrs Total",
                                 fontWeight = FontWeight.Bold,
+                                Text(
+                                    text = "Subject Split",
                                 color = Color(0xFF92400E),
+                                Text(
+                                    text = "Daily Activity",
                                 modifier = Modifier.weight(1f)
                             )
                         }
@@ -404,9 +491,13 @@ fun HomeScreen(viewModel: MainViewModel) {
             item {
                 Surface(
                     shape = RoundedCornerShape(22.dp),
+                    Text(
+                        text = "${hours}h",
                     color = BentoSurface,
                     border = BorderStroke(1.5.dp, Brush.horizontalGradient(listOf(BentoPrimary.copy(alpha = 0.5f), Color(0xFF10B981).copy(alpha = 0.3f)))),
                     shadowElevation = 3.dp,
+                    Text(
+                        text = day,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 4.dp)
@@ -418,6 +509,8 @@ fun HomeScreen(viewModel: MainViewModel) {
                         }
                 ) {
                     Row(
+                        Text(
+                            text = "42.5h",
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp, vertical = 14.dp),
@@ -425,10 +518,14 @@ fun HomeScreen(viewModel: MainViewModel) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
-                            Text(
-                                text = greetingText,
+                                Text(
+                                    text = "Total Time",
                                 fontWeight = FontWeight.Black,
+                                Text(
+                                    text = pair.first,
                                 fontSize = 21.sp,
+                                Text(
+                                    text = "${(pair.second * 100).toInt()}%",
                                 color = BentoOnSurface,
                                 letterSpacing = (-0.5).sp
                             )
@@ -442,14 +539,45 @@ fun HomeScreen(viewModel: MainViewModel) {
                                 // Target Exam Pill
                                 Surface(
                                     shape = RoundedCornerShape(20.dp),
+                                    Text(
+                                        text = value,
                                     color = BentoPrimaryContainer.copy(alpha = 0.8f),
                                     border = BorderStroke(1.dp, BentoPrimary.copy(alpha = 0.4f))
                                 ) {
-                                    Text(
-                                        text = "🎯 ${selectedExam.displayName}",
+                                        Text(
+                                            text = label,
                                         fontSize = 11.5.sp,
+                                        Text(
+                                            text = iconEmoji,
                                         fontWeight = FontWeight.Bold,
+                                        Text(
+                                            text = title,
                                         color = BentoPrimary,
+                                        Text(
+                                            text = "Perplexa AI Solver",
+                                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                                    )
+                                }
+
+                                // Daily Streak Pill
+                                Surface(
+                                    shape = RoundedCornerShape(20.dp),
+                                    Text(
+                                        text = "Instant 24/7 AI Mentor for ${selectedExam.displayName}",
+                                    color = Color(0xFFFEF3C7),
+                                    border = BorderStroke(1.dp, Color(0xFFF59E0B).copy(alpha = 0.4f))
+                                ) {
+                                        Text(
+                                            text = "GEMINI PRO",
+                                        fontSize = 11.5.sp,
+                                        Text(
+                                            text = "Stuck on a problem? Upload a photo or PDF of any question for a step-by-step clear solution!",
+                                        fontWeight = FontWeight.ExtraBold,
+                                        Text(
+                                            text = "Launch AI Mentor",
+                                        color = Color(0xFFD97706),
+                                        Text(
+                                            text = "Missing Text",
                                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
                                     )
                                 }
@@ -458,6 +586,8 @@ fun HomeScreen(viewModel: MainViewModel) {
 
                         // Floating Aesthetic News Notification Bell Button
                         Box(
+                            Text(
+                                text = "Missing Text",
                             modifier = Modifier
                                 .clip(CircleShape)
                                 .clickable { showNewsDialog = true }
@@ -466,9 +596,13 @@ fun HomeScreen(viewModel: MainViewModel) {
                         ) {
                             Surface(
                                 shape = CircleShape,
+                                Text(
+                                    text = "Missing Text",
                                 color = BentoPrimaryContainer,
                                 border = BorderStroke(2.dp, Brush.horizontalGradient(listOf(BentoPrimary, Color(0xFF10B981)))),
                                 shadowElevation = 4.dp,
+                                Text(
+                                    text = "Missing Text",
                                 modifier = Modifier.size(46.dp)
                             ) {
                                 Box(contentAlignment = Alignment.Center) {
@@ -476,6 +610,8 @@ fun HomeScreen(viewModel: MainViewModel) {
                                         imageVector = Icons.Filled.NotificationsActive,
                                         contentDescription = "News Notifications",
                                         tint = BentoPrimary,
+                                        Text(
+                                            text = "Missing Text",
                                         modifier = Modifier.size(24.dp)
                                     )
                                 }
@@ -488,19 +624,27 @@ fun HomeScreen(viewModel: MainViewModel) {
             // 2. EXAM SELECTORS (NEET UG & JEE MAINS ONLY)
             item {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(
-                        text = "Select Your Target Exam",
+                        Text(
+                            text = "Missing Text",
                         fontWeight = FontWeight.ExtraBold,
+                        Text(
+                            text = "Missing Text",
                         fontSize = 16.sp,
+                        Text(
+                            text = "Missing Text",
                         color = BentoOnSurface
                     )
 
                     Row(
+                        Text(
+                            text = "Missing Text",
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         // NEET UG CARD
                         ExamCardItem(
+                            Text(
+                                text = "Missing Text",
                             modifier = Modifier.weight(1f),
                             exam = ExamType.NEET_UG,
                             isSelected = selectedExam == ExamType.NEET_UG,
@@ -513,6 +657,8 @@ fun HomeScreen(viewModel: MainViewModel) {
 
                         // JEE MAINS CARD
                         ExamCardItem(
+                            Text(
+                                text = "Missing Text",
                             modifier = Modifier.weight(1f),
                             exam = ExamType.JEE_MAINS,
                             isSelected = selectedExam == ExamType.JEE_MAINS,
@@ -526,9 +672,169 @@ fun HomeScreen(viewModel: MainViewModel) {
                 }
             }
 
-            // TOP COLLEGES GALLERY SECTION
+            // 3. SNAPCHAT-STYLE STREAK CARD (CLEAN & COMPACT)
             item {
-                TopCollegesGallerySection(selectedExam = selectedExam)
+                Surface(
+                    Text(
+                        text = "Missing Text",
+                    modifier = Modifier.fillMaxWidth().clickable { showStreakCalendarModal = true },
+                    shape = RoundedCornerShape(18.dp),
+                    Text(
+                        text = "Missing Text",
+                    color = Color(0xFF121829), // Rich Dark Canvas
+                    border = BorderStroke(1.dp, Color(0xFF2E3856))
+                ) {
+                    Column(
+                        Text(
+                            text = "Missing Text",
+                        modifier = Modifier.padding(12.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        // Compact Streak Header Row
+                        Row(
+                            Text(
+                                text = "Missing Text",
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Surface(
+                                    shape = CircleShape,
+                                    Text(
+                                        text = "Missing Text",
+                                    color = Color(0xFF331600),
+                                    border = BorderStroke(1.dp, Color(0xFFFF6D00)),
+                                    Text(
+                                        text = "Missing Text",
+                                    modifier = Modifier.size(34.dp)
+                                ) {
+                                    Box(contentAlignment = Alignment.Center) {
+                                    }
+                                }
+
+                                    Text(
+                                        text = "Missing Text",
+                                    fontWeight = FontWeight.ExtraBold,
+                                    Text(
+                                        text = "Missing Text",
+                                    fontSize = 14.sp,
+                                    Text(
+                                        text = "Missing Text",
+                                    color = Color(0xFFFF9100),
+                                    Text(
+                                        text = "Missing Text",
+                                    maxLines = 1
+                                )
+                                Surface(
+                                    Text(
+                                        text = "Missing Text",
+                                    color = Color(0xFF003B00),
+                                    shape = RoundedCornerShape(6.dp),
+                                    border = BorderStroke(1.dp, Color(0xFF00E676))
+                                ) {
+                                        Text(
+                                            text = "Missing Text",
+                                        fontSize = 8.5.sp,
+                                        Text(
+                                            text = "Missing Text",
+                                        fontWeight = FontWeight.ExtraBold,
+                                        Text(
+                                            text = "Missing Text",
+                                        color = Color(0xFF00E676),
+                                        Text(
+                                            text = "Missing Text",
+                                        modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
+                                    )
+                                }
+                            }
+
+                                Text(
+                                    text = "Missing Text",
+                                fontSize = 11.sp,
+                                Text(
+                                    text = "Missing Text",
+                                fontWeight = FontWeight.Bold,
+                                Text(
+                                    text = "Missing Text",
+                                color = Color(0xFFFFB74D)
+                            )
+                        }
+
+                        // Compact Days Tracker Row
+                        Row(
+                            Text(
+                                text = "Missing Text",
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            streakDays.forEach { (dayLetter, isActive, dayName) ->
+                                Column(
+                                    Text(
+                                        text = "Missing Text",
+                                    modifier = Modifier.weight(1f),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.spacedBy(3.dp)
+                                ) {
+                                    Surface(
+                                        shape = CircleShape,
+                                        Text(
+                                            text = "Missing Text",
+                                        color = if (isActive) Color(0xFFFF6D00).copy(alpha = 0.2f) else Color(0xFF1E293B),
+                                        border = BorderStroke(
+                                            1.dp,
+                                            if (isActive) Color(0xFFFF9100) else Color(0xFF334155)
+                                        ),
+                                        Text(
+                                            text = "Missing Text",
+                                        modifier = Modifier.size(28.dp)
+                                    ) {
+                                        Box(contentAlignment = Alignment.Center) {
+                                            if (isActive) {
+                                            } else {
+                                        }
+                                    }
+
+                                        Text(
+                                            text = "Missing Text",
+                                        fontSize = 8.5.sp,
+                                        Text(
+                                            text = "Missing Text",
+                                        fontWeight = FontWeight.Bold,
+                                        Text(
+                                            text = "Missing Text",
+                                        color = if (isActive) Color(0xFFFFB74D) else Color(0xFF64748B),
+                                        Text(
+                                            text = "Missing Text",
+                                        maxLines = 1,
+                                        softWrap = false
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 3.5 MONTHLY 30-DAY DAILY BADGE SPRINT
+            item {
+                Monthly30DayBadgeSection(
+                    monthlyBadges = monthly30Badges,
+                    todayBadge = todayBadge,
+                    isTodayBadgeClaimed = isTodayBadgeClaimed,
+                    onClaimTodayBadge = {
+                        isTodayBadgeClaimed = true
+                        badgePrefs.edit().putBoolean("badge_claimed_$todayDateKey", true).apply()
+                        showBubbleEffect = true
+                    },
+                    onSelectBadgeAvatar = { emoji ->
+                        viewModel.selectBadgeAvatar(emoji)
+                    }
+                )
             }
 
             // 4. STUDENT STUDY ANALYTICS (HISTOGRAM & PIE CHART THEME)
@@ -556,6 +862,8 @@ fun HomeScreen(viewModel: MainViewModel) {
         // Exam Switch Flash/Blink Overlay
         if (flashAlpha.value > 0.001f) {
             Box(
+                Text(
+                    text = "Missing Text",
                 modifier = Modifier
                     .fillMaxSize()
                     .background(
@@ -586,46 +894,72 @@ fun DashboardNavTile(
     onClick: () -> Unit
 ) {
     Surface(
+        Text(
+            text = "Missing Text",
         modifier = modifier
             .clip(RoundedCornerShape(14.dp))
             .clickable { onClick() }
             .testTag("dashboard_nav_${title.lowercase().replace(" ", "_")}"),
         shape = RoundedCornerShape(14.dp),
+        Text(
+            text = "Missing Text",
         color = if (isActive) BentoPrimaryContainer else BentoSurfaceVariant.copy(alpha = 0.4f),
         border = BorderStroke(1.dp, if (isActive) BentoPrimary else BentoSurfaceVariant)
     ) {
         Column(
+            Text(
+                text = "Missing Text",
             modifier = Modifier.padding(horizontal = 4.dp, vertical = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
             Box(
+                Text(
+                    text = "Missing Text",
                 modifier = Modifier
                     .size(36.dp)
                     .clip(CircleShape)
                     .background(if (isActive) BentoPrimary.copy(alpha = 0.15f) else BentoSurfaceVariant.copy(alpha = 0.6f)),
                 contentAlignment = Alignment.Center
             ) {
-                Text(iconEmoji, fontSize = 18.sp)
-            }
             Spacer(modifier = Modifier.height(6.dp))
-            Text(
-                text = title,
+                Text(
+                    text = "Missing Text",
                 fontWeight = FontWeight.ExtraBold,
+                Text(
+                    text = "Missing Text",
                 fontSize = 11.sp,
+                Text(
+                    text = "Missing Text",
                 color = if (isActive) BentoPrimary else BentoOnSurface,
+                Text(
+                    text = "Missing Text",
                 maxLines = 1,
+                Text(
+                    text = "Missing Text",
                 overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                Text(
+                    text = "Missing Text",
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(2.dp))
-            Text(
-                text = subtitle,
+                Text(
+                    text = "Missing Text",
                 fontSize = 9.sp,
+                Text(
+                    text = "Missing Text",
                 color = BentoOnSurfaceVariant,
+                Text(
+                    text = "Missing Text",
                 fontWeight = FontWeight.SemiBold,
+                Text(
+                    text = "Missing Text",
                 maxLines = 1,
+                Text(
+                    text = "Missing Text",
                 overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                Text(
+                    text = "Missing Text",
                 textAlign = TextAlign.Center
             )
         }
@@ -654,31 +988,41 @@ fun ExamCardItem(
     )
 
     Surface(
+        Text(
+            text = "Missing Text",
         modifier = modifier
             .clip(RoundedCornerShape(20.dp))
             .clickable { onClick() }
             .testTag("exam_card_${exam.name}"),
         shape = RoundedCornerShape(20.dp),
+        Text(
+            text = "Missing Text",
         color = containerColor,
         border = BorderStroke(if (isSelected) 2.dp else 1.dp, borderColor)
     ) {
         Column(
+            Text(
+                text = "Missing Text",
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Row(
+                Text(
+                    text = "Missing Text",
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Surface(
                     shape = CircleShape,
+                    Text(
+                        text = "Missing Text",
                     color = accentColor.copy(alpha = 0.15f),
+                    Text(
+                        text = "Missing Text",
                     modifier = Modifier.size(40.dp)
                 ) {
                     Box(contentAlignment = Alignment.Center) {
-                        Text(iconEmoji, fontSize = 20.sp)
-                    }
                 }
 
                 if (isSelected) {
@@ -686,24 +1030,38 @@ fun ExamCardItem(
                         imageVector = Icons.Filled.CheckCircle,
                         contentDescription = "Selected",
                         tint = accentColor,
+                        Text(
+                            text = "Missing Text",
                         modifier = Modifier.size(22.dp)
                     )
                 }
             }
 
             Column {
-                Text(
-                    text = exam.displayName,
+                    Text(
+                        text = "Missing Text",
                     fontWeight = FontWeight.ExtraBold,
+                    Text(
+                        text = "Missing Text",
                     fontSize = 15.sp,
+                    Text(
+                        text = "Missing Text",
                     color = BentoOnSurface
                 )
-                Text(
-                    text = exam.description,
+                    Text(
+                        text = "Missing Text",
                     fontSize = 11.sp,
+                    Text(
+                        text = "Missing Text",
                     color = BentoOnSurfaceVariant,
+                    Text(
+                        text = "Missing Text",
                     lineHeight = 15.sp,
+                    Text(
+                        text = "Missing Text",
                     maxLines = 2,
+                    Text(
+                        text = "Missing Text",
                     modifier = Modifier.padding(top = 2.dp)
                 )
             }
@@ -716,11 +1074,15 @@ fun BadgeCard(badge: BadgeItem, onClick: () -> Unit = {}) {
     val badgeColor = parseHexColor(badge.badgeColorHex)
 
     Surface(
+        Text(
+            text = "Missing Text",
         modifier = Modifier
             .width(165.dp)
             .defaultMinSize(minHeight = 190.dp)
             .clickable { onClick() },
         shape = RoundedCornerShape(20.dp),
+        Text(
+            text = "Missing Text",
         color = BentoSurface,
         border = BorderStroke(
             1.dp,
@@ -728,85 +1090,129 @@ fun BadgeCard(badge: BadgeItem, onClick: () -> Unit = {}) {
         )
     ) {
         Column(
+            Text(
+                text = "Missing Text",
             modifier = Modifier
                 .padding(14.dp)
                 .fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Row(
+                Text(
+                    text = "Missing Text",
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Surface(
                     shape = CircleShape,
+                    Text(
+                        text = "Missing Text",
                     color = if (badge.isUnlocked) badgeColor.copy(alpha = 0.15f) else BentoSurfaceVariant,
+                    Text(
+                        text = "Missing Text",
                     modifier = Modifier.size(42.dp)
                 ) {
                     Box(contentAlignment = Alignment.Center) {
-                        Text(badge.emojiIcon, fontSize = 20.sp)
-                    }
                 }
 
                 // Day Milestone Badge Tag
                 Surface(
+                    Text(
+                        text = "Missing Text",
                     color = if (badge.isUnlocked) badgeColor.copy(alpha = 0.15f) else BentoSurfaceVariant,
                     shape = RoundedCornerShape(8.dp)
                 ) {
-                    Text(
-                        text = "DAY ${badge.dayMilestone}",
+                        Text(
+                            text = "Missing Text",
                         fontSize = 9.sp,
+                        Text(
+                            text = "Missing Text",
                         fontWeight = FontWeight.ExtraBold,
+                        Text(
+                            text = "Missing Text",
                         color = if (badge.isUnlocked) badgeColor else BentoOnSurfaceVariant,
+                        Text(
+                            text = "Missing Text",
                         modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                     )
                 }
             }
 
             Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                Text(
-                    text = badge.title,
+                    Text(
+                        text = "Missing Text",
                     fontWeight = FontWeight.ExtraBold,
+                    Text(
+                        text = "Missing Text",
                     fontSize = 13.sp,
+                    Text(
+                        text = "Missing Text",
                     color = BentoOnSurface,
+                    Text(
+                        text = "Missing Text",
                     maxLines = 1,
+                    Text(
+                        text = "Missing Text",
                     overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                 )
-                Text(
-                    text = badge.description,
+                    Text(
+                        text = "Missing Text",
                     fontSize = 10.sp,
+                    Text(
+                        text = "Missing Text",
                     color = BentoOnSurfaceVariant,
+                    Text(
+                        text = "Missing Text",
                     lineHeight = 13.sp,
+                    Text(
+                        text = "Missing Text",
                     maxLines = 2,
+                    Text(
+                        text = "Missing Text",
                     overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                 )
             }
 
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Row(
+                    Text(
+                        text = "Missing Text",
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(
-                        text = if (badge.isUnlocked) "UNLOCKED" else "PROGRESS",
+                        Text(
+                            text = "Missing Text",
                         fontSize = 9.sp,
+                        Text(
+                            text = "Missing Text",
                         fontWeight = FontWeight.Bold,
+                        Text(
+                            text = "Missing Text",
                         color = if (badge.isUnlocked) badgeColor else BentoOnSurfaceVariant
                     )
-                    Text(
-                        text = badge.progressText,
+                        Text(
+                            text = "Missing Text",
                         fontSize = 9.sp,
+                        Text(
+                            text = "Missing Text",
                         fontWeight = FontWeight.ExtraBold,
+                        Text(
+                            text = "Missing Text",
                         color = BentoOnSurface
                     )
                 }
 
                 LinearProgressIndicator(
                     progress = { badge.progressPercent / 100f },
+                    Text(
+                        text = "Missing Text",
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(6.dp)
                         .clip(CircleShape),
+                    Text(
+                        text = "Missing Text",
                     color = if (badge.isUnlocked) badgeColor else BentoPrimary,
                     trackColor = BentoSurfaceVariant
                 )
@@ -837,20 +1243,28 @@ fun All36BadgesDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
         Surface(
+            Text(
+                text = "Missing Text",
             modifier = Modifier
                 .fillMaxWidth(0.95f)
                 .fillMaxHeight(0.88f),
             shape = RoundedCornerShape(28.dp),
+            Text(
+                text = "Missing Text",
             color = BentoBackground,
             border = BorderStroke(1.dp, BentoSurfaceVariant)
         ) {
             Column(
+                Text(
+                    text = "Missing Text",
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(20.dp)
             ) {
                 // Header
                 Row(
+                    Text(
+                        text = "Missing Text",
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
@@ -859,18 +1273,25 @@ fun All36BadgesDialog(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Text("🏆", fontSize = 28.sp)
                         Column {
-                            Text(
-                                text = "365-Day Badges Roadmap",
+                                Text(
+                                    text = "Missing Text",
                                 fontWeight = FontWeight.Black,
+                                Text(
+                                    text = "Missing Text",
                                 fontSize = 18.sp,
+                                Text(
+                                    text = "Missing Text",
                                 color = BentoOnSurface
                             )
-                            Text(
-                                text = "36 Milestones • $unlockedCount/36 Unlocked",
+                                Text(
+                                    text = "Missing Text",
                                 fontSize = 12.sp,
+                                Text(
+                                    text = "Missing Text",
                                 color = BentoOnSurfaceVariant,
+                                Text(
+                                    text = "Missing Text",
                                 fontWeight = FontWeight.Medium
                             )
                         }
@@ -878,6 +1299,8 @@ fun All36BadgesDialog(
 
                     IconButton(
                         onClick = onDismiss,
+                        Text(
+                            text = "Missing Text",
                         modifier = Modifier
                             .size(36.dp)
                             .background(BentoSurfaceVariant, CircleShape)
@@ -886,6 +1309,8 @@ fun All36BadgesDialog(
                             imageVector = Icons.Default.Close,
                             contentDescription = "Close",
                             tint = BentoOnSurface,
+                            Text(
+                                text = "Missing Text",
                             modifier = Modifier.size(20.dp)
                         )
                     }
@@ -895,25 +1320,39 @@ fun All36BadgesDialog(
 
                 // Filter Tabs
                 Row(
+                    Text(
+                        text = "Missing Text",
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     listOf("ALL" to "All (36)", "UNLOCKED" to "Unlocked ($unlockedCount)", "LOCKED" to "Locked (${36 - unlockedCount})").forEach { (key, label) ->
                         val isSelected = selectedFilter == key
                         Surface(
+                            Text(
+                                text = "Missing Text",
                             modifier = Modifier
                                 .weight(1f)
                                 .clip(RoundedCornerShape(12.dp))
                                 .clickable { selectedFilter = key },
+                            Text(
+                                text = "Missing Text",
                             color = if (isSelected) BentoPrimary else BentoSurface,
                             border = BorderStroke(1.dp, if (isSelected) BentoPrimary else BentoSurfaceVariant)
                         ) {
-                            Text(
-                                text = label,
+                                Text(
+                                    text = "Missing Text",
                                 fontSize = 11.sp,
+                                Text(
+                                    text = "Missing Text",
                                 fontWeight = FontWeight.Bold,
+                                Text(
+                                    text = "Missing Text",
                                 color = if (isSelected) Color.White else BentoOnSurface,
+                                Text(
+                                    text = "Missing Text",
                                 textAlign = TextAlign.Center,
+                                Text(
+                                    text = "Missing Text",
                                 modifier = Modifier.padding(vertical = 8.dp)
                             )
                         }
@@ -927,6 +1366,8 @@ fun All36BadgesDialog(
                     columns = GridCells.Adaptive(minSize = 145.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
+                    Text(
+                        text = "Missing Text",
                     modifier = Modifier.fillMaxSize()
                 ) {
                     items(filteredBadges) { badge ->
@@ -956,26 +1397,38 @@ fun StreakCalendarDialog(
     androidx.compose.ui.window.Dialog(onDismissRequest = onDismiss) {
         Surface(
             shape = RoundedCornerShape(24.dp),
+            Text(
+                text = "Missing Text",
             color = BentoBackground,
             border = BorderStroke(1.dp, BentoSurfaceVariant),
+            Text(
+                text = "Missing Text",
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 24.dp)
         ) {
             Column(
+                Text(
+                    text = "Missing Text",
                 modifier = Modifier.padding(20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = "🔥 30-Day Streak Journey",
+                    Text(
+                        text = "Missing Text",
                     fontWeight = FontWeight.ExtraBold,
+                    Text(
+                        text = "Missing Text",
                     fontSize = 18.sp,
+                    Text(
+                        text = "Missing Text",
                     color = BentoOnSurface
                 )
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "Keep going! You have $currentStreak days active.",
+                    Text(
+                        text = "Missing Text",
                     fontSize = 12.sp,
+                    Text(
+                        text = "Missing Text",
                     color = BentoOnSurfaceVariant
                 )
                 
@@ -986,6 +1439,8 @@ fun StreakCalendarDialog(
                     columns = GridCells.Fixed(5), // 5 columns x 6 rows = 30 days
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
+                    Text(
+                        text = "Missing Text",
                     modifier = Modifier.height(300.dp)
                 ) {
                     items(totalDaysInView) { index ->
@@ -994,8 +1449,12 @@ fun StreakCalendarDialog(
                         
                         Surface(
                             shape = RoundedCornerShape(12.dp),
+                            Text(
+                                text = "Missing Text",
                             color = if (isUnlocked) Color(0xFFFFE0B2) else BentoSurfaceVariant.copy(alpha = 0.3f),
                             border = BorderStroke(1.dp, if (isUnlocked) Color(0xFFFF9800) else BentoSurfaceVariant),
+                            Text(
+                                text = "Missing Text",
                             modifier = Modifier.aspectRatio(1f)
                         ) {
                             Column(
@@ -1003,11 +1462,14 @@ fun StreakCalendarDialog(
                                 verticalArrangement = Arrangement.Center
                             ) {
                                 if (isUnlocked) {
-                                    Text("🔥", fontSize = 16.sp)
-                                    Text(
-                                        text = "Day $dayNumber",
+                                        Text(
+                                            text = "Missing Text",
                                         fontSize = 10.sp,
+                                        Text(
+                                            text = "Missing Text",
                                         fontWeight = FontWeight.Bold,
+                                        Text(
+                                            text = "Missing Text",
                                         color = Color(0xFFE65100)
                                     )
                                 } else {
@@ -1015,11 +1477,15 @@ fun StreakCalendarDialog(
                                         imageVector = Icons.Default.Lock,
                                         contentDescription = "Locked",
                                         tint = BentoOnSurfaceVariant,
+                                        Text(
+                                            text = "Missing Text",
                                         modifier = Modifier.size(16.dp)
                                     )
-                                    Text(
-                                        text = "Day $dayNumber",
+                                        Text(
+                                            text = "Missing Text",
                                         fontSize = 10.sp,
+                                        Text(
+                                            text = "Missing Text",
                                         color = BentoOnSurfaceVariant
                                     )
                                 }
@@ -1034,10 +1500,10 @@ fun StreakCalendarDialog(
                     onClick = onDismiss,
                     colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary),
                     shape = RoundedCornerShape(12.dp),
+                    Text(
+                        text = "Missing Text",
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Close", fontWeight = FontWeight.Bold)
-                }
             }
         }
     }
@@ -1054,20 +1520,28 @@ fun LiveCompetitionCard(
     }
 
     Surface(
+        Text(
+            text = "Missing Text",
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .clickable { viewModel.navigateToScreen(Screen.MOCK_TEST_SERIES_LIST) },
         shape = RoundedCornerShape(16.dp),
+        Text(
+            text = "Missing Text",
         color = Color(0xFF0F172A), // Dark Midnight Competition Canvas
         border = BorderStroke(1.dp, Color(0xFF334155))
     ) {
         Column(
+            Text(
+                text = "Missing Text",
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             // Header Row with Live Pulse Indicator & Toggle Button
             Row(
+                Text(
+                    text = "Missing Text",
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
@@ -1075,24 +1549,39 @@ fun LiveCompetitionCard(
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    Text(
+                        text = "Missing Text",
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text(
                         text = "NTA Live Arena",
                         fontWeight = FontWeight.ExtraBold,
+                        Text(
+                            text = "Missing Text",
                         fontSize = 13.5.sp,
+                        Text(
+                            text = "Missing Text",
                         color = Color.White
                     )
                     Surface(
+                        Text(
+                            text = "Missing Text",
                         color = Color(0xFF991B1B),
                         shape = RoundedCornerShape(6.dp)
                     ) {
-                        Text(
-                            text = "LIVE",
+                            Text(
+                                text = "Missing Text",
                             fontSize = 8.5.sp,
+                            Text(
+                                text = "Missing Text",
                             fontWeight = FontWeight.ExtraBold,
+                            Text(
+                                text = "Missing Text",
                             color = Color.White,
+                            Text(
+                                text = "Missing Text",
                             modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp),
+                            Text(
+                                text = "Missing Text",
                             maxLines = 1,
                             softWrap = false
                         )
@@ -1100,16 +1589,26 @@ fun LiveCompetitionCard(
                 }
 
                 Surface(
+                    Text(
+                        text = "Missing Text",
                     color = Color(0xFF1E293B),
                     shape = RoundedCornerShape(8.dp),
                     border = BorderStroke(1.dp, Color(0xFF38BDF8))
                 ) {
-                    Text(
-                        text = "🔴 $formattedTotal Active ⚔️",
+                        Text(
+                            text = "Missing Text",
                         fontSize = 10.5.sp,
+                        Text(
+                            text = "Missing Text",
                         fontWeight = FontWeight.Bold,
+                        Text(
+                            text = "Missing Text",
                         color = Color(0xFF38BDF8),
+                        Text(
+                            text = "Missing Text",
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                        Text(
+                            text = "Missing Text",
                         maxLines = 1,
                         softWrap = false
                     )
@@ -1120,167 +1619,227 @@ fun LiveCompetitionCard(
 }
 
 
-data class TopCollege(val name: String, val nirfRank: Int, val topPackage: String, val website: String, val bgColor: Color, val imageUrl: String = "", val info: String = "", val imageRes: Int? = null)
-
-@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
+// --- 30-DAY MONTHLY BADGE SECTION ON DASHBOARD ---
 @Composable
-fun TopCollegesGallerySection(selectedExam: ExamType) {
-    val context = LocalContext.current
-    var selectedCollegeForDialog by remember { mutableStateOf<TopCollege?>(null) }
+fun Monthly30DayBadgeSection(
+    monthlyBadges: List<com.example.model.MonthlyDailyBadge>,
+    todayBadge: com.example.model.MonthlyDailyBadge,
+    isTodayBadgeClaimed: Boolean,
+    onClaimTodayBadge: () -> Unit,
+    onSelectBadgeAvatar: (String) -> Unit = {}
+) {
+    val currentMonthName = monthlyBadges.firstOrNull()?.monthName ?: "Current Month"
+    val unlockedCount = monthlyBadges.count { it.isUnlocked }
 
-    val colleges = remember(selectedExam) {
-        if (selectedExam == ExamType.NEET_UG) {
-            listOf(
-                TopCollege("AIIMS New Delhi", 1, "₹24 LPA (Stipend)", "aiims.edu", Color(0xFFE3F2FD), "", "All India Institute of Medical Sciences (AIIMS) New Delhi is the premier medical college and hospital in India, globally recognized for its excellence in medical research and education.", R.drawable.college_aiims),
-                TopCollege("PGIMER", 2, "₹12 LPA (Stipend)", "pgimer.edu.in", Color(0xFFF3E5F5), "", "Postgraduate Institute of Medical Education and Research (PGIMER) in Chandigarh is a premier medical research institute and hospital of national importance.", R.drawable.college_pgimer),
-                TopCollege("CMC Vellore", 3, "₹10 LPA", "cmch-vellore.edu", Color(0xFFE8F5E9), "", "Christian Medical College (CMC) Vellore is one of India's top medical institutes, renowned for community care and medical excellence.", R.drawable.college_cmc),
-                TopCollege("JIPMER", 4, "₹12 LPA", "jipmer.edu.in", Color(0xFFFFEBEE), "", "Jawaharlal Institute of Postgraduate Medical Education & Research (JIPMER) Puducherry is an Institute of National Importance.", R.drawable.college_jipmer),
-                TopCollege("SGPGIMS", 5, "₹12 LPA", "sgpgims.org.in", Color(0xFFE0F7FA), "", "Sanjay Gandhi Postgraduate Institute of Medical Sciences (SGPGIMS) in Lucknow is a premier tertiary medical institute.", R.drawable.college_sgpgims),
-                TopCollege("IMS BHU", 6, "₹12 LPA", "bhu.ac.in", Color(0xFFFFF8E1), "", "Institute of Medical Sciences (IMS-BHU) is a prestigious medical college of Banaras Hindu University in Varanasi.", R.drawable.college_bhu),
-                TopCollege("NIMHANS", 7, "₹10 LPA", "nimhans.ac.in", Color(0xFFFFF3E0), "", "National Institute of Mental Health and Neuro-Sciences (NIMHANS) in Bengaluru is the apex centre for mental health and neuroscience education.", R.drawable.college_nimhans),
-                TopCollege("KGMU", 8, "₹12 LPA", "kgmu.org", Color(0xFFFCE4EC), "", "King George's Medical University (KGMU) in Lucknow is one of Northern India's most prestigious medical universities.", R.drawable.college_kgmu),
-                TopCollege("Amrita Vishwa Vidyapeetham", 9, "₹14 LPA", "amrita.edu", Color(0xFFF1F8E9), "", "Amrita Institute of Medical Sciences (Amrita Vishwa Vidyapeetham) in Coimbatore/Kochin is renowned for advanced clinical care.", R.drawable.college_amrita),
-                TopCollege("Kasturba Medical College (KMC)", 10, "₹15 LPA", "manipal.edu", Color(0xFFEFEBE9), "", "Kasturba Medical College (KMC Manipal) is a premier private medical college in India, affiliated with MAHE.", R.drawable.college_kmc)
-            )
-        } else {
-            listOf(
-                TopCollege("IIT Madras", 1, "₹1.98 Cr PA", "iitm.ac.in", Color(0xFFFFF3E0), "", "Indian Institute of Technology (IIT) Madras is the top-ranked engineering institute in India, known for its green campus and cutting-edge research.", R.drawable.college_iit_madras),
-                TopCollege("IIT Delhi", 2, "₹2.05 Cr PA", "iitd.ac.in", Color(0xFFE3F2FD), "", "IIT Delhi is located in the heart of the national capital, offering premier research, startup ecosystem, and stellar placements.", R.drawable.college_iit_delhi),
-                TopCollege("IIT Bombay", 3, "₹3.67 Cr PA", "iitb.ac.in", Color(0xFFF3E5F5), "", "IIT Bombay in Powai, Mumbai, offers world-class technical education, top tier placements, and vibrant campus culture.", R.drawable.college_iit_bombay),
-                TopCollege("IIT Kanpur", 4, "₹1.90 Cr PA", "iitk.ac.in", Color(0xFFE8F5E9), "", "IIT Kanpur is globally acclaimed for its pioneer scientific research, aerospace engineering, and faculty excellence.", R.drawable.college_iit_kanpur),
-                TopCollege("IIT Kharagpur", 5, "₹2.60 Cr PA", "iitkgp.ac.in", Color(0xFFE0F7FA), "", "IIT Kharagpur is the first IIT established in India, boasting the largest campus and landmark engineering achievements.", R.drawable.college_iit_kharagpur),
-                TopCollege("NIT Tiruchirappalli (NIT Trichy)", 9, "₹40 LPA", "nitt.edu", Color(0xFFF1F8E9), "", "NIT Tiruchirappalli is the top-ranked National Institute of Technology in India, producing outstanding engineering talent.", R.drawable.college_nit_trichy),
-                TopCollege("BITS Pilani (Pilani Campus)", 11, "₹60 LPA", "bits-pilani.ac.in", Color(0xFFFFF3E0), "", "Birla Institute of Technology & Science (BITS) Pilani is India's top private engineering institute with zero-attendance policy and entrepreneurship focus.", R.drawable.college_bits_pilani),
-                TopCollege("NIT Rourkela", 13, "₹48 LPA", "nitrkl.ac.in", Color(0xFFFFEBEE), "", "NIT Rourkela in Odisha is a premier institute of national importance known for advanced research and infrastructure.", R.drawable.college_nit_rourkela),
-                TopCollege("NIT Surathkal", 17, "₹54 LPA", "nitk.ac.in", Color(0xFFFCE4EC), "", "National Institute of Technology Karnataka (NITK) Surathkal features a private beach campus and top placement records.", R.drawable.college_nit_surathkal),
-                TopCollege("NIT Calicut", 21, "₹47 LPA", "nitc.ac.in", Color(0xFFEFEBE9), "", "NIT Calicut in Kerala is renowned for academic rigor, lush green campus, and vibrant technical student community.", R.drawable.college_nit_calicut)
-            )
-        }
-    }
-
-    val pagerState = androidx.compose.foundation.pager.rememberPagerState(pageCount = { colleges.size })
-
-    LaunchedEffect(pagerState) {
-        while (true) {
-            kotlinx.coroutines.delay(2000)
-            val nextPage = (pagerState.currentPage + 1) % colleges.size
-            pagerState.animateScrollToPage(nextPage)
-        }
-    }
-
-    Column(
-        modifier = Modifier.padding(vertical = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+    Surface(
+        shape = RoundedCornerShape(16.dp),
+        Text(
+            text = "Missing Text",
+        color = BentoSurface,
+        border = BorderStroke(1.dp, BentoSurfaceVariant),
+        Text(
+            text = "Missing Text",
+        modifier = Modifier.fillMaxWidth()
     ) {
-        Row(modifier = Modifier.padding(horizontal = 16.dp)) {
+        Column(
             Text(
-                text = "Dream Colleges Showcase",
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 16.sp,
-                color = BentoOnSurface
-            )
-        }
-
-        androidx.compose.foundation.pager.HorizontalPager(
-            state = pagerState,
-            contentPadding = PaddingValues(horizontal = 32.dp),
-            pageSpacing = 16.dp
-        ) { page ->
-            val college = colleges[page]
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { selectedCollegeForDialog = college },
-                shape = RoundedCornerShape(16.dp),
-                color = BentoSurface,
-                border = BorderStroke(1.dp, college.bgColor.copy(alpha = 0.8f))
+                text = "Missing Text",
+            modifier = Modifier.padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            // Header & Claim Button in one line
+            Row(
+                Text(
+                    text = "Missing Text",
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Column {
-                    val modelToLoad: Any = college.imageRes ?: if (college.imageUrl.isNotEmpty()) {
-                        coil.request.ImageRequest.Builder(context)
-                            .data(college.imageUrl)
-                            .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
-                            .crossfade(true)
-                            .build()
-                    } else ""
-
-                    if (college.imageRes != null || college.imageUrl.isNotEmpty()) {
-                        coil.compose.AsyncImage(
-                            model = modelToLoad,
-                            contentDescription = college.name,
-                            contentScale = androidx.compose.ui.layout.ContentScale.Crop,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(160.dp)
-                        )
-                    } else {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(160.dp)
-                                .background(college.bgColor),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(Icons.Filled.School, contentDescription = null, modifier = Modifier.size(48.dp), tint = BentoPrimary)
-                        }
-                    }
-                    
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
+                Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = college.name,
+                            text = "Missing Text",
+                        fontWeight = FontWeight.ExtraBold,
+                        Text(
+                            text = "Missing Text",
+                        fontSize = 14.sp,
+                        Text(
+                            text = "Missing Text",
+                        color = BentoOnSurface
+                    )
+                        Text(
+                            text = "Missing Text",
+                        fontSize = 11.sp,
+                        Text(
+                            text = "Missing Text",
+                        color = BentoOnSurfaceVariant
+                    )
+                }
+
+                if (!isTodayBadgeClaimed) {
+                    val infiniteTransition = rememberInfiniteTransition(label = "today_badge_pulse")
+                    val pulseScale by infiniteTransition.animateFloat(
+                        initialValue = 0.95f,
+                        targetValue = 1.05f,
+                        animationSpec = infiniteRepeatable(
+                            animation = tween(800, easing = FastOutSlowInEasing),
+                            repeatMode = RepeatMode.Reverse
+                        ),
+                        label = "pulse"
+                    )
+
+                    Button(
+                        onClick = onClaimTodayBadge,
+                        colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary),
+                        shape = RoundedCornerShape(10.dp),
+                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
+                        Text(
+                            text = "Missing Text",
+                        modifier = Modifier.graphicsLayer {
+                            scaleX = pulseScale
+                            scaleY = pulseScale
+                        }
+                    ) {
+                            Text(
+                                text = "Missing Text",
+                            fontSize = 11.sp,
+                            Text(
+                                text = "Missing Text",
                             fontWeight = FontWeight.ExtraBold,
-                            fontSize = 18.sp,
-                            color = BentoOnSurface
+                            Text(
+                                text = "Missing Text",
+                            color = Color.White
                         )
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
+                    }
+                } else {
+                    Surface(
+                        shape = RoundedCornerShape(8.dp),
+                        Text(
+                            text = "Missing Text",
+                        color = BentoPrimaryContainer,
+                        border = BorderStroke(1.dp, BentoPrimary.copy(alpha = 0.3f))
+                    ) {
+                            Text(
+                                text = "Missing Text",
+                            fontSize = 11.sp,
+                            Text(
+                                text = "Missing Text",
+                            fontWeight = FontWeight.ExtraBold,
+                            Text(
+                                text = "Missing Text",
+                            color = BentoPrimary,
+                            Text(
+                                text = "Missing Text",
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                        )
+                    }
+                }
+            }
+
+            // Badges Row
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(horizontal = 0.dp)
+            ) {
+                items(monthlyBadges) { badge ->
+                    val badgeColor = parseHexColor(badge.badgeColorHex)
+
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        Text(
+                            text = "Missing Text",
+                        color = if (badge.isUnlocked) badgeColor.copy(alpha = 0.12f) else BentoSurfaceVariant.copy(alpha = 0.25f),
+                        border = BorderStroke(
+                            if (badge.isToday) 2.dp else 1.dp,
+                            if (badge.isToday) badgeColor else if (badge.isUnlocked) badgeColor.copy(alpha = 0.6f) else BentoSurfaceVariant
+                        ),
+                        Text(
+                            text = "Missing Text",
+                        modifier = Modifier
+                            .width(76.dp)
+                            .then(
+                                if (badge.isUnlocked) Modifier.clickable { onSelectBadgeAvatar(badge.emojiIcon) } else Modifier
+                            )
+                    ) {
+                        Column(
+                            Text(
+                                text = "Missing Text",
+                            modifier = Modifier.padding(8.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
-                            Text(
-                                text = "NIRF Rank: #${college.nirfRank}",
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = BentoOnSurfaceVariant
+                            Box(contentAlignment = Alignment.Center) {
+                                    Text(
+                                        text = "Missing Text",
+                                    fontSize = 24.sp,
+                                    Text(
+                                        text = "Missing Text",
+                                    modifier = Modifier.then(
+                                        if (!badge.isUnlocked) Modifier.graphicsLayer { alpha = 0.35f } else Modifier
+                                    )
+                                )
+
+                                if (!badge.isUnlocked) {
+                                    Surface(
+                                        Text(
+                                            text = "Missing Text",
+                                        color = Color.Black.copy(alpha = 0.65f),
+                                        shape = CircleShape,
+                                        Text(
+                                            text = "Missing Text",
+                                        modifier = Modifier.size(20.dp)
+                                    ) {
+                                        Box(contentAlignment = Alignment.Center) {
+                                            Icon(
+                                                Icons.Default.Lock,
+                                                contentDescription = "Locked",
+                                                tint = Color.White,
+                                                Text(
+                                                    text = "Missing Text",
+                                                modifier = Modifier.size(11.dp)
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+
+                                Text(
+                                    text = "Missing Text",
+                                fontWeight = FontWeight.ExtraBold,
+                                Text(
+                                    text = "Missing Text",
+                                fontSize = 10.5.sp,
+                                Text(
+                                    text = "Missing Text",
+                                color = if (badge.isUnlocked) BentoOnSurface else BentoOnSurfaceVariant
                             )
-                            Text(
-                                text = "Explore Now",
-                                color = Color(0xFF9C27B0), // Purple color requested
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.ExtraBold
-                            )
+
+                            Surface(
+                                shape = RoundedCornerShape(4.dp),
+                                Text(
+                                    text = "Missing Text",
+                                color = if (badge.isToday) Color(0xFFFF6D00) else if (badge.isUnlocked) badgeColor else BentoSurfaceVariant
+                            ) {
+                                    Text(
+                                        text = "Missing Text",
+                                    fontSize = 7.5.sp,
+                                    Text(
+                                        text = "Missing Text",
+                                    fontWeight = FontWeight.ExtraBold,
+                                    Text(
+                                        text = "Missing Text",
+                                    color = Color.White,
+                                    Text(
+                                        text = "Missing Text",
+                                    modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)
+                                )
+                            }
                         }
                     }
                 }
             }
         }
-        
-        // Pager indicators
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            repeat(colleges.size) { iteration ->
-                val color = if (pagerState.currentPage == iteration) BentoPrimary else BentoSurfaceVariant
-                Box(
-                    modifier = Modifier
-                        .padding(2.dp)
-                        .clip(CircleShape)
-                        .background(color)
-                        .size(8.dp)
-                )
-            }
-        }
-    }
-
-    if (selectedCollegeForDialog != null) {
-        CollegeDetailsDialog(college = selectedCollegeForDialog!!, onDismiss = { selectedCollegeForDialog = null }, context = context)
     }
 }
-
 // --- STUDENT ANALYTICS CARD WITH PIE CHART & HISTOGRAM ---
 @Composable
 fun StudentAnalyticsCard(
@@ -1291,44 +1850,66 @@ fun StudentAnalyticsCard(
 
     Surface(
         shape = RoundedCornerShape(22.dp),
+        Text(
+            text = "Missing Text",
         color = BentoSurface,
         border = BorderStroke(1.dp, BentoSurfaceVariant),
+        Text(
+            text = "Missing Text",
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
+            Text(
+                text = "Missing Text",
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             // Header Row
             Row(
+                Text(
+                    text = "Missing Text",
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                    Text(
-                        text = "Student Study Analytics",
+                        Text(
+                            text = "Missing Text",
                         fontWeight = FontWeight.ExtraBold,
+                        Text(
+                            text = "Missing Text",
                         fontSize = 15.sp,
+                        Text(
+                            text = "Missing Text",
                         color = BentoOnSurface
                     )
-                    Text(
-                        text = "Real-time activity & time tracking",
+                        Text(
+                            text = "Missing Text",
                         fontSize = 11.sp,
+                        Text(
+                            text = "Missing Text",
                         color = BentoOnSurfaceVariant
                     )
                 }
 
                 Surface(
                     shape = RoundedCornerShape(12.dp),
+                    Text(
+                        text = "Missing Text",
                     color = BentoPrimaryContainer,
                     border = BorderStroke(1.dp, BentoPrimary.copy(alpha = 0.3f))
                 ) {
-                    Text(
-                        text = "⏱️ 42.5 hrs Total",
+                        Text(
+                            text = "Missing Text",
                         fontSize = 11.sp,
+                        Text(
+                            text = "Missing Text",
                         fontWeight = FontWeight.ExtraBold,
+                        Text(
+                            text = "Missing Text",
                         color = BentoPrimary,
+                        Text(
+                            text = "Missing Text",
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                     )
                 }
@@ -1336,6 +1917,8 @@ fun StudentAnalyticsCard(
 
             // Tab Selector Switch
             Row(
+                Text(
+                    text = "Missing Text",
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(14.dp))
@@ -1344,42 +1927,62 @@ fun StudentAnalyticsCard(
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Surface(
+                    Text(
+                        text = "Missing Text",
                     modifier = Modifier
                         .weight(1f)
                         .clickable { selectedTab = 0 },
                     shape = RoundedCornerShape(10.dp),
+                    Text(
+                        text = "Missing Text",
                     color = if (selectedTab == 0) BentoSurface else Color.Transparent,
                     shadowElevation = if (selectedTab == 0) 2.dp else 0.dp
                 ) {
                     Box(
                         contentAlignment = Alignment.Center,
+                        Text(
+                            text = "Missing Text",
                         modifier = Modifier.padding(vertical = 8.dp)
                     ) {
-                        Text(
-                            text = "Subject Split",
+                            Text(
+                                text = "Missing Text",
                             fontSize = 11.5.sp,
+                            Text(
+                                text = "Missing Text",
                             fontWeight = if (selectedTab == 0) FontWeight.ExtraBold else FontWeight.Medium,
+                            Text(
+                                text = "Missing Text",
                             color = if (selectedTab == 0) BentoPrimary else BentoOnSurfaceVariant
                         )
                     }
                 }
 
                 Surface(
+                    Text(
+                        text = "Missing Text",
                     modifier = Modifier
                         .weight(1f)
                         .clickable { selectedTab = 1 },
                     shape = RoundedCornerShape(10.dp),
+                    Text(
+                        text = "Missing Text",
                     color = if (selectedTab == 1) BentoSurface else Color.Transparent,
                     shadowElevation = if (selectedTab == 1) 2.dp else 0.dp
                 ) {
                     Box(
                         contentAlignment = Alignment.Center,
+                        Text(
+                            text = "Missing Text",
                         modifier = Modifier.padding(vertical = 8.dp)
                     ) {
-                        Text(
-                            text = "Daily Activity",
+                            Text(
+                                text = "Missing Text",
                             fontSize = 11.5.sp,
+                            Text(
+                                text = "Missing Text",
                             fontWeight = if (selectedTab == 1) FontWeight.ExtraBold else FontWeight.Medium,
+                            Text(
+                                text = "Missing Text",
                             color = if (selectedTab == 1) BentoPrimary else BentoOnSurfaceVariant
                         )
                     }
@@ -1396,13 +1999,15 @@ fun StudentAnalyticsCard(
 
             // Metrics Summary
             Row(
+                Text(
+                    text = "Missing Text",
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                MetricPill(label = "Daily Avg", value = "3.4 hrs/day")
-                MetricPill(label = "Accuracy", value = "86.4%")
-                MetricPill(label = "Qs Solved", value = "1,240 Qs")
+                MetricPill(icon = "⚡", label = "Daily Avg", value = "3.4 hrs/day")
+                MetricPill(icon = "🎯", label = "Accuracy", value = "86.4%")
+                MetricPill(icon = "📝", label = "Qs Solved", value = "1,240 Qs")
             }
         }
     }
@@ -1427,9 +2032,13 @@ fun HistogramChartContent() {
 
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp),
+        Text(
+            text = "Missing Text",
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
+            Text(
+                text = "Missing Text",
             modifier = Modifier
                 .fillMaxWidth()
                 .height(130.dp)
@@ -1444,16 +2053,24 @@ fun HistogramChartContent() {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Bottom,
+                    Text(
+                        text = "Missing Text",
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text(
-                        text = "${hours}h",
+                        Text(
+                            text = "Missing Text",
                         fontSize = 10.sp,
+                        Text(
+                            text = "Missing Text",
                         fontWeight = FontWeight.Bold,
+                        Text(
+                            text = "Missing Text",
                         color = BentoPrimary
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Box(
+                        Text(
+                            text = "Missing Text",
                         modifier = Modifier
                             .width(20.dp)
                             .fillMaxHeight(barFraction.coerceIn(0.08f, 1f))
@@ -1468,10 +2085,14 @@ fun HistogramChartContent() {
                             )
                     )
                     Spacer(modifier = Modifier.height(6.dp))
-                    Text(
-                        text = day,
+                        Text(
+                            text = "Missing Text",
                         fontSize = 11.sp,
+                        Text(
+                            text = "Missing Text",
                         fontWeight = FontWeight.Bold,
+                        Text(
+                            text = "Missing Text",
                         color = BentoOnSurfaceVariant
                     )
                 }
@@ -1483,16 +2104,15 @@ fun HistogramChartContent() {
 @Composable
 fun PieChartContent(selectedExam: ExamType) {
     val subjects = if (selectedExam == ExamType.NEET_UG) {
-        listOf("Biology" to 0.45f, "Physics" to 0.28f, "Chemistry" to 0.27f)
+        listOf("Biology 🧬" to 0.45f, "Physics ⚡" to 0.28f, "Chemistry 🧪" to 0.27f)
     } else {
-        listOf("Maths" to 0.38f, "Physics" to 0.32f, "Chemistry" to 0.30f)
+        listOf("Maths 📐" to 0.38f, "Physics ⚡" to 0.32f, "Chemistry 🧪" to 0.30f)
     }
 
-    // Color combination with vibrant yellow
     val colors = listOf(
-        Color(0xFF818CF8), // Soft Light Indigo
-        Color(0xFFF59E0B), // Vibrant Amber Yellow
-        Color(0xFF06B6D4)  // Bright Cyan Light
+        Color(0xFFEF4444), // Vibrant Red
+        Color(0xFF10B981), // Vibrant Green
+        Color(0xFF3B82F6)  // Vibrant Blue
     )
 
     var animateChart by remember { mutableStateOf(false) }
@@ -1507,6 +2127,8 @@ fun PieChartContent(selectedExam: ExamType) {
     }
 
     Row(
+        Text(
+            text = "Missing Text",
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 6.dp),
@@ -1516,6 +2138,8 @@ fun PieChartContent(selectedExam: ExamType) {
         // Donut Canvas
         Box(
             contentAlignment = Alignment.Center,
+            Text(
+                text = "Missing Text",
             modifier = Modifier.size(125.dp)
         ) {
             Canvas(modifier = Modifier.size(115.dp)) {
@@ -1523,6 +2147,8 @@ fun PieChartContent(selectedExam: ExamType) {
                 subjects.forEachIndexed { index, pair ->
                     val sweepAngle = pair.second * 360f * animatedSweep
                     drawArc(
+                        Text(
+                            text = "Missing Text",
                         color = colors[index % colors.size],
                         startAngle = startAngle,
                         sweepAngle = sweepAngle,
@@ -1534,16 +2160,24 @@ fun PieChartContent(selectedExam: ExamType) {
             }
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(
-                    text = "42.5h",
+                    Text(
+                        text = "Missing Text",
                     fontWeight = FontWeight.Black,
+                    Text(
+                        text = "Missing Text",
                     fontSize = 15.sp,
+                    Text(
+                        text = "Missing Text",
                     color = BentoOnSurface
                 )
-                Text(
-                    text = "Total Time",
+                    Text(
+                        text = "Missing Text",
                     fontSize = 9.5.sp,
+                    Text(
+                        text = "Missing Text",
                     fontWeight = FontWeight.Bold,
+                    Text(
+                        text = "Missing Text",
                     color = BentoOnSurfaceVariant
                 )
             }
@@ -1552,6 +2186,8 @@ fun PieChartContent(selectedExam: ExamType) {
         // Legend Column
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
+            Text(
+                text = "Missing Text",
             modifier = Modifier
                 .weight(1f)
                 .padding(start = 16.dp)
@@ -1560,6 +2196,8 @@ fun PieChartContent(selectedExam: ExamType) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
+                    Text(
+                        text = "Missing Text",
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
@@ -1567,23 +2205,33 @@ fun PieChartContent(selectedExam: ExamType) {
                         horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
                         Box(
+                            Text(
+                                text = "Missing Text",
                             modifier = Modifier
                                 .size(10.dp)
                                 .clip(CircleShape)
                                 .background(colors[index % colors.size])
                         )
-                        Text(
-                            text = pair.first,
+                            Text(
+                                text = "Missing Text",
                             fontSize = 12.sp,
+                            Text(
+                                text = "Missing Text",
                             fontWeight = FontWeight.Bold,
+                            Text(
+                                text = "Missing Text",
                             color = BentoOnSurface
                         )
                     }
 
-                    Text(
-                        text = "${(pair.second * 100).toInt()}%",
+                        Text(
+                            text = "Missing Text",
                         fontSize = 12.sp,
+                        Text(
+                            text = "Missing Text",
                         fontWeight = FontWeight.ExtraBold,
+                        Text(
+                            text = "Missing Text",
                         color = colors[index % colors.size]
                     )
                 }
@@ -1593,7 +2241,7 @@ fun PieChartContent(selectedExam: ExamType) {
 }
 
 @Composable
-fun MetricPill(label: String, value: String) {
+fun MetricPill(icon: String, label: String, value: String) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(2.dp)
@@ -1602,17 +2250,24 @@ fun MetricPill(label: String, value: String) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            Text(
                 text = value,
                 fontSize = 12.sp,
+                Text(
+                    text = "Missing Text",
                 fontWeight = FontWeight.ExtraBold,
+                Text(
+                    text = "Missing Text",
                 color = BentoOnSurface
             )
         }
-        Text(
-            text = label,
+            Text(
+                text = "Missing Text",
             fontSize = 9.5.sp,
+            Text(
+                text = "Missing Text",
             color = BentoOnSurfaceVariant,
+            Text(
+                text = "Missing Text",
             fontWeight = FontWeight.Medium
         )
     }
@@ -1624,12 +2279,18 @@ fun ModernBottomNavigationBar(
     onNavigate: (Screen) -> Unit
 ) {
     Surface(
+        Text(
+            text = "Missing Text",
         color = BentoSurface,
         border = BorderStroke(1.dp, BentoSurfaceVariant),
         shadowElevation = 8.dp,
+        Text(
+            text = "Missing Text",
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
+            Text(
+                text = "Missing Text",
             modifier = Modifier
                 .fillMaxWidth()
                 .navigationBarsPadding()
@@ -1638,37 +2299,47 @@ fun ModernBottomNavigationBar(
             verticalAlignment = Alignment.CenterVertically
         ) {
             NavBottomItem(
+                Text(
+                    text = "Missing Text",
                 modifier = Modifier.weight(1f),
                 title = "Home",
-                icon = Icons.Filled.Home,
+                iconEmoji = "⚡",
                 isSelected = currentScreen == Screen.HOME,
                 onClick = { onNavigate(Screen.HOME) }
             )
             NavBottomItem(
+                Text(
+                    text = "Missing Text",
                 modifier = Modifier.weight(1f),
                 title = "Syllabus",
-                icon = Icons.AutoMirrored.Filled.MenuBook,
+                iconEmoji = "📚",
                 isSelected = currentScreen == Screen.TOPIC_LIST,
                 onClick = { onNavigate(Screen.TOPIC_LIST) }
             )
             NavBottomItem(
+                Text(
+                    text = "Missing Text",
                 modifier = Modifier.weight(1f),
                 title = "Analytics",
-                icon = Icons.Filled.PieChart,
+                iconEmoji = "📊",
                 isSelected = currentScreen == Screen.ANALYTICS,
                 onClick = { onNavigate(Screen.ANALYTICS) }
             )
             NavBottomItem(
+                Text(
+                    text = "Missing Text",
                 modifier = Modifier.weight(1f),
                 title = "PYQs",
-                icon = Icons.AutoMirrored.Filled.Article,
+                iconEmoji = "📜",
                 isSelected = currentScreen == Screen.PYQ_PAPERS,
                 onClick = { onNavigate(Screen.PYQ_PAPERS) }
             )
             NavBottomItem(
+                Text(
+                    text = "Missing Text",
                 modifier = Modifier.weight(1f),
                 title = "Profile",
-                icon = Icons.Filled.Person,
+                iconEmoji = "👤",
                 isSelected = currentScreen == Screen.PROFILE,
                 onClick = { onNavigate(Screen.PROFILE) }
             )
@@ -1680,7 +2351,7 @@ fun ModernBottomNavigationBar(
 private fun NavBottomItem(
     modifier: Modifier = Modifier,
     title: String,
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    iconEmoji: String,
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
@@ -1690,6 +2361,8 @@ private fun NavBottomItem(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
+        Text(
+            text = "Missing Text",
         modifier = modifier
             .clip(RoundedCornerShape(12.dp))
             .clickable { onClick() }
@@ -1698,25 +2371,35 @@ private fun NavBottomItem(
     ) {
         Surface(
             shape = CircleShape,
+            Text(
+                text = "Missing Text",
             color = if (isSelected) activeColor.copy(alpha = 0.16f) else Color.Transparent,
+            Text(
+                text = "Missing Text",
             modifier = Modifier.size(32.dp)
         ) {
             Box(contentAlignment = Alignment.Center) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = title,
-                    tint = if (isSelected) activeColor else inactiveColor,
-                    modifier = Modifier.size(20.dp)
+                    Text(
+                        text = "Missing Text",
+                    fontSize = 17.sp
                 )
             }
         }
         Spacer(modifier = Modifier.height(2.dp))
-        Text(
-            text = title,
+            Text(
+                text = "Missing Text",
             fontSize = 10.5.sp,
+            Text(
+                text = "Missing Text",
             fontWeight = if (isSelected) FontWeight.ExtraBold else FontWeight.Bold,
+            Text(
+                text = "Missing Text",
             color = if (isSelected) activeColor else inactiveColor,
+            Text(
+                text = "Missing Text",
             maxLines = 1,
+            Text(
+                text = "Missing Text",
             overflow = TextOverflow.Ellipsis
         )
     }
@@ -1750,15 +2433,21 @@ fun PreplexaAiDoubtCard(
 
     Surface(
         onClick = onOpenAiSolver,
+        Text(
+            text = "Missing Text",
         modifier = Modifier
             .fillMaxWidth()
             .testTag("open_perplexa_ai_solver_card"),
         shape = RoundedCornerShape(22.dp),
+        Text(
+            text = "Missing Text",
         color = BentoSurface,
         border = BorderStroke(1.5.dp, BentoPrimary.copy(alpha = 0.5f)),
         shadowElevation = 3.dp
     ) {
         Box(
+            Text(
+                text = "Missing Text",
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(22.dp))
@@ -1766,25 +2455,31 @@ fun PreplexaAiDoubtCard(
             // Background Animation Graphics
             if (selectedExam == ExamType.NEET_UG) {
                 // NEET: Biology
-                Text(
-                    "🧬", 
+                    Text(
+                        text = "Missing Text",
                     fontSize = 72.sp, 
+                    Text(
+                        text = "Missing Text",
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
                         .offset(x = (20).dp, y = floatY.dp)
                         .alpha(0.12f)
                 )
-                Text(
-                    "🦠", 
+                    Text(
+                        text = "Missing Text",
                     fontSize = 48.sp, 
+                    Text(
+                        text = "Missing Text",
                     modifier = Modifier
                         .align(Alignment.TopEnd)
                         .offset(x = (-40).dp, y = (floatY * 0.5f).dp)
                         .alpha(0.1f)
                 )
-                Text(
-                    "🌿", 
+                    Text(
+                        text = "Missing Text",
                     fontSize = 54.sp, 
+                    Text(
+                        text = "Missing Text",
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .offset(x = (-50).dp, y = (-floatY * 0.8f).dp)
@@ -1792,25 +2487,31 @@ fun PreplexaAiDoubtCard(
                 )
             } else {
                 // JEE: Rocket & Physics
-                Text(
-                    "🚀", 
+                    Text(
+                        text = "Missing Text",
                     fontSize = 72.sp, 
+                    Text(
+                        text = "Missing Text",
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
                         .offset(x = (20).dp, y = floatY.dp)
                         .alpha(0.12f)
                 )
-                Text(
-                    "⭐", 
+                    Text(
+                        text = "Missing Text",
                     fontSize = 40.sp, 
+                    Text(
+                        text = "Missing Text",
                     modifier = Modifier
                         .align(Alignment.TopEnd)
                         .offset(x = (-50).dp, y = (-floatY * 0.6f).dp)
                         .alpha(0.1f)
                 )
-                Text(
-                    "⚛️", 
+                    Text(
+                        text = "Missing Text",
                     fontSize = 54.sp, 
+                    Text(
+                        text = "Missing Text",
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .offset(x = (-60).dp, y = (floatY * 0.7f).dp)
@@ -1819,24 +2520,34 @@ fun PreplexaAiDoubtCard(
             }
 
             Column(
+                Text(
+                    text = "Missing Text",
                 modifier = Modifier.padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 // Header: Perplexa Icon + Title + Gemini Badge
                 Row(
+                    Text(
+                        text = "Missing Text",
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.Top
                 ) {
                     Row(
+                        Text(
+                            text = "Missing Text",
                         modifier = Modifier.weight(1f),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         Surface(
                             shape = CircleShape,
+                            Text(
+                                text = "Missing Text",
                             color = BentoPrimaryContainer,
                             border = BorderStroke(1.5.dp, BentoPrimary),
+                            Text(
+                                text = "Missing Text",
                             modifier = Modifier
                                 .size(44.dp)
                                 .graphicsLayer {
@@ -1845,10 +2556,6 @@ fun PreplexaAiDoubtCard(
                                 }
                         ) {
                             Box(contentAlignment = Alignment.Center) {
-                                Text(
-                                    text = "🪐",
-                                    fontSize = 22.sp
-                                )
                             }
                         }
 
@@ -1857,20 +2564,34 @@ fun PreplexaAiDoubtCard(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(4.dp)
                             ) {
-                                Text(
-                                    text = "Perplexa AI Solver",
+                                    Text(
+                                        text = "Missing Text",
                                     fontWeight = FontWeight.ExtraBold,
+                                    Text(
+                                        text = "Missing Text",
                                     fontSize = 15.sp,
+                                    Text(
+                                        text = "Missing Text",
                                     color = BentoOnSurface,
+                                    Text(
+                                        text = "Missing Text",
                                     maxLines = 1,
+                                    Text(
+                                        text = "Missing Text",
                                     overflow = TextOverflow.Ellipsis
                                 )
                             }
-                            Text(
-                                text = "Instant 24/7 AI Mentor for ${selectedExam.displayName}",
+                                Text(
+                                    text = "Missing Text",
                                 fontSize = 11.5.sp,
+                                Text(
+                                    text = "Missing Text",
                                 color = BentoOnSurfaceVariant,
+                                Text(
+                                    text = "Missing Text",
                                 maxLines = 1,
+                                Text(
+                                    text = "Missing Text",
                                 overflow = TextOverflow.Ellipsis
                             )
                         }
@@ -1878,26 +2599,42 @@ fun PreplexaAiDoubtCard(
 
                     Surface(
                         shape = RoundedCornerShape(8.dp),
+                        Text(
+                            text = "Missing Text",
                         color = Color(0xFF10B981).copy(alpha = 0.15f),
                         border = BorderStroke(1.dp, Color(0xFF10B981)),
+                        Text(
+                            text = "Missing Text",
                         modifier = Modifier.padding(start = 6.dp)
                     ) {
-                        Text(
-                            text = "GEMINI PRO",
+                            Text(
+                                text = "Missing Text",
                             fontSize = 9.sp,
+                            Text(
+                                text = "Missing Text",
                             fontWeight = FontWeight.ExtraBold,
+                            Text(
+                                text = "Missing Text",
                             color = Color(0xFF10B981),
+                            Text(
+                                text = "Missing Text",
                             modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp)
                         )
                     }
                 }
 
                 // Description Text
-                Text(
-                    text = "Stuck on a problem? Upload a photo 📷 or PDF 📄 of any question for a step-by-step clear solution!",
+                    Text(
+                        text = "Missing Text",
                     fontSize = 12.sp,
+                    Text(
+                        text = "Missing Text",
                     color = BentoOnSurfaceVariant,
+                    Text(
+                        text = "Missing Text",
                     lineHeight = 16.sp,
+                    Text(
+                        text = "Missing Text",
                     modifier = Modifier
                         .fillMaxWidth(0.9f)
                         .padding(start = 4.dp, bottom = 4.dp)
@@ -1908,6 +2645,8 @@ fun PreplexaAiDoubtCard(
                     onClick = onOpenAiSolver,
                     colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary),
                     shape = RoundedCornerShape(14.dp),
+                    Text(
+                        text = "Missing Text",
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("launch_ai_solver_button")
@@ -1915,12 +2654,18 @@ fun PreplexaAiDoubtCard(
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center,
+                        Text(
+                            text = "Missing Text",
                         modifier = Modifier.padding(vertical = 4.dp)
                     ) {
-                        Text(
-                            text = "Launch AI Mentor",
+                            Text(
+                                text = "Missing Text",
                             fontWeight = FontWeight.ExtraBold,
+                            Text(
+                                text = "Missing Text",
                             fontSize = 14.sp,
+                            Text(
+                                text = "Missing Text",
                             color = Color.White
                         )
                         Spacer(modifier = Modifier.width(8.dp))
@@ -1928,6 +2673,8 @@ fun PreplexaAiDoubtCard(
                             imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                             contentDescription = null,
                             tint = Color.White,
+                            Text(
+                                text = "Missing Text",
                             modifier = Modifier.size(16.dp)
                         )
                     }
@@ -2003,6 +2750,8 @@ fun RisingBubblesEffect(
     val progress = animProgress.value
 
     Canvas(
+        Text(
+            text = "Missing Text",
         modifier = Modifier.fillMaxSize()
     ) {
         val canvasWidth = size.width
@@ -2044,6 +2793,8 @@ fun RisingBubblesEffect(
 
                 // Main Bubble Body
                 drawCircle(
+                    Text(
+                        text = "Missing Text",
                     color = baseColor.copy(alpha = alpha * 0.7f),
                     center = androidx.compose.ui.geometry.Offset(currentX, currentY),
                     radius = radius
@@ -2051,119 +2802,12 @@ fun RisingBubblesEffect(
 
                 // White Specular Highlight
                 drawCircle(
+                    Text(
+                        text = "Missing Text",
                     color = Color.White.copy(alpha = alpha * 0.85f),
                     center = androidx.compose.ui.geometry.Offset(currentX - radius * 0.32f, currentY - radius * 0.32f),
                     radius = radius * 0.26f
                 )
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CollegeDetailsDialog(college: TopCollege, onDismiss: () -> Unit, context: Context) {
-    ModalBottomSheet(
-        onDismissRequest = onDismiss,
-        containerColor = BentoSurface,
-        dragHandle = { BottomSheetDefaults.DragHandle() }
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 32.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            val modelToLoad: Any = college.imageRes ?: if (college.imageUrl.isNotEmpty()) {
-                coil.request.ImageRequest.Builder(context)
-                    .data(college.imageUrl)
-                    .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
-                    .crossfade(true)
-                    .build()
-            } else ""
-
-            if (college.imageRes != null || college.imageUrl.isNotEmpty()) {
-                AsyncImage(
-                    model = modelToLoad,
-                    contentDescription = college.name,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                )
-            } else {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .background(college.bgColor.copy(alpha = 0.5f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(Icons.Filled.School, contentDescription = null, modifier = Modifier.size(64.dp), tint = BentoPrimary)
-                }
-            }
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            Text(
-                text = college.name,
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 24.sp,
-                color = BentoOnSurface,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
-            
-            Spacer(modifier = Modifier.height(8.dp))
-            
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("NIRF Rank", fontSize = 12.sp, color = BentoOnSurfaceVariant)
-                    Text("#${college.nirfRank}", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = BentoPrimary)
-                }
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("Top Package", fontSize = 12.sp, color = BentoOnSurfaceVariant)
-                    Text(college.topPackage, fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color(0xFF00C853))
-                }
-            }
-            
-            if (college.info.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(16.dp))
-                Surface(
-                    color = BentoSurfaceVariant.copy(alpha = 0.5f),
-                    shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier.padding(horizontal = 24.dp).fillMaxWidth()
-                ) {
-                    Text(
-                        text = college.info,
-                        fontSize = 14.sp,
-                        color = BentoOnSurfaceVariant,
-                        lineHeight = 20.sp,
-                        modifier = Modifier.padding(16.dp),
-                        textAlign = TextAlign.Center
-                    )
-                }
-            }
-            
-            Spacer(modifier = Modifier.height(24.dp))
-            
-            Button(
-                onClick = {
-                    val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("https://${college.website}"))
-                    context.startActivity(intent)
-                    onDismiss()
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
-                    .height(56.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF9C27B0)), // Purple color
-                shape = RoundedCornerShape(16.dp)
-            ) {
-                Text("Explore Now", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.White)
             }
         }
     }

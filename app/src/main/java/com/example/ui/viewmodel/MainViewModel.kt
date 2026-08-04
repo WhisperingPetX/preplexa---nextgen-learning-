@@ -24,7 +24,8 @@ enum class Screen {
     ANALYTICS,
     PYQ_PAPERS,
     PROFILE,
-    AUTH
+    AUTH,
+    PERPLEXA_AI_SOLVER
 }
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -51,6 +52,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     )
     val isDarkMode: StateFlow<Boolean> = _isDarkMode.asStateFlow()
 
+    // --- Interactive App Tutorial Overlay State ---
+    private val _showTutorialOverlay = MutableStateFlow(
+        !userPrefs.getBoolean("has_seen_app_tutorial", false)
+    )
+    val showTutorialOverlay: StateFlow<Boolean> = _showTutorialOverlay.asStateFlow()
+
+    fun openTutorial() {
+        _showTutorialOverlay.value = true
+    }
+
+    fun dismissTutorial() {
+        _showTutorialOverlay.value = false
+        userPrefs.edit().putBoolean("has_seen_app_tutorial", true).apply()
+    }
+
     fun toggleDarkMode() {
         val newValue = !_isDarkMode.value
         _isDarkMode.value = newValue
@@ -67,30 +83,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     )
     val studentName: StateFlow<String> = _studentName.asStateFlow()
 
-    private val _isAvatarAutoRotating = MutableStateFlow(
-        userPrefs.getBoolean("avatar_auto_rotate", true)
-    )
+    private val _isAvatarAutoRotating = MutableStateFlow(false)
     val isAvatarAutoRotating: StateFlow<Boolean> = _isAvatarAutoRotating.asStateFlow()
 
     private val _studentAvatar = MutableStateFlow(
-        if (userPrefs.getBoolean("avatar_auto_rotate", true) || userPrefs.getString("student_avatar", "AUTO") == "AUTO") {
-            com.example.model.DailyAvatarManager.getTodayAvatarInfo().avatarEmoji
-        } else {
-            userPrefs.getString("student_avatar", com.example.model.DailyAvatarManager.getTodayAvatarInfo().avatarEmoji) ?: com.example.model.DailyAvatarManager.getTodayAvatarInfo().avatarEmoji
-        }
+        userPrefs.getString("student_avatar", "🐺")?.let { avatar ->
+            if (avatar in listOf("⭐", "✨", "🌟", "💫", "🌱", "👤")) "🐺" else avatar
+        } ?: "🐺"
     )
     val studentAvatar: StateFlow<String> = _studentAvatar.asStateFlow()
 
     private fun refreshDailyAvatar() {
-        val isAuto = userPrefs.getBoolean("avatar_auto_rotate", true) || userPrefs.getString("student_avatar", "AUTO") == "AUTO"
-        if (isAuto) {
-            val todayInfo = com.example.model.DailyAvatarManager.getTodayAvatarInfo()
-            _studentAvatar.value = todayInfo.avatarEmoji
-            _isAvatarAutoRotating.value = true
-        } else {
-            _isAvatarAutoRotating.value = false
-            _studentAvatar.value = userPrefs.getString("student_avatar", com.example.model.DailyAvatarManager.getTodayAvatarInfo().avatarEmoji) ?: com.example.model.DailyAvatarManager.getTodayAvatarInfo().avatarEmoji
-        }
+        val avatar = userPrefs.getString("student_avatar", "🐺") ?: "🐺"
+        _studentAvatar.value = if (avatar in listOf("⭐", "✨", "🌟", "💫")) "🐺" else avatar
     }
 
     // --- Streak State ---
@@ -176,19 +181,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun updateStudentProfile(name: String, avatar: String, autoRotate: Boolean = false) {
         val trimmedName = name.trim().ifEmpty { "Aspirant" }
         _studentName.value = trimmedName
-        _isAvatarAutoRotating.value = autoRotate
-        
-        val newAvatar = if (autoRotate) {
-            com.example.model.DailyAvatarManager.getTodayAvatarInfo().avatarEmoji
-        } else {
-            avatar
-        }
-        _studentAvatar.value = newAvatar
+        _studentAvatar.value = avatar
 
         userPrefs.edit()
             .putString("student_name", trimmedName)
-            .putString("student_avatar", if (autoRotate) "AUTO" else avatar)
-            .putBoolean("avatar_auto_rotate", autoRotate)
+            .putString("student_avatar", avatar)
+            .apply()
+    }
+
+    fun selectBadgeAvatar(emoji: String) {
+        _studentAvatar.value = emoji
+        _isAvatarAutoRotating.value = false
+        userPrefs.edit()
+            .putString("student_avatar", emoji)
+            .putBoolean("avatar_auto_rotate", false)
             .apply()
     }
 
@@ -411,15 +417,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _selectedSubject,
         _searchQuery
     ) { exam, subject, query ->
-        SyllabusRepository.allTopics.filter { topic ->
-            val matchesExam = topic.examTypes.contains(exam)
-            val matchesSubject = subject == null || topic.subject == subject
-            val matchesQuery = query.isBlank() ||
-                    topic.title.contains(query, ignoreCase = true) ||
-                    topic.description.contains(query, ignoreCase = true) ||
-                    topic.subtopics.any { it.contains(query, ignoreCase = true) }
-            matchesExam && matchesSubject && matchesQuery
-        }
+        SyllabusRepository.allTopics
+            .filter { topic ->
+                val matchesExam = topic.examTypes.contains(exam)
+                val matchesSubject = subject == null || topic.subject == subject
+                val matchesQuery = query.isBlank() ||
+                        topic.title.contains(query, ignoreCase = true) ||
+                        topic.description.contains(query, ignoreCase = true) ||
+                        topic.subtopics.any { it.contains(query, ignoreCase = true) }
+                matchesExam && matchesSubject && matchesQuery
+            }
+            .sortedWith(compareBy({ it.subject.ordinal }, { it.unitNumber }))
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     // --- Methods ---

@@ -29,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.model.ExamType
+import com.example.ui.components.ExamEnvironmentBackground
 import com.example.ui.components.AdminPanelDialog
 import com.example.ui.components.AdminPasswordDialog
 import com.example.ui.components.SubscriptionPlanModal
@@ -53,6 +54,7 @@ fun ProfileScreen(viewModel: MainViewModel) {
 
     var showEditProfileDialog by remember { mutableStateOf(false) }
     var showSubscriptionModal by remember { mutableStateOf(false) }
+    var showAvatarPopoutModal by remember { mutableStateOf(false) }
     
     // --- Admin Secret Tap Gesture ---
     var profileTapCount by remember { mutableStateOf(0) }
@@ -64,16 +66,25 @@ fun ProfileScreen(viewModel: MainViewModel) {
     val avgScore = if (totalAttempts > 0) attempts.map { it.scorePercent }.average().toInt() else 0
     val streakCount by viewModel.currentStreak.collectAsState()
 
-    // Dynamic Badges based on student accomplishments
-    val earnedBadges = remember(totalAttempts, avgScore, streakCount) {
-        listOf(
-            BadgeItem("1st Step", "Complete 1 Mock Test", "🌱", totalAttempts >= 1, Color(0xFF10B981)),
-            BadgeItem("Test Tackler", "Attempt 5+ Tests", "📝", totalAttempts >= 5, Color(0xFF3B82F6)),
-            BadgeItem("Streak Master", "3+ Days Active Streak", "🔥", streakCount >= 3, Color(0xFFF59E0B)),
-            BadgeItem("Accuracy Ace", "Scored 80%+ in a test", "🎯", avgScore >= 80, Color(0xFF8B5CF6)),
-            BadgeItem("Question Bank", "Practiced 50+ Questions", "⚡", totalQuestions >= 50, Color(0xFFEC4899)),
-            BadgeItem("Bookmark Scholar", "Saved 5+ Questions", "🔖", bookmarkedQuestions.size >= 5, Color(0xFF6366F1))
-        )
+    // Current Month 30 Badges
+    val monthlyBadges = remember { com.example.model.MonthlyBadgeManager.getCurrentMonth30Badges() }
+    val currentMonthName = remember { monthlyBadges.firstOrNull()?.monthName ?: "Current Month" }
+
+    val earnedBadges = remember(monthlyBadges) {
+        monthlyBadges.map { mb ->
+            val color = try {
+                Color(android.graphics.Color.parseColor(mb.badgeColorHex))
+            } catch (e: Exception) {
+                BentoPrimary
+            }
+            BadgeItem(
+                title = mb.title,
+                subtitle = if (mb.isUnlocked) "Unlocked in $currentMonthName" else "Locked 🔒",
+                emoji = mb.emojiIcon,
+                isUnlocked = mb.isUnlocked,
+                themeColor = color
+            )
+        }
     }
 
     if (showEditProfileDialog) {
@@ -85,6 +96,105 @@ fun ProfileScreen(viewModel: MainViewModel) {
             onSave = { newName, newAvatar, autoRotate ->
                 viewModel.updateStudentProfile(newName, newAvatar, autoRotate)
                 showEditProfileDialog = false
+            }
+        )
+    }
+
+    if (showAvatarPopoutModal) {
+        AlertDialog(
+            onDismissRequest = { showAvatarPopoutModal = false },
+            title = {
+                Text(
+                    text = "🌟 Choose Your Avatar",
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 18.sp,
+                    color = BentoOnSurface
+                )
+            },
+            text = {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = "Tap any avatar icon to apply instantly:",
+                        fontSize = 12.5.sp,
+                        color = BentoOnSurfaceVariant
+                    )
+
+                    val popoutAvatars = listOf(
+                        "🐺" to "Wolf",
+                        "🩺" to "Stethoscope",
+                        "🚀" to "Rocket",
+                        "🦠" to "Bacteria",
+                        "🔬" to "Microscope",
+                        "🛸" to "Spaceship"
+                    )
+
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp)
+                    ) {
+                        popoutAvatars.take(3).forEach { (emoji, label) ->
+                            Surface(
+                                onClick = {
+                                    viewModel.updateStudentProfile(studentName, emoji, isAutoRotate)
+                                    showAvatarPopoutModal = false
+                                },
+                                shape = RoundedCornerShape(16.dp),
+                                color = if (studentAvatar == emoji) BentoPrimaryContainer else BentoSurfaceVariant,
+                                border = BorderStroke(1.5.dp, if (studentAvatar == emoji) BentoPrimary else Color.Transparent),
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    modifier = Modifier.padding(vertical = 12.dp)
+                                ) {
+                                    Text(emoji, fontSize = 28.sp)
+                                    Spacer(modifier = Modifier.height(4.dp))
+                                    Text(label, fontSize = 10.sp, fontWeight = FontWeight.Bold, color = BentoOnSurface)
+                                }
+                            }
+                        }
+                    }
+
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        popoutAvatars.drop(3).forEach { (emoji, label) ->
+                            Surface(
+                                onClick = {
+                                    viewModel.updateStudentProfile(studentName, emoji, isAutoRotate)
+                                    showAvatarPopoutModal = false
+                                },
+                                shape = RoundedCornerShape(16.dp),
+                                color = if (studentAvatar == emoji) BentoPrimaryContainer else BentoSurfaceVariant,
+                                border = BorderStroke(1.5.dp, if (studentAvatar == emoji) BentoPrimary else Color.Transparent),
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    modifier = Modifier.padding(vertical = 12.dp)
+                                ) {
+                                    Text(emoji, fontSize = 28.sp)
+                                    Spacer(modifier = Modifier.height(4.dp))
+                                    Text(label, fontSize = 10.sp, fontWeight = FontWeight.Bold, color = BentoOnSurface)
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { showAvatarPopoutModal = false }) {
+                    Text("Close", fontWeight = FontWeight.Bold, color = BentoPrimary)
+                }
             }
         )
     }
@@ -136,17 +246,34 @@ fun ProfileScreen(viewModel: MainViewModel) {
                         }
                     }
                 },
+                actions = {
+                    // Empty for now
+                },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = BentoBackground)
+            )
+        },
+        bottomBar = {
+            ModernBottomNavigationBar(
+                currentScreen = Screen.PROFILE,
+                onNavigate = { viewModel.navigateToScreen(it) }
             )
         }
     ) { paddingValues ->
-        LazyColumn(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .padding(paddingValues),
+            contentAlignment = Alignment.TopCenter
         ) {
+            ExamEnvironmentBackground(selectedExam = selectedExam)
+
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .widthIn(max = 680.dp)
+                    .padding(horizontal = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
             // --- 1. STYLISH PROFILE HEADER CARD WITH EDIT NAME & AVATAR ---
             item {
                 Surface(
@@ -178,13 +305,16 @@ fun ProfileScreen(viewModel: MainViewModel) {
                                 Surface(
                                     shape = CircleShape,
                                     color = BentoPrimaryContainer,
-                                    border = BorderStroke(2.5.dp, Brush.sweepGradient(listOf(BentoPrimary, Color(0xFFEC4899), Color(0xFFF59E0B), BentoPrimary))),
+                                    border = BorderStroke(2.5.dp, BentoPrimary),
                                     shadowElevation = 4.dp,
-                                    modifier = Modifier.size(72.dp)
+                                    modifier = Modifier
+                                        .size(72.dp)
+                                        .clickable { showAvatarPopoutModal = true }
                                 ) {
                                     Box(contentAlignment = Alignment.Center) {
+                                        val displayAvatar = if (studentAvatar == "👤" || studentAvatar.isBlank()) "🐺" else studentAvatar
                                         Text(
-                                            text = studentAvatar,
+                                            text = displayAvatar,
                                             fontSize = 36.sp
                                         )
                                     }
@@ -196,7 +326,7 @@ fun ProfileScreen(viewModel: MainViewModel) {
                                     border = BorderStroke(1.5.dp, Color.White),
                                     modifier = Modifier
                                         .size(24.dp)
-                                        .clickable { showEditProfileDialog = true }
+                                        .clickable { showAvatarPopoutModal = true }
                                         .testTag("edit_avatar_badge")
                                 ) {
                                     Box(contentAlignment = Alignment.Center) {
@@ -262,22 +392,6 @@ fun ProfileScreen(viewModel: MainViewModel) {
                                             fontSize = 11.sp,
                                             fontWeight = FontWeight.ExtraBold,
                                             color = Color(0xFFD97706),
-                                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-                                        )
-                                    }
-
-                                    // Daily Avatar Persona Pill
-                                    val todayInfo = remember { com.example.model.DailyAvatarManager.getTodayAvatarInfo() }
-                                    Surface(
-                                        color = Color(0xFFE0F2FE),
-                                        border = BorderStroke(1.dp, Color(0xFFBAE6FD)),
-                                        shape = RoundedCornerShape(12.dp)
-                                    ) {
-                                        Text(
-                                            text = if (isAutoRotate) "📅 ${todayInfo.dayName}: ${todayInfo.personaTitle}" else "📅 ${todayInfo.dayName} Avatar",
-                                            fontSize = 11.sp,
-                                            fontWeight = FontWeight.ExtraBold,
-                                            color = Color(0xFF0284C7),
                                             modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
                                         )
                                     }
@@ -373,7 +487,7 @@ fun ProfileScreen(viewModel: MainViewModel) {
                                 .testTag("view_subscription_plan_button")
                         ) {
                             Text(
-                                text = if (isServiceLocked) "🔒 Trial Expired • Choose Plan to Unlock" else "✨ View Membership Plans",
+                                text = if (isServiceLocked) "🔒 Trial Expired • Choose Plan to Unlock" else "View Membership Plans",
                                 fontSize = 13.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color.White
@@ -387,7 +501,7 @@ fun ProfileScreen(viewModel: MainViewModel) {
             item {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text(
-                        text = "📝 Tests & Performance Overview",
+                        text = "Tests & Performance Overview",
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 15.sp,
                         color = BentoOnSurface
@@ -402,7 +516,7 @@ fun ProfileScreen(viewModel: MainViewModel) {
                             title = "Tests Completed",
                             value = "$totalAttempts",
                             subtitle = "Mock papers done",
-                            emoji = "📝",
+                            emoji = "",
                             badgeColor = BentoPurpleBadge
                         )
                         ProfileStatCard(
@@ -410,7 +524,7 @@ fun ProfileScreen(viewModel: MainViewModel) {
                             title = "Questions Done",
                             value = "$totalQuestions",
                             subtitle = "Solved in practice",
-                            emoji = "⚡",
+                            emoji = "",
                             badgeColor = BentoBlueBadge
                         )
                         ProfileStatCard(
@@ -418,52 +532,9 @@ fun ProfileScreen(viewModel: MainViewModel) {
                             title = "Avg Accuracy",
                             value = if (totalAttempts > 0) "$avgScore%" else "0%",
                             subtitle = "Overall test score",
-                            emoji = "🎯",
+                            emoji = "",
                             badgeColor = BentoGreenBadge
                         )
-                    }
-                }
-            }
-
-            // --- 4. BADGES & ACHIEVEMENTS ---
-            item {
-                Surface(
-                    shape = RoundedCornerShape(20.dp),
-                    color = BentoSurface,
-                    border = BorderStroke(1.dp, BentoSurfaceVariant),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "🏆 Earned Badges & Medals",
-                                fontWeight = FontWeight.ExtraBold,
-                                fontSize = 15.sp,
-                                color = BentoOnSurface
-                            )
-                            Text(
-                                text = "${earnedBadges.count { it.isUnlocked }} / ${earnedBadges.size} Unlocked",
-                                fontSize = 11.5.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = BentoPrimary
-                            )
-                        }
-
-                        LazyRow(
-                            horizontalArrangement = Arrangement.spacedBy(12.dp),
-                            contentPadding = PaddingValues(vertical = 4.dp)
-                        ) {
-                            items(earnedBadges) { badge ->
-                                BadgeCard(badge = badge)
-                            }
-                        }
                     }
                 }
             }
@@ -481,7 +552,7 @@ fun ProfileScreen(viewModel: MainViewModel) {
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         Text(
-                            text = "🎯 Change Target Entrance Exam",
+                            text = "Change Target Entrance Exam",
                             fontWeight = FontWeight.ExtraBold,
                             fontSize = 15.sp,
                             color = BentoOnSurface
@@ -508,7 +579,6 @@ fun ProfileScreen(viewModel: MainViewModel) {
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                                 ) {
-                                    Text("🩺", fontSize = 22.sp)
                                     Column {
                                         Text(
                                             text = "NEET UG",
@@ -542,7 +612,6 @@ fun ProfileScreen(viewModel: MainViewModel) {
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                                 ) {
-                                    Text("🚀", fontSize = 22.sp)
                                     Column {
                                         Text(
                                             text = "JEE Main",
@@ -673,7 +742,7 @@ fun ProfileScreen(viewModel: MainViewModel) {
                 }
             }
 
-            // --- 6. DISPLAY & THEME PREFERENCES ---
+            // --- 6. APP GUIDE & TUTORIALS ---
             item {
                 Surface(
                     shape = RoundedCornerShape(20.dp),
@@ -686,7 +755,7 @@ fun ProfileScreen(viewModel: MainViewModel) {
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         Text(
-                            text = "🎨 Display & Theme Settings",
+                            text = "💡 App Guide & Tutorials",
                             fontWeight = FontWeight.ExtraBold,
                             fontSize = 15.sp,
                             color = BentoOnSurface
@@ -696,8 +765,9 @@ fun ProfileScreen(viewModel: MainViewModel) {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clip(RoundedCornerShape(16.dp))
-                                .background(BentoSurfaceVariant.copy(alpha = 0.3f))
-                                .padding(12.dp),
+                                .background(BentoSurfaceVariant.copy(alpha = 0.35f))
+                                .clickable { viewModel.openTutorial() }
+                                .padding(14.dp),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -708,38 +778,32 @@ fun ProfileScreen(viewModel: MainViewModel) {
                             ) {
                                 Surface(
                                     shape = CircleShape,
-                                    color = if (isDarkMode) Color(0xFF1E293B) else Color(0xFFFEF3C7),
-                                    modifier = Modifier.size(40.dp)
+                                    color = BentoPrimaryContainer,
+                                    modifier = Modifier.size(42.dp)
                                 ) {
                                     Box(contentAlignment = Alignment.Center) {
-                                        Text(if (isDarkMode) "🌙" else "☀️", fontSize = 20.sp)
+                                        Text("💡", fontSize = 22.sp)
                                     }
                                 }
                                 Column {
                                     Text(
-                                        text = if (isDarkMode) "Night Study Mode (Dark Theme)" else "Day Study Mode (Light Theme)",
+                                        text = "Interactive App Walkthrough",
                                         fontWeight = FontWeight.Bold,
-                                        fontSize = 13.5.sp,
+                                        fontSize = 14.sp,
                                         color = BentoOnSurface
                                     )
                                     Text(
-                                        text = "Reduces glare & eye strain during late night study sessions",
-                                        fontSize = 11.sp,
+                                        text = "Learn how to use AI Solver, Test Series, and Practice PYQs",
+                                        fontSize = 11.5.sp,
                                         color = BentoOnSurfaceVariant
                                     )
                                 }
                             }
 
-                            Switch(
-                                checked = isDarkMode,
-                                onCheckedChange = { viewModel.setDarkMode(it) },
-                                colors = SwitchDefaults.colors(
-                                    checkedThumbColor = Color.White,
-                                    checkedTrackColor = BentoPrimary,
-                                    uncheckedThumbColor = BentoOnSurfaceVariant,
-                                    uncheckedTrackColor = BentoSurfaceVariant
-                                ),
-                                modifier = Modifier.testTag("profile_theme_switch")
+                            Icon(
+                                imageVector = Icons.Default.ChevronRight,
+                                contentDescription = "Open Guide",
+                                tint = BentoPrimary
                             )
                         }
                     }
@@ -749,6 +813,7 @@ fun ProfileScreen(viewModel: MainViewModel) {
             item { Spacer(modifier = Modifier.height(24.dp)) }
         }
     }
+}
 }
 
 data class BadgeItem(
@@ -827,7 +892,6 @@ fun ProfileStatCard(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            Text(emoji, fontSize = 22.sp)
             Text(
                 text = value,
                 fontWeight = FontWeight.ExtraBold,
@@ -868,17 +932,33 @@ fun EditProfileDialog(
     onSave: (newName: String, newAvatar: String, autoRotate: Boolean) -> Unit
 ) {
     var nameText by remember { mutableStateOf(currentName) }
-    var autoRotate by remember { mutableStateOf(isAutoRotateCurrent) }
     var selectedAvatar by remember { mutableStateOf(currentAvatar) }
 
-    val weeklyAvatars = com.example.model.DailyAvatarManager.WEEKLY_AVATARS
-    val todayInfo = com.example.model.DailyAvatarManager.getTodayAvatarInfo()
+    val studentAvatars = listOf(
+        "👨‍🎓" to "Student",
+        "👩‍🎓" to "Scholar",
+        "👨‍⚕️" to "Doctor",
+        "👩‍⚕️" to "Med Pro",
+        "👨‍🔬" to "Scientist",
+        "👩‍🔬" to "Bio Lead",
+        "🧑‍💻" to "Techie",
+        "🎓" to "Graduate",
+        "👤" to "Default",
+        "🩺" to "Stethoscope",
+        "🔬" to "Microscope",
+        "🧬" to "Genetics",
+        "🚀" to "Rocket",
+        "💡" to "Genius",
+        "📚" to "Reader",
+        "✍️" to "Aspirant",
+        "🌟" to "Star"
+    )
 
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
             Text(
-                text = "✏️ Customize Profile & Daily Avatars",
+                text = "✏️ Customize Profile & Avatar",
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 17.sp,
                 color = BentoOnSurface
@@ -902,112 +982,55 @@ fun EditProfileDialog(
                 )
 
                 Text(
-                    text = "7 Daily Rotating Avatars (Sun ➔ Sat):",
+                    text = "Choose Your Profile Icon / Avatar:",
                     fontSize = 12.5.sp,
                     fontWeight = FontWeight.Bold,
                     color = BentoOnSurface
                 )
 
-                // 1. Auto-Rotate Toggle Card
-                Surface(
-                    onClick = {
-                        autoRotate = true
-                        selectedAvatar = todayInfo.avatarEmoji
-                    },
-                    shape = RoundedCornerShape(12.dp),
-                    color = if (autoRotate) BentoPrimaryContainer else BentoSurfaceVariant,
-                    border = BorderStroke(1.5.dp, if (autoRotate) BentoPrimary else Color.Transparent),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Row(
-                        modifier = Modifier.padding(12.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        Surface(
-                            shape = CircleShape,
-                            color = BentoPrimary,
-                            modifier = Modifier.size(36.dp)
-                        ) {
-                            Box(contentAlignment = Alignment.Center) {
-                                Text("🔄", fontSize = 18.sp)
-                            }
-                        }
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(
-                                text = "Auto Daily Rotation (Recommended)",
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 13.sp,
-                                color = BentoOnSurface
-                            )
-                            Text(
-                                text = "Changes daily: Sun(🫏), Mon(🚀), Tue(🐼), Wed(🩺), Thu(🐒), Fri(🦉), Sat(🏆)",
-                                fontSize = 10.5.sp,
-                                color = BentoOnSurfaceVariant
-                            )
-                        }
-                    }
-                }
-
-                Text(
-                    text = "Or Pick a Specific Day Avatar:",
-                    fontSize = 11.5.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = BentoOnSurfaceVariant
-                )
-
-                // 2. 7 Day Avatars Row
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    items(weeklyAvatars) { dayInfo ->
-                        val isToday = dayInfo.dayOfWeek == todayInfo.dayOfWeek
-                        val isSelected = !autoRotate && selectedAvatar == dayInfo.avatarEmoji
+                    items(studentAvatars) { (emoji, title) ->
+                        val isSelected = selectedAvatar == emoji
 
                         Surface(
                             onClick = {
-                                autoRotate = false
-                                selectedAvatar = dayInfo.avatarEmoji
+                                selectedAvatar = emoji
                             },
                             shape = RoundedCornerShape(14.dp),
                             color = if (isSelected) BentoPrimaryContainer else BentoSurfaceVariant,
                             border = BorderStroke(
                                 1.5.dp,
-                                if (isSelected) BentoPrimary else if (isToday) Color(0xFFFF9100) else Color.Transparent
+                                if (isSelected) BentoPrimary else Color.Transparent
                             ),
                             modifier = Modifier.width(82.dp)
                         ) {
                             Column(
-                                modifier = Modifier.padding(vertical = 8.dp, horizontal = 4.dp),
+                                modifier = Modifier.padding(vertical = 10.dp, horizontal = 4.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 verticalArrangement = Arrangement.spacedBy(4.dp)
                             ) {
                                 Text(
-                                    text = dayInfo.avatarEmoji,
-                                    fontSize = 24.sp
+                                    text = emoji,
+                                    fontSize = 26.sp
                                 )
                                 Text(
-                                    text = dayInfo.dayName.take(3),
-                                    fontSize = 11.sp,
+                                    text = title,
+                                    fontSize = 9.5.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = BentoOnSurface
-                                )
-                                Text(
-                                    text = dayInfo.personaTitle.substringAfter(" "),
-                                    fontSize = 8.5.sp,
-                                    fontWeight = FontWeight.Medium,
-                                    color = BentoOnSurfaceVariant,
+                                    color = BentoOnSurface,
                                     maxLines = 1,
                                     textAlign = TextAlign.Center
                                 )
-                                if (isToday) {
+                                if (isSelected) {
                                     Surface(
-                                        color = Color(0xFFFF6D00),
+                                        color = BentoPrimary,
                                         shape = RoundedCornerShape(4.dp)
                                     ) {
                                         Text(
-                                            text = "TODAY",
+                                            text = "SELECTED",
                                             fontSize = 7.5.sp,
                                             fontWeight = FontWeight.ExtraBold,
                                             color = Color.White,
@@ -1023,7 +1046,7 @@ fun EditProfileDialog(
         },
         confirmButton = {
             Button(
-                onClick = { onSave(nameText, selectedAvatar, autoRotate) },
+                onClick = { onSave(nameText, selectedAvatar, false) },
                 colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary),
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier.testTag("save_profile_button")

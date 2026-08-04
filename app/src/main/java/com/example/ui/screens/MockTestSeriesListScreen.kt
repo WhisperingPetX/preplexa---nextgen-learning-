@@ -38,12 +38,7 @@ fun MockTestSeriesListScreen(viewModel: MainViewModel) {
 
     val activeTopic = topic ?: return
 
-    val themeColor = when (activeTopic.subject) {
-        Subject.PHYSICS -> BentoBlueBadge
-        Subject.CHEMISTRY -> BentoPeachBadge
-        Subject.MATHEMATICS -> BentoPurpleBadge
-        Subject.BIOLOGY -> BentoGreenBadge
-    }
+    val themeColor = BentoPrimary
 
     Scaffold(
         containerColor = BentoBackground,
@@ -179,7 +174,7 @@ fun MockTestSeriesListScreen(viewModel: MainViewModel) {
                                     .fillMaxWidth()
                                     .clip(RoundedCornerShape(20.dp))
                                     .background(BentoPrimaryContainer)
-                                    .border(1.dp, BentoBlueBorder, RoundedCornerShape(20.dp))
+                                    .border(1.dp, BentoPrimary.copy(alpha = 0.5f), RoundedCornerShape(20.dp))
                                     .padding(14.dp),
                                 verticalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
@@ -240,58 +235,55 @@ fun MockTestSeriesListScreen(viewModel: MainViewModel) {
                         }
                     }
 
-                    // Level Distribution Badge Strip (3 Easy, 4 Medium, 3 Tough)
+                    // Level Distribution Plain Text Row (1-3 Easy, 4-7 Medium, 8-10 Tough)
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
                         Surface(
-                            color = BentoGreenBg,
-                            border = BorderStroke(1.dp, BentoGreenBorder),
+                            color = BentoSurfaceVariant,
                             shape = RoundedCornerShape(10.dp),
                             modifier = Modifier.weight(1f)
                         ) {
                             Text(
-                                text = "🟢 1-3 Easy • 20 min",
-                                color = BentoGreenText,
-                                fontSize = 9.5.sp,
-                                fontWeight = FontWeight.ExtraBold,
+                                text = "1-3 Easy • 20 min",
+                                color = BentoOnSurfaceVariant,
+                                fontSize = 10.sp,
+                                fontWeight = FontWeight.Bold,
                                 maxLines = 1,
-                                modifier = Modifier.padding(vertical = 6.dp, horizontal = 2.dp),
+                                modifier = Modifier.padding(vertical = 6.dp, horizontal = 4.dp),
                                 textAlign = androidx.compose.ui.text.style.TextAlign.Center
                             )
                         }
 
                         Surface(
-                            color = BentoBlueBg,
-                            border = BorderStroke(1.dp, BentoBlueBorder),
+                            color = BentoSurfaceVariant,
                             shape = RoundedCornerShape(10.dp),
                             modifier = Modifier.weight(1f)
                         ) {
                             Text(
-                                text = "🟡 4-7 Med • 25 min",
-                                color = BentoPrimary,
-                                fontSize = 9.5.sp,
-                                fontWeight = FontWeight.ExtraBold,
+                                text = "4-7 Medium • 25 min",
+                                color = BentoOnSurfaceVariant,
+                                fontSize = 10.sp,
+                                fontWeight = FontWeight.Bold,
                                 maxLines = 1,
-                                modifier = Modifier.padding(vertical = 6.dp, horizontal = 2.dp),
+                                modifier = Modifier.padding(vertical = 6.dp, horizontal = 4.dp),
                                 textAlign = androidx.compose.ui.text.style.TextAlign.Center
                             )
                         }
 
                         Surface(
-                            color = BentoPeachBg,
-                            border = BorderStroke(1.dp, BentoPeachBorder),
+                            color = BentoSurfaceVariant,
                             shape = RoundedCornerShape(10.dp),
                             modifier = Modifier.weight(1f)
                         ) {
                             Text(
-                                text = "🔴 8-10 Tough • 30 min",
-                                color = BentoPeachBadge,
-                                fontSize = 9.5.sp,
-                                fontWeight = FontWeight.ExtraBold,
+                                text = "8-10 Tough • 30 min",
+                                color = BentoOnSurfaceVariant,
+                                fontSize = 10.sp,
+                                fontWeight = FontWeight.Bold,
                                 maxLines = 1,
-                                modifier = Modifier.padding(vertical = 6.dp, horizontal = 2.dp),
+                                modifier = Modifier.padding(vertical = 6.dp, horizontal = 4.dp),
                                 textAlign = androidx.compose.ui.text.style.TextAlign.Center
                             )
                         }
@@ -320,24 +312,9 @@ fun BentoMockTestCardItem(
     themeColor: Color,
     onStartTest: () -> Unit
 ) {
-    val diffColor = when {
-        mockTest.difficulty.contains("Easy", ignoreCase = true) -> BentoGreenBadge
-        mockTest.difficulty.contains("Medium", ignoreCase = true) -> BentoPrimary
-        mockTest.difficulty.contains("Tough", ignoreCase = true) || mockTest.difficulty.contains("Hard", ignoreCase = true) -> BentoPeachBadge
-        else -> themeColor
-    }
-
-    val diffBg = when {
-        mockTest.difficulty.contains("Easy", ignoreCase = true) -> BentoGreenBg
-        mockTest.difficulty.contains("Medium", ignoreCase = true) -> BentoBlueBg
-        else -> BentoPeachBg
-    }
-
-    val diffBorder = when {
-        mockTest.difficulty.contains("Easy", ignoreCase = true) -> BentoGreenBorder
-        mockTest.difficulty.contains("Medium", ignoreCase = true) -> BentoBlueBorder
-        else -> BentoPeachBorder
-    }
+    val diffColor = BentoPrimary
+    val diffBg = BentoPrimaryContainer
+    val diffBorder = BentoPrimary.copy(alpha = 0.5f)
 
     Surface(
         shape = RoundedCornerShape(28.dp),
@@ -376,15 +353,14 @@ fun BentoMockTestCardItem(
                     }
 
                     Surface(
-                        color = diffBg,
-                        border = BorderStroke(1.dp, diffBorder),
-                        shape = RoundedCornerShape(10.dp)
+                        color = BentoSurfaceVariant,
+                        shape = RoundedCornerShape(8.dp)
                     ) {
                         Text(
                             text = mockTest.difficulty,
-                            color = diffColor,
+                            color = BentoOnSurfaceVariant,
                             fontSize = 11.sp,
-                            fontWeight = FontWeight.ExtraBold,
+                            fontWeight = FontWeight.Medium,
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
                         )
                     }

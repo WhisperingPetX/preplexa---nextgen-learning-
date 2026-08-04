@@ -6,6 +6,7 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.widthIn
@@ -17,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.ui.components.AppTutorialOverlay
 import com.example.ui.components.TrialExpiredPaywallModal
 import com.example.ui.screens.*
 import com.example.ui.theme.PreplexaTheme
@@ -38,6 +40,7 @@ fun PreplexaApp(viewModel: MainViewModel = viewModel()) {
     val isDarkMode by viewModel.isDarkMode.collectAsState()
     val currentScreen by viewModel.currentScreen.collectAsState()
     val showPaywallModal by viewModel.showPaywallModal.collectAsState()
+    val showTutorialOverlay by viewModel.showTutorialOverlay.collectAsState()
 
     PreplexaTheme(darkTheme = isDarkMode) {
         Surface(modifier = Modifier.fillMaxSize()) {
@@ -50,6 +53,16 @@ fun PreplexaApp(viewModel: MainViewModel = viewModel()) {
                         .fillMaxSize()
                         .widthIn(max = 600.dp)
                 ) {
+                    androidx.compose.animation.AnimatedVisibility(
+                        visible = showTutorialOverlay,
+                        enter = androidx.compose.animation.fadeIn(animationSpec = tween(300)) + androidx.compose.animation.scaleIn(initialScale = 0.95f),
+                        exit = androidx.compose.animation.fadeOut(animationSpec = tween(300)) + androidx.compose.animation.scaleOut(targetScale = 0.95f)
+                    ) {
+                        AppTutorialOverlay(
+                            onDismiss = { viewModel.dismissTutorial() }
+                        )
+                    }
+
                     if (showPaywallModal) {
                         TrialExpiredPaywallModal(
                             viewModel = viewModel,
@@ -68,6 +81,7 @@ fun PreplexaApp(viewModel: MainViewModel = viewModel()) {
                             Screen.ANALYTICS -> viewModel.navigateToScreen(Screen.HOME)
                             Screen.PYQ_PAPERS -> viewModel.navigateToScreen(Screen.HOME)
                             Screen.PROFILE -> viewModel.navigateToScreen(Screen.HOME)
+                            Screen.PERPLEXA_AI_SOLVER -> viewModel.navigateToScreen(Screen.HOME)
                             Screen.AUTH -> { /* Stay on Auth */ }
                             Screen.HOME -> { /* Exit */ }
                         }
@@ -87,6 +101,7 @@ fun PreplexaApp(viewModel: MainViewModel = viewModel()) {
                             Screen.ANALYTICS -> AnalyticsScreen(viewModel = viewModel)
                             Screen.PYQ_PAPERS -> PyqPapersScreen(viewModel = viewModel)
                             Screen.PROFILE -> ProfileScreen(viewModel = viewModel)
+                            Screen.PERPLEXA_AI_SOLVER -> PerplexaAiSolverScreen(viewModel = viewModel)
                             Screen.AUTH -> AuthScreen(viewModel = viewModel)
                         }
                     }

@@ -98,4 +98,66 @@ object GeminiService {
             3. Ensure correct unit conversions.
         """.trimIndent()
     }
+
+    suspend fun askDoubtOrChat(
+        userMessage: String,
+        selectedExam: String = "NEET/JEE"
+    ): String = withContext(Dispatchers.IO) {
+        val apiKey = BuildConfig.GEMINI_API_KEY
+        if (apiKey.isBlank() || apiKey == "MY_GEMINI_API_KEY") {
+            return@withContext """
+                Namaste! Main Gemini hu 👋
+
+                Aapke question "$userMessage" par main aapki bilkul naturally help kar sakta hu! Live Gemini 3.5 Flash AI responses aur instant image/document analysis ke liye AI Studio Secrets me apni Gemini API Key add karein.
+
+                Tab tak aap Mock Tests, PYQ Papers, ya Subject Formulas practice kar sakte hain!
+            """.trimIndent()
+        }
+
+        try {
+            val systemInstructionText = """
+                You are Gemini, an intelligent, friendly, warm, and expert AI tutor and companion for students preparing for $selectedExam.
+                You talk naturally, smoothly, and conversationally, just like official Google Gemini in real life.
+                Always respond in a natural, friendly, human-like manner. Match the student's language (Hindi, Hinglish, or English).
+                Be direct, clear, empathetic, and fast. Avoid stiff, robotic templates unless a structured step-by-step formula solution is requested.
+            """.trimIndent()
+
+            val systemInstructionObj = JSONObject().put("parts", JSONArray().put(JSONObject().put("text", systemInstructionText)))
+            val partObj = JSONObject().put("text", userMessage)
+            val partsArray = JSONArray().put(partObj)
+            val contentObj = JSONObject().put("parts", partsArray)
+            val contentsArray = JSONArray().put(contentObj)
+
+            val requestJson = JSONObject()
+                .put("systemInstruction", systemInstructionObj)
+                .put("contents", contentsArray)
+                .put("generationConfig", JSONObject().put("temperature", 0.7))
+
+            val httpRequest = Request.Builder()
+                .url("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=$apiKey")
+                .post(requestJson.toString().toRequestBody("application/json".toMediaType()))
+                .build()
+
+            val httpResponse = client.newCall(httpRequest).execute()
+            val responseString = httpResponse.body?.string() ?: ""
+
+            if (httpResponse.isSuccessful && responseString.isNotBlank()) {
+                val jsonResp = JSONObject(responseString)
+                val candidates = jsonResp.optJSONArray("candidates")
+                if (candidates != null && candidates.length() > 0) {
+                    val firstCandidate = candidates.getJSONObject(0)
+                    val content = firstCandidate.optJSONObject("content")
+                    val parts = content?.optJSONArray("parts")
+                    if (parts != null && parts.length() > 0) {
+                        val text = parts.getJSONObject(0).optString("text")
+                        if (!text.isNullOrBlank()) return@withContext text
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        return@withContext "Mujhe abhi connection me issue ho raha hai. Please ek baar fir se try kijiye!"
+    }
 }

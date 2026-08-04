@@ -14,6 +14,83 @@ data class BadgeItem(
     val badgeColorHex: String
 )
 
+data class MonthlyDailyBadge(
+    val dayOfMonth: Int, // 1 to 30
+    val monthName: String, // e.g. "August"
+    val year: Int, // e.g. 2026
+    val title: String,
+    val description: String,
+    val emojiIcon: String,
+    val isUnlocked: Boolean,
+    val isToday: Boolean,
+    val badgeColorHex: String
+)
+
+object MonthlyBadgeManager {
+    private val DAILY_BADGE_PRESETS = listOf(
+        Triple("Pioneer Badge", "Unlocked on Day 1 login 🌱", Pair("🌱", "#10B981")),
+        Triple("Rocket Velocity", "Unlocked on Day 2 login 🚀", Pair("🚀", "#3B82F6")),
+        Triple("Panda Power", "Unlocked on Day 3 login 🐼", Pair("🐼", "#F59E0B")),
+        Triple("Med Wizard", "Unlocked on Day 4 login 🩺", Pair("🩺", "#8B5CF6")),
+        Triple("Clever Monkey", "Unlocked on Day 5 login 🐒", Pair("🐒", "#EC4899")),
+        Triple("Night Owl", "Unlocked on Day 6 login 🦉", Pair("🦉", "#06B6D4")),
+        Triple("Grand Legend", "Unlocked on Day 7 login 🏆", Pair("🏆", "#EAB308")),
+        Triple("Thunder Titan", "Unlocked on Day 8 login ⚡", Pair("⚡", "#FF6D00")),
+        Triple("Apex Conqueror", "Unlocked on Day 9 login 👑", Pair("👑", "#AA00FF")),
+        Triple("Bullseye Focus", "Unlocked on Day 10 login 🎯", Pair("🎯", "#FF1744")),
+        Triple("Bio Genius", "Unlocked on Day 11 login 🧬", Pair("🧬", "#00E676")),
+        Triple("Diamond Grit", "Unlocked on Day 12 login 💎", Pair("💎", "#00B0FF")),
+        Triple("Flame Scholar", "Unlocked on Day 13 login 🔥", Pair("🔥", "#FF3D00")),
+        Triple("Aegis Shield", "Unlocked on Day 14 login 🛡️", Pair("🛡️", "#7C4DFF")),
+        Triple("Formula Wand", "Unlocked on Day 15 login 🪄", Pair("🪄", "#E040FB")),
+        Triple("Deep Cosmos", "Unlocked on Day 16 login 🌌", Pair("🌌", "#2979FF")),
+        Triple("Synapse Master", "Unlocked on Day 17 login 🧠", Pair("🧠", "#D500F9")),
+        Triple("Vector Ruler", "Unlocked on Day 18 login 📐", Pair("📐", "#00C853")),
+        Triple("Panther Sprint", "Unlocked on Day 19 login 🐅", Pair("🐅", "#FF6F00")),
+        Triple("Lion Heart", "Unlocked on Day 20 login 🦁", Pair("🦁", "#FFAB00")),
+        Triple("Sky Eagle", "Unlocked on Day 21 login 🦅", Pair("🦅", "#3D5AFF")),
+        Triple("Volcano Power", "Unlocked on Day 22 login 🌋", Pair("🌋", "#FF3D00")),
+        Triple("Superstar", "Unlocked on Day 23 login 🌟", Pair("🌟", "#FFD700")),
+        Triple("Champion Punch", "Unlocked on Day 24 login 🥊", Pair("🥊", "#FF1744")),
+        Triple("Oracle Crystal", "Unlocked on Day 25 login 🔮", Pair("🔮", "#AA00FF")),
+        Triple("Target Archer", "Unlocked on Day 26 login 🏹", Pair("🏹", "#00E676")),
+        Triple("Saturn Ring", "Unlocked on Day 27 login 🪐", Pair("🪐", "#00B0FF")),
+        Triple("Gold Medalist", "Unlocked on Day 28 login 🥇", Pair("🥇", "#FFD600")),
+        Triple("Final Lap", "Unlocked on Day 29 login 🏁", Pair("🏁", "#3B82F6")),
+        Triple("Month Apex Topper", "Unlocked on Day 30 login 🏅", Pair("🏅", "#FFD700"))
+    )
+
+    fun getCurrentMonth30Badges(): List<MonthlyDailyBadge> {
+        val cal = java.util.Calendar.getInstance()
+        val todayDay = cal.get(java.util.Calendar.DAY_OF_MONTH).coerceIn(1, 30)
+        val monthFormat = java.text.SimpleDateFormat("MMMM", java.util.Locale.getDefault())
+        val monthName = monthFormat.format(cal.time)
+        val year = cal.get(java.util.Calendar.YEAR)
+
+        return (1..30).map { day ->
+            val preset = DAILY_BADGE_PRESETS[(day - 1) % DAILY_BADGE_PRESETS.size]
+            MonthlyDailyBadge(
+                dayOfMonth = day,
+                monthName = monthName,
+                year = year,
+                title = "Day $day: ${preset.first}",
+                description = preset.second,
+                emojiIcon = preset.third.first,
+                isUnlocked = day <= todayDay,
+                isToday = day == todayDay,
+                badgeColorHex = preset.third.second
+            )
+        }
+    }
+
+    fun getTodayBadge(): MonthlyDailyBadge {
+        val cal = java.util.Calendar.getInstance()
+        val todayDay = cal.get(java.util.Calendar.DAY_OF_MONTH).coerceIn(1, 30)
+        return getCurrentMonth30Badges().firstOrNull { it.dayOfMonth == todayDay }
+            ?: getCurrentMonth30Badges()[0]
+    }
+}
+
 object BadgeRepository {
     fun getAll36Badges(currentStreakDays: Int = 25): List<BadgeItem> {
         val rawBadges = listOf(

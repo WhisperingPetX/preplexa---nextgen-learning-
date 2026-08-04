@@ -33,13 +33,13 @@ val BentoOnSurface: Color
 val BentoOnSurfaceVariant: Color
     @Composable get() = MaterialTheme.colorScheme.onSurfaceVariant
 
-val BentoPrimary = Color(0xFF651FFF) // Radiant Deep Violet
+val BentoPrimary = Color(0xFFA855F7) // Vibrant Light Purple (Amethyst)
 
 val BentoPrimaryContainer: Color
-    @Composable get() = if (LocalDarkTheme.current) Color(0xFF1E1B4B) else Color(0xFFEDE7F6)
+    @Composable get() = if (LocalDarkTheme.current) Color(0xFF38144C) else Color(0xFFF3E5F5)
 
 val BentoOnPrimaryContainer: Color
-    @Composable get() = if (LocalDarkTheme.current) Color(0xFFC7D2FE) else Color(0xFF311B92)
+    @Composable get() = if (LocalDarkTheme.current) Color(0xFFE9D5FF) else Color(0xFF4A148C)
 
 // Bento Color Block Cards matched to Logo Accents with Dark Mode support
 val BentoBlueBg: Color

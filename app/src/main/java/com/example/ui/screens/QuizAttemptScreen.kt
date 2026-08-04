@@ -181,8 +181,8 @@ fun QuizAttemptScreen(viewModel: MainViewModel) {
                     OutlinedButton(
                         onClick = { showExitConfirmDialog = true },
                         shape = RoundedCornerShape(16.dp),
-                        border = BorderStroke(1.dp, Color(0xFFEF4444).copy(alpha = 0.5f)),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFFDC2626)),
+                        border = BorderStroke(1.dp, BentoSurfaceVariant),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = BentoOnSurface),
                         contentPadding = PaddingValues(horizontal = 10.dp, vertical = 8.dp),
                         modifier = Modifier.testTag("exit_test_button")
                     ) {
@@ -521,7 +521,7 @@ fun QuizAttemptScreen(viewModel: MainViewModel) {
                         viewModel.exitQuizTest()
                     },
                     shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFDC2626), contentColor = Color.White)
+                    colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary, contentColor = Color.White)
                 ) {
                     Text("Exit Exam", fontWeight = FontWeight.Bold)
                 }
