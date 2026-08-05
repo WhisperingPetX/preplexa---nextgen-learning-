@@ -54,7 +54,7 @@ fun PreplexaApp(viewModel: MainViewModel = viewModel()) {
                         .widthIn(max = 600.dp)
                 ) {
                     androidx.compose.animation.AnimatedVisibility(
-                        visible = showTutorialOverlay,
+                        visible = showTutorialOverlay && currentScreen != Screen.AUTH,
                         enter = androidx.compose.animation.fadeIn(animationSpec = tween(300)) + androidx.compose.animation.scaleIn(initialScale = 0.95f),
                         exit = androidx.compose.animation.fadeOut(animationSpec = tween(300)) + androidx.compose.animation.scaleOut(targetScale = 0.95f)
                     ) {

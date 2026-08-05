@@ -9,9 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -549,7 +547,12 @@ fun JeeMainPyqYearCard(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                            Text("📅", fontSize = 14.sp)
+                            Icon(
+                                imageVector = Icons.Default.Event,
+                                contentDescription = null,
+                                tint = BentoOnSurfaceVariant,
+                                modifier = Modifier.size(16.dp)
+                            )
                             Text(
                                 text = "Session 1 (Jan / Feb)",
                                 fontWeight = FontWeight.ExtraBold,
@@ -567,9 +570,24 @@ fun JeeMainPyqYearCard(
                             onClick = { onStartTest(1, 1) },
                             colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary),
                             shape = RoundedCornerShape(12.dp),
+                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text("⚡ Shift 1 (Morning)", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Bolt,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Column(horizontalAlignment = Alignment.Start) {
+                                    Text("Shift 1", fontSize = 12.sp, fontWeight = FontWeight.ExtraBold, lineHeight = 14.sp)
+                                    Text("Morning", fontSize = 10.sp, fontWeight = FontWeight.Medium, lineHeight = 12.sp)
+                                }
+                            }
                         }
 
                         Button(
@@ -577,9 +595,24 @@ fun JeeMainPyqYearCard(
                             colors = ButtonDefaults.buttonColors(containerColor = BentoPrimaryContainer, contentColor = BentoPrimary),
                             border = BorderStroke(1.dp, BentoPrimary.copy(alpha = 0.5f)),
                             shape = RoundedCornerShape(12.dp),
+                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text("⚡ Shift 2 (Evening)", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Bolt,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Column(horizontalAlignment = Alignment.Start) {
+                                    Text("Shift 2", fontSize = 12.sp, fontWeight = FontWeight.ExtraBold, lineHeight = 14.sp)
+                                    Text("Evening", fontSize = 10.sp, fontWeight = FontWeight.Medium, lineHeight = 12.sp)
+                                }
+                            }
                         }
                     }
                 }
@@ -598,7 +631,12 @@ fun JeeMainPyqYearCard(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                            Text("📅", fontSize = 14.sp)
+                            Icon(
+                                imageVector = Icons.Default.Event,
+                                contentDescription = null,
+                                tint = BentoOnSurfaceVariant,
+                                modifier = Modifier.size(16.dp)
+                            )
                             Text(
                                 text = "Session 2 (April)",
                                 fontWeight = FontWeight.ExtraBold,
@@ -616,9 +654,24 @@ fun JeeMainPyqYearCard(
                             onClick = { onStartTest(2, 1) },
                             colors = ButtonDefaults.buttonColors(containerColor = BentoPrimary),
                             shape = RoundedCornerShape(12.dp),
+                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text("⚡ Shift 1 (Morning)", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Bolt,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Column(horizontalAlignment = Alignment.Start) {
+                                    Text("Shift 1", fontSize = 12.sp, fontWeight = FontWeight.ExtraBold, lineHeight = 14.sp)
+                                    Text("Morning", fontSize = 10.sp, fontWeight = FontWeight.Medium, lineHeight = 12.sp)
+                                }
+                            }
                         }
 
                         Button(
@@ -626,9 +679,24 @@ fun JeeMainPyqYearCard(
                             colors = ButtonDefaults.buttonColors(containerColor = BentoPrimaryContainer, contentColor = BentoPrimary),
                             border = BorderStroke(1.dp, BentoPrimary.copy(alpha = 0.5f)),
                             shape = RoundedCornerShape(12.dp),
+                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text("⚡ Shift 2 (Evening)", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Bolt,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Column(horizontalAlignment = Alignment.Start) {
+                                    Text("Shift 2", fontSize = 12.sp, fontWeight = FontWeight.ExtraBold, lineHeight = 14.sp)
+                                    Text("Evening", fontSize = 10.sp, fontWeight = FontWeight.Medium, lineHeight = 12.sp)
+                                }
+                            }
                         }
                     }
                 }

@@ -17,6 +17,15 @@ interface PreplexaDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAttempt(attempt: TestAttemptEntity)
 
+    @Query("DELETE FROM test_attempts WHERE id = :id")
+    suspend fun deleteAttempt(id: Long)
+
+    @Query("DELETE FROM test_attempts WHERE id IN (:ids)")
+    suspend fun deleteAttempts(ids: List<Long>)
+
+    @Query("DELETE FROM test_attempts")
+    suspend fun clearAllAttempts()
+
     @Query("SELECT * FROM bookmarked_questions ORDER BY timestamp DESC")
     fun getAllBookmarks(): Flow<List<BookmarkedQuestionEntity>>
 

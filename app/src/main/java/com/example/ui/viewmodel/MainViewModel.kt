@@ -273,6 +273,24 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val allAttempts: StateFlow<List<TestAttemptEntity>> = dao.getAllTestAttempts()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
+    fun deleteAttempt(attemptId: Long) {
+        viewModelScope.launch {
+            dao.deleteAttempt(attemptId)
+        }
+    }
+
+    fun deleteAttempts(attemptIds: Set<Long>) {
+        viewModelScope.launch {
+            dao.deleteAttempts(attemptIds.toList())
+        }
+    }
+
+    fun clearAllAttemptsHistory() {
+        viewModelScope.launch {
+            dao.clearAllAttempts()
+        }
+    }
+
     val bookmarkedQuestions: StateFlow<List<BookmarkedQuestionEntity>> = dao.getAllBookmarks()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
