@@ -2,7 +2,7 @@ package com.example.model
 
 enum class ExamType(val displayName: String, val description: String, val badgeColorHex: String) {
     NEET_UG("NEET (UG)", "Medical Entrance (Physics, Chemistry, Biology)", "#10B981"),
-    JEE_MAINS("JEE Mains", "Engineering Entrance (Physics, Chemistry, Maths)", "#6366F1")
+    JEE_MAINS("JEE Mains", "Engineering Entrance (Physics, Chemistry, Math)", "#6366F1")
 }
 
 enum class Subject(val id: String, val displayName: String, val iconName: String, val colorHex: String) {

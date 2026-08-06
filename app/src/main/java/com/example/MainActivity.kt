@@ -82,6 +82,7 @@ fun PreplexaApp(viewModel: MainViewModel = viewModel()) {
                             Screen.PYQ_PAPERS -> viewModel.navigateToScreen(Screen.HOME)
                             Screen.PROFILE -> viewModel.navigateToScreen(Screen.HOME)
                             Screen.PERPLEXA_AI_SOLVER -> viewModel.navigateToScreen(Screen.HOME)
+                            Screen.PHET_SIMULATIONS -> viewModel.navigateToScreen(Screen.HOME)
                             Screen.AUTH -> { /* Stay on Auth */ }
                             Screen.HOME -> { /* Exit */ }
                         }
@@ -102,6 +103,7 @@ fun PreplexaApp(viewModel: MainViewModel = viewModel()) {
                             Screen.PYQ_PAPERS -> PyqPapersScreen(viewModel = viewModel)
                             Screen.PROFILE -> ProfileScreen(viewModel = viewModel)
                             Screen.PERPLEXA_AI_SOLVER -> PerplexaAiSolverScreen(viewModel = viewModel)
+                            Screen.PHET_SIMULATIONS -> PhetSimulationsScreen(viewModel = viewModel)
                             Screen.AUTH -> AuthScreen(viewModel = viewModel)
                         }
                     }

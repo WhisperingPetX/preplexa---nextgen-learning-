@@ -111,7 +111,7 @@ fun AuthScreen(viewModel: MainViewModel) {
                     }
 
                     Text(
-                        text = "PREPLEXA LIVE ARENA",
+                        text = "PREPLEXA",
                         fontWeight = FontWeight.Black,
                         fontSize = 20.sp,
                         color = BentoOnSurface,

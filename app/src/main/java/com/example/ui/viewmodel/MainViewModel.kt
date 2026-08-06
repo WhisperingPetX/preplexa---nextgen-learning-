@@ -25,7 +25,8 @@ enum class Screen {
     PYQ_PAPERS,
     PROFILE,
     AUTH,
-    PERPLEXA_AI_SOLVER
+    PERPLEXA_AI_SOLVER,
+    PHET_SIMULATIONS
 }
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -109,6 +110,39 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _liveArenaStats = MutableStateFlow(com.example.data.supabase.SupabaseLiveArenaDto())
     val liveArenaStats: StateFlow<com.example.data.supabase.SupabaseLiveArenaDto> = _liveArenaStats.asStateFlow()
 
+    // --- Real-time App & Simulator Time Tracker ---
+    private val _appSessionSeconds = MutableStateFlow(userPrefs.getLong("total_app_session_seconds", 0L))
+    val appSessionSeconds: StateFlow<Long> = _appSessionSeconds.asStateFlow()
+
+    private val _phetSessionSeconds = MutableStateFlow(userPrefs.getLong("total_phet_session_seconds", 0L))
+    val phetSessionSeconds: StateFlow<Long> = _phetSessionSeconds.asStateFlow()
+
+    private fun loadDailyPhetSeconds(): Map<String, Long> {
+        val days = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+        val map = mutableMapOf<String, Long>()
+        days.forEach { day ->
+            map[day] = userPrefs.getLong("phet_daily_sec_$day", 0L)
+        }
+        return map
+    }
+
+    private val _phetDailySeconds = MutableStateFlow<Map<String, Long>>(loadDailyPhetSeconds())
+    val phetDailySeconds: StateFlow<Map<String, Long>> = _phetDailySeconds.asStateFlow()
+
+    private fun getCurrentDayKey(): String {
+        val cal = java.util.Calendar.getInstance()
+        return when (cal.get(java.util.Calendar.DAY_OF_WEEK)) {
+            java.util.Calendar.MONDAY -> "Mon"
+            java.util.Calendar.TUESDAY -> "Tue"
+            java.util.Calendar.WEDNESDAY -> "Wed"
+            java.util.Calendar.THURSDAY -> "Thu"
+            java.util.Calendar.FRIDAY -> "Fri"
+            java.util.Calendar.SATURDAY -> "Sat"
+            java.util.Calendar.SUNDAY -> "Sun"
+            else -> "Mon"
+        }
+    }
+
     init {
         refreshDailyAvatar()
         updateStreak()
@@ -123,6 +157,31 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             if (!userPrefs.getBoolean("pyq_2024_loaded", false)) {
                 dao.insertCustomQuestions(com.example.data.repository.JeeMain2024Jan27Shift1.questions)
                 userPrefs.edit().putBoolean("pyq_2024_loaded", true).apply()
+            }
+        }
+        // Real-time second-by-second app & simulator time tracker
+        viewModelScope.launch {
+            while (true) {
+                delay(1000L)
+                _appSessionSeconds.value += 1L
+                val currentDayKey = getCurrentDayKey()
+
+                if (_currentScreen.value == Screen.PHET_SIMULATIONS) {
+                    _phetSessionSeconds.value += 1L
+                    val currentMap = _phetDailySeconds.value.toMutableMap()
+                    val newDaySecs = (currentMap[currentDayKey] ?: 0L) + 1L
+                    currentMap[currentDayKey] = newDaySecs
+                    _phetDailySeconds.value = currentMap
+
+                    userPrefs.edit()
+                        .putLong("phet_daily_sec_$currentDayKey", newDaySecs)
+                        .putLong("total_phet_session_seconds", _phetSessionSeconds.value)
+                        .apply()
+                }
+
+                if (_appSessionSeconds.value % 5L == 0L) {
+                    userPrefs.edit().putLong("total_app_session_seconds", _appSessionSeconds.value).apply()
+                }
             }
         }
     }
@@ -222,6 +281,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         currentList.add(0, news) // Add to top
         _adminNewsList.value = currentList
         userPrefs.edit().putStringSet("admin_news_list", currentList.toSet()).apply()
+    }
+
+    fun refreshAllData() {
+        viewModelScope.launch {
+            syncWithSupabase()
+        }
     }
     
     fun removeAdminNews(news: String) {

@@ -2,13 +2,13 @@ package com.example.ui.components
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,45 +27,10 @@ fun ExamEnvironmentBackground(
     selectedExam: ExamType,
     modifier: Modifier = Modifier
 ) {
-    val infiniteTransition = rememberInfiniteTransition(label = "exam_bg_anim")
-
-    // Vertical floating motion
-    val floatOffsetY by infiniteTransition.animateFloat(
-        initialValue = -12f,
-        targetValue = 16f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(3200, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "float_offset"
-    )
-
-    // Gentle rotation wiggle
-    val rotateAngle by infiniteTransition.animateFloat(
-        initialValue = -8f,
-        targetValue = 8f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(2800, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "rotate_angle"
-    )
-
-    // Pulsing opacity for background ambient circles
-    val pulseAlpha by infiniteTransition.animateFloat(
-        initialValue = 0.12f,
-        targetValue = 0.32f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(2400, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "pulse_alpha"
-    )
-
-    // Smooth ambient background color shift based on exam
+    // Smooth ambient background color shift based on exam (animates only on exam change)
     val bgGradientTop by animateColorAsState(
         targetValue = if (selectedExam == ExamType.NEET_UG) Color(0xFF003820) else Color(0xFF1E1035),
-        animationSpec = tween(600),
+        animationSpec = tween(500),
         label = "bg_top"
     )
 
@@ -77,8 +42,8 @@ fun ExamEnvironmentBackground(
                 .background(
                     Brush.verticalGradient(
                         colors = listOf(
-                            bgGradientTop.copy(alpha = 0.12f),
-                            bgGradientTop.copy(alpha = 0.03f),
+                            bgGradientTop.copy(alpha = 0.10f),
+                            bgGradientTop.copy(alpha = 0.02f),
                             Color.Transparent
                         )
                     )
@@ -87,29 +52,29 @@ fun ExamEnvironmentBackground(
 
         Crossfade(
             targetState = selectedExam,
-            animationSpec = tween(durationMillis = 500, easing = FastOutSlowInEasing),
+            animationSpec = tween(durationMillis = 400, easing = FastOutSlowInEasing),
             label = "exam_env_crossfade"
         ) { exam ->
             Box(modifier = Modifier.fillMaxSize()) {
                 if (exam == ExamType.NEET_UG) {
-                    // Medical Canvas Glows
+                    // Medical Ambient Glows (Static render for maximum scroll performance)
                     Canvas(modifier = Modifier.fillMaxSize()) {
                         val width = size.width
                         val height = size.height
 
                         drawCircle(
-                            color = Color(0xFF00E676).copy(alpha = pulseAlpha * 0.22f),
-                            radius = width * 0.4f,
-                            center = Offset(width * 0.85f, height * 0.18f + floatOffsetY * 2)
+                            color = Color(0xFF00E676).copy(alpha = 0.06f),
+                            radius = width * 0.45f,
+                            center = Offset(width * 0.85f, height * 0.18f)
                         )
                         drawCircle(
-                            color = Color(0xFF00B0FF).copy(alpha = pulseAlpha * 0.18f),
-                            radius = width * 0.35f,
-                            center = Offset(width * 0.15f, height * 0.65f - floatOffsetY * 2)
+                            color = Color(0xFF00B0FF).copy(alpha = 0.05f),
+                            radius = width * 0.40f,
+                            center = Offset(width * 0.15f, height * 0.65f)
                         )
                     }
 
-                    // Floating Medical Icons (🩺, 🧬, 💊, 🫀, 🏥)
+                    // Watermark Medical Icons
                     Box(modifier = Modifier.fillMaxSize()) {
                         Text(
                             text = "🩺",
@@ -117,11 +82,7 @@ fun ExamEnvironmentBackground(
                             modifier = Modifier
                                 .align(Alignment.TopEnd)
                                 .padding(top = 90.dp, end = 20.dp)
-                                .graphicsLayer {
-                                    translationY = floatOffsetY * 1.5f
-                                    rotationZ = rotateAngle * 2
-                                    alpha = 0.3f
-                                }
+                                .graphicsLayer { alpha = 0.20f }
                         )
                         Text(
                             text = "🧬",
@@ -129,11 +90,7 @@ fun ExamEnvironmentBackground(
                             modifier = Modifier
                                 .align(Alignment.CenterStart)
                                 .padding(start = 12.dp)
-                                .graphicsLayer {
-                                    translationY = -floatOffsetY * 1.8f
-                                    rotationZ = -rotateAngle * 3
-                                    alpha = 0.25f
-                                }
+                                .graphicsLayer { alpha = 0.18f }
                         )
                         Text(
                             text = "💊",
@@ -141,11 +98,7 @@ fun ExamEnvironmentBackground(
                             modifier = Modifier
                                 .align(Alignment.CenterEnd)
                                 .padding(end = 16.dp, top = 220.dp)
-                                .graphicsLayer {
-                                    translationY = floatOffsetY * 2.2f
-                                    rotationZ = rotateAngle * 4
-                                    alpha = 0.25f
-                                }
+                                .graphicsLayer { alpha = 0.18f }
                         )
                         Text(
                             text = "🫀",
@@ -153,31 +106,28 @@ fun ExamEnvironmentBackground(
                             modifier = Modifier
                                 .align(Alignment.BottomStart)
                                 .padding(start = 24.dp, bottom = 140.dp)
-                                .graphicsLayer {
-                                    translationY = -floatOffsetY * 1.4f
-                                    alpha = 0.22f
-                                }
+                                .graphicsLayer { alpha = 0.16f }
                         )
                     }
                 } else {
-                    // JEE Rocket & Physics Canvas Glows
+                    // JEE Rocket & Physics Glows
                     Canvas(modifier = Modifier.fillMaxSize()) {
                         val width = size.width
                         val height = size.height
 
                         drawCircle(
-                            color = Color(0xFF7C4DFF).copy(alpha = pulseAlpha * 0.28f),
-                            radius = width * 0.42f,
-                            center = Offset(width * 0.82f, height * 0.2f - floatOffsetY * 2)
+                            color = Color(0xFF7C4DFF).copy(alpha = 0.07f),
+                            radius = width * 0.45f,
+                            center = Offset(width * 0.82f, height * 0.2f)
                         )
                         drawCircle(
-                            color = Color(0xFFFF4081).copy(alpha = pulseAlpha * 0.18f),
-                            radius = width * 0.38f,
-                            center = Offset(width * 0.18f, height * 0.72f + floatOffsetY * 2)
+                            color = Color(0xFFFF4081).copy(alpha = 0.05f),
+                            radius = width * 0.40f,
+                            center = Offset(width * 0.18f, height * 0.72f)
                         )
                     }
 
-                    // Floating Rocket & Physics Icons (🚀, ⚛️, 📐, ✨, 🛰️)
+                    // Watermark Engineering Icons
                     Box(modifier = Modifier.fillMaxSize()) {
                         Text(
                             text = "🚀",
@@ -185,11 +135,7 @@ fun ExamEnvironmentBackground(
                             modifier = Modifier
                                 .align(Alignment.TopEnd)
                                 .padding(top = 80.dp, end = 22.dp)
-                                .graphicsLayer {
-                                    translationY = -floatOffsetY * 2.5f
-                                    rotationZ = -15f + rotateAngle
-                                    alpha = 0.32f
-                                }
+                                .graphicsLayer { alpha = 0.22f }
                         )
                         Text(
                             text = "⚛️",
@@ -197,11 +143,7 @@ fun ExamEnvironmentBackground(
                             modifier = Modifier
                                 .align(Alignment.CenterStart)
                                 .padding(start = 12.dp)
-                                .graphicsLayer {
-                                    translationY = floatOffsetY * 1.6f
-                                    rotationZ = rotateAngle * 5
-                                    alpha = 0.28f
-                                }
+                                .graphicsLayer { alpha = 0.20f }
                         )
                         Text(
                             text = "📐",
@@ -209,11 +151,7 @@ fun ExamEnvironmentBackground(
                             modifier = Modifier
                                 .align(Alignment.CenterEnd)
                                 .padding(end = 20.dp, top = 230.dp)
-                                .graphicsLayer {
-                                    translationY = -floatOffsetY * 1.6f
-                                    rotationZ = -rotateAngle * 2
-                                    alpha = 0.25f
-                                }
+                                .graphicsLayer { alpha = 0.18f }
                         )
                         Text(
                             text = "✨",
@@ -221,10 +159,7 @@ fun ExamEnvironmentBackground(
                             modifier = Modifier
                                 .align(Alignment.BottomStart)
                                 .padding(start = 28.dp, bottom = 150.dp)
-                                .graphicsLayer {
-                                    translationY = floatOffsetY * 2f
-                                    alpha = 0.28f
-                                }
+                                .graphicsLayer { alpha = 0.20f }
                         )
                     }
                 }
